@@ -52,11 +52,34 @@ class ResultTask:
 
 class Task:
     def __init__(self, result_path: Path) -> None:
+        self.active = True
         self.result = ResultTask(result_path)
         self.queue_in = mp.Queue()
 
         self.process = mp.Process(target=self.run)
         self.process.start()
+
+    def __del__(self) -> None:
+        """
+        Avoid terminating processes.
+
+        Using the Process.terminate method to stop a process is liable to
+        cause any shared resources (such as locks, semaphores, pipes and
+        queues) currently being used by the process to become broken or
+        unavailable to other processes.
+
+        Therefore it is probably best to only consider using Process.terminate
+        on processes which never use any shared resources.
+        """
+        self.terminate()
+
+    def terminate(self) -> None:
+        if not self.active:
+            return
+
+        self.active = False
+        self.queue_in.put(None)
+        self.process.join()
 
 
     def request(self, *args, **kwargs) -> str:
@@ -79,27 +102,28 @@ class Task:
         return key
 
     def task(self, *args, task_id: str, **kwargs) -> None:
-        raise Exception("Task not implemented yet.")
+        raise Exception("`task` not implemented yet.")
+
+    def prepare_task(self, data: Any) -> None:
+        raise Exception("`prepare_task` not implemented yet.")
 
     def run(self):
-        raise Exception("Task not implemented yet.")
+        while self.active:
+            data = self.queue_in.get()
+            if data is None:
+                print("process terminated.")
+                break
+            self.prepare_task(data)
+
 
 
 class SequentialTask(Task):
     def __init__(self, result_path: Path) -> None:
-        self.result = ResultTask(result_path)
-        self.queue_in = mp.Queue()
-        # self.queue_out = mp.Queue()
+        super().__init__(result_path)
 
-        self.process = mp.Process(target=self.run)
-        self.process.start()
-
-
-    def run(self):
-        while True:
-            data = self.queue_in.get()
-            self.task(
-                *data["args"],
-                task_id=data["task_id"],
-                **data["kwargs"],
-            )
+    def prepare_task(self, data: Any) -> None:
+        self.task(
+            *data["args"],
+            task_id=data["task_id"],
+            **data["kwargs"],
+        )
