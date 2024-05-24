@@ -12,10 +12,14 @@ import asyncio
 import json
 import multiprocessing as mp
 import os
+import warnings
 
+from abc import abstractmethod
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
+
+from public import public
 
 
 class ResultTask:
@@ -43,45 +47,44 @@ class ResultTask:
         result_file = self.result_path / f"{task_id}.json"
         return result_file.exists()
 
-    def get_result(self, task_id: str) -> Any:
+    def get(self, task_id: str) -> Any:
         if not self.status(task_id):
             return {"status": False, "message": "Result not ready."}
 
-        return self.result.load(task_id)
+        return self.load(task_id)
 
 
+@public
 class Task:
-    def __init__(self, result_path: Path) -> None:
+    def __init__(self, result_path: Path, workers: int=1) -> None:
         self.active = True
+        self.workers = workers
         self.result = ResultTask(result_path)
         self.queue_in = mp.Queue()
+        self.processes: list[Process] = []
 
-        self.process = mp.Process(target=self.run)
-        self.process.start()
+        for _ in range(self.workers):
+            p = mp.Process(target=self.run)
+            p.start()
+            self.processes.append(p)
 
-    def __del__(self) -> None:
-        """
-        Avoid terminating processes.
+    @public
+    def get_result(self, task_id: str) -> Any:
+        return self.result.get(task_id)
 
-        Using the Process.terminate method to stop a process is liable to
-        cause any shared resources (such as locks, semaphores, pipes and
-        queues) currently being used by the process to become broken or
-        unavailable to other processes.
-
-        Therefore it is probably best to only consider using Process.terminate
-        on processes which never use any shared resources.
-        """
-        self.terminate()
-
+    @public
     def terminate(self) -> None:
         if not self.active:
             return
 
         self.active = False
-        self.queue_in.put(None)
-        self.process.join()
 
+        for i in range(self.workers):
+            self.queue_in.put(None)
+            p = self.processes[i]
+            p.join()
 
+    @public
     def request(self, *args, **kwargs) -> str:
         key = uuid4().hex
         print(
@@ -101,25 +104,9 @@ class Task:
         )
         return key
 
+    @abstractmethod
     def task(self, *args, task_id: str, **kwargs) -> None:
         raise Exception("`task` not implemented yet.")
-
-    def prepare_task(self, data: Any) -> None:
-        raise Exception("`prepare_task` not implemented yet.")
-
-    def run(self):
-        while self.active:
-            data = self.queue_in.get()
-            if data is None:
-                print("process terminated.")
-                break
-            self.prepare_task(data)
-
-
-
-class SequentialTask(Task):
-    def __init__(self, result_path: Path) -> None:
-        super().__init__(result_path)
 
     def prepare_task(self, data: Any) -> None:
         self.task(
@@ -127,3 +114,34 @@ class SequentialTask(Task):
             task_id=data["task_id"],
             **data["kwargs"],
         )
+
+
+    @public
+    def run(self):
+        while self.active:
+            data = self.queue_in.get()
+            if data is None:
+                print("Process terminated.")
+                self.active = False
+                return
+            self.prepare_task(data)
+
+
+
+class SerialTask(Task):
+    def __init__(self, result_path: Path, workers: int=1) -> None:
+        if workers != 1:
+            warnings.warn(
+                "SerialTask should have just 1 worker. "
+                "Switching automatically to 1 ..."
+            )
+            workers = 1
+        super().__init__(result_path, workers=workers)
+
+
+class ParallelTask(Task):
+    def __init__(self, result_path: Path, workers: int=1) -> None:
+        if workers <= 1:
+            raise Exception("ParallelTask should have more than 1 worker.")
+
+        super().__init__(result_path, workers=workers)
