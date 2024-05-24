@@ -17,6 +17,7 @@ include = ["src/retsu/py.typed"]
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4"
+atpublic = ">=4.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=7.3.2"
@@ -42,6 +43,7 @@ mkdocstrings-python = ">=1.1.2"
 makim = "1.15.1"
 # 'PosixPath' object has no attribute 'endswith'
 virtualenv = "<=20.25.1"
+flask = ">=3"
 
 [tool.pytest.ini_options]
 testpaths = [
