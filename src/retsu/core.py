@@ -84,6 +84,9 @@ class Task:
             p = self.processes[i]
             p.join()
 
+        self.queue_in.close()
+        self.queue_in.join_thread()
+
     @public
     def request(self, *args, **kwargs) -> str:
         key = uuid4().hex

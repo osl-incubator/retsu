@@ -19,6 +19,7 @@ include = ["src/retsu/py.typed"]
 python = ">=3.8.1,<4"
 atpublic = ">=4.0"
 celery = ">=5"
+redis = ">=5"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=7.3.2"

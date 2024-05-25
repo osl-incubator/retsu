@@ -10,7 +10,7 @@ groups:
       - containers/compose.yaml
     # env-file: .env
     services:
-      default: valkey,celery
+      default: valkey #,celery
       available:
         - name: valkey
-        - name: celery
+        # - name: celery

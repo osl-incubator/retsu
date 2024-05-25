@@ -5,13 +5,15 @@ services:
     image: valkey/valkey:7.2.5-alpine
     hostname: valkey
     container_name: valkey
+    ports:
+      - 6379:6379
 
-  celery:
-    hostname: celery
-    container_name: celery
-    build:
-      context: ..
-      dockerfile: containers/celery/Dockerfile
-    command: celery --app=config worker --loglevel=INFO  --concurrency=4
-    depends_on:
-      - valkey
+  # celery:
+  #   hostname: celery
+  #   container_name: celery
+  #   build:
+  #     context: ..
+  #     dockerfile: containers/celery/Dockerfile
+  #   command: celery --app=config worker --loglevel=INFO  --concurrency=4
+  #   depends_on:
+  #     - valkey
