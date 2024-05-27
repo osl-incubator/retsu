@@ -41,37 +41,36 @@ from typing import Any, Callable
 
 from celery import Celery
 
+from retsu.core import ParallelTask, SerialTask
 
-class CeleryTask:
+
+class ParallelCeleryTask(ParallelTask):
     def __init__(
         self,
+        result_path: Path,
+        workers: int=1,
         name: str="retsu",
         broker_url: str='valkey://localhost:6379/0',
         result_backend: str='valkey://localhost:6379/0'
     ) -> None:
+        super().__init__(result_path, workers)
         self.name = name
         self.app = Celery(self.name)
         self.broker_url = 'valkey://localhost:6379/0'
         self.result_backend = 'valkey://localhost:6379/0'
-        self.task_queues = {}
-        self.task_routes = {}
 
-    def task(self, fn: Callable[(Any,), Any]) -> Callable[(Any,), Any]:
-        @wraps
-        def _task(*args, **kwargs) -> Any:
-            return fn(*args, **kwargs)
 
-        _module = f"{fn.__module__}."
-        _class = f"{fn.__self.__.__name__}." if hasattr(fn, "__self__") else ""
-        _func = f"{fn.__name___}"
-        key = f'{_module}{_class}{_func}'
-
-        queue_key = f"queue.{key}"
-        task_key = f"task.{key}"
-
-        self.task_queues[queue_key] = {
-            'exchange': 'tasks',
-            'routing_key': task_key,
-        }
-        self.task_routes[task_key] = {'queue': queue_key}
-        return _task
+class SerialCeleryTask(ParallelTask):
+    def __init__(
+        self,
+        result_path: Path,
+        workers: int=1,
+        name: str="retsu",
+        broker_url: str='valkey://localhost:6379/0',
+        result_backend: str='valkey://localhost:6379/0'
+    ) -> None:
+        super().__init__(result_path, workers)
+        self.name = name
+        self.app = Celery(self.name)
+        self.broker_url = 'valkey://localhost:6379/0'
+        self.result_backend = 'valkey://localhost:6379/0'
