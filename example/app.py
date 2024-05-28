@@ -93,6 +93,11 @@ def parallel_result(task_id: str) -> str:
 
 if __name__ == "__main__":
     try:
-        app.run()
+        app.run(
+            debug=True,
+            passthrough_errors=True,
+            use_debugger=True,
+            use_reloader=False,
+        )
     except KeyboardInterrupt:
         signal_handler(signal.SIGINT, None)

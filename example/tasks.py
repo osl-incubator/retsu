@@ -51,6 +51,40 @@ except redis.ConnectionError as e:
     exit(1)
 
 
+@app.task
+def task_serial_a1(a: int, b: int, task_id: str) -> int:  # type: ignore
+    """Define the task_a1."""
+    sleep(a + b)
+    print("running task a1")
+    result = a + b
+    redis_client.set(f"result-{task_id}", result)
+    return result
+
+
+@app.task
+def task_serial_a2(task_id: str) -> int:  # type: ignore
+    """Define the task_a2."""
+    print("running task a2")
+    result = redis_client.get(f"result-{task_id}")
+    return result
+
+
+@app.task
+def task_serial_final(results, task_id: str) -> int:  # type: ignore
+    """Define the final_task."""
+    print("running final task")
+
+    result = redis_client.get(f"result-{task_id}")
+    final_result = f"Final result: {result}"
+    print(final_result)
+
+    task_result = ResultTask()
+
+    task_result.save(task_id=task_id, result=final_result)
+
+    return final_result
+
+
 class MySerialTask1(SerialCeleryTask):
     """MySerialTask1."""
 
@@ -60,49 +94,49 @@ class MySerialTask1(SerialCeleryTask):
 
     def get_chord_tasks(
         self, a: int, b: int, task_id: str
-    ) -> tuple[list[celery.local.PromiseProxy], celery.local.PromiseProxy]:
+    ) -> tuple[list[celery.Signature], celery.Signature]:
         """Define the list of tasks for celery chord."""
         return (
             [
-                self.task_a1.s(a, b, task_id),
-                self.task_a2.s(task_id),
+                task_serial_a1.s(a, b, task_id),
+                task_serial_a2.s(task_id),
             ],
-            self.final_task.s(task_id),
+            task_serial_final.s(task_id),
         )
 
-    @app.task
-    @staticmethod
-    def task_a1(a: int, b: int, task_id: str) -> int:  # type: ignore
-        """Define the task_a1."""
-        sleep(a + b)
-        print("running task a1")
-        result = a + b
-        redis_client.set(f"result-{task_id}", result)
-        return result
 
-    @app.task
-    @staticmethod
-    def task_a2(task_id: str) -> int:  # type: ignore
-        """Define the task_a2."""
-        print("running task a2")
-        result = redis_client.get(f"result-{task_id}")
-        return result
+@app.task
+def task_parallel_a1(a: int, b: int, task_id: str) -> int:  # type: ignore
+    """Define the task_a1."""
+    sleep(a + b)
+    print("running task a1")
+    result = a + b
+    redis_client.set(f"result-{task_id}", result)
+    return result
 
-    @app.task
-    @staticmethod
-    def final_task(results, task_id: str) -> int:  # type: ignore
-        """Define the final_task."""
-        print("running final task")
 
-        result = redis_client.get(f"result-{task_id}")
-        final_result = f"Final result: {result}"
-        print(final_result)
+@app.task
+def task_parallel_a2(task_id: str) -> int:  # type: ignore
+    """Define the task_a2."""
+    print("running task a2")
+    result = redis_client.get(f"result-{task_id}")
+    return result
 
-        task_result = ResultTask()
 
-        task_result.save(task_id=task_id, result=final_result)
+@app.task
+def task_parallel_final(results, task_id: str) -> int:  # type: ignore
+    """Define the final_task."""
+    print("running final task")
 
-        return final_result
+    result = redis_client.get(f"result-{task_id}")
+    final_result = f"Final result: {result}"
+    print(final_result)
+
+    task_result = ResultTask()
+
+    task_result.save(task_id=task_id, result=final_result)
+
+    return final_result
 
 
 class MyParallelTask1(ParallelCeleryTask):
@@ -114,49 +148,15 @@ class MyParallelTask1(ParallelCeleryTask):
 
     def get_chord_tasks(
         self, a: int, b: int, task_id: str
-    ) -> list[celery.local.PromiseProxy]:
+    ) -> list[celery.Signature]:
         """Define the list of tasks for celery chord."""
         return (
             [
-                self.task_a1.s(a, b, task_id),
-                self.task_a2.s(task_id),
+                task_parallel_a1.s(a, b, task_id),
+                task_parallel_a2.s(task_id),
             ],
-            self.final_task.s(task_id),
+            task_parallel_final.s(task_id),
         )
-
-    @app.task
-    @staticmethod
-    def task_a1(a: int, b: int, task_id: str) -> int:  # type: ignore
-        """Define the task_a1."""
-        sleep(a + b)
-        print("running task a1")
-        result = a + b
-        redis_client.set(f"result-{task_id}", result)
-        return result
-
-    @app.task
-    @staticmethod
-    def task_a2(task_id: str) -> int:  # type: ignore
-        """Define the task_a2."""
-        print("running task a2")
-        result = redis_client.get(f"result-{task_id}")
-        return result
-
-    @app.task
-    @staticmethod
-    def final_task(results, task_id: str) -> int:  # type: ignore
-        """Define the final_task."""
-        print("running final task")
-
-        result = redis_client.get(f"result-{task_id}")
-        final_result = f"Final result: {result}"
-        print(final_result)
-
-        task_result = ResultTask()
-
-        task_result.save(task_id=task_id, result=final_result)
-
-        return final_result
 
 
 class MyTaskManager(TaskManager):

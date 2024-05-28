@@ -22,21 +22,19 @@ class CeleryTask:
         chain_tasks = self.get_chain_tasks(*args, task_id=task_id, **kwargs)
 
         if chord_tasks:
-            _chord = chord(chord_tasks)
-            workflow_chord = (
-                _chord(chord_callback) if chord_callback else _chord()
-            )
+            if chord_callback:
+                workflow_chord = chord(chord_tasks, chord_callback)
+            else:
+                workflow_chord = chord(chord_tasks)
             workflow_chord.apply_async()
 
         if chain_tasks:
-            workflow_chain = chain(chord_tasks)()
+            workflow_chain = chain(chord_tasks)
             workflow_chain.apply_async()
 
     def get_chord_tasks(  # type: ignore
         self, *args, **kwargs
-    ) -> tuple[
-        list[celery.local.PromiseProxy], Optional[celery.local.PromiseProxy]
-    ]:
+    ) -> tuple[list[celery.Signature], Optional[celery.Signature]]:
         """
         Run tasks with chord.
 
@@ -45,15 +43,15 @@ class CeleryTask:
         tuple:
             list of tasks for the chord, and the task to be used as a callback
         """
-        chord_tasks: list[celery.local.PromiseProxy] = []
+        chord_tasks: list[celery.Signature] = []
         callback_task = None
         return (chord_tasks, callback_task)
 
     def get_chain_tasks(  # type: ignore
         self, *args, **kwargs
-    ) -> list[celery.local.PromiseProxy]:
+    ) -> list[celery.Signature]:
         """Run tasks with chain."""
-        chain_tasks: list[celery.local.PromiseProxy] = []
+        chain_tasks: list[celery.Signature] = []
         return chain_tasks
 
 
