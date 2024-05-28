@@ -4,6 +4,7 @@ from importlib import metadata as importlib_metadata
 
 from retsu.core import (
     ParallelTask,
+    ResultTask,
     SerialTask,
     TaskManager,
 )

@@ -15,7 +15,10 @@ task_manager.start()
 def signal_handler(signum, frame):
     """Define signal handler."""
     print(f"Received signal {signum}, shutting down...")
-    task_manager.stop()
+    try:
+        task_manager.stop()
+    except Exception:
+        ...
     # Perform any other cleanup here if necessary
     os._exit(0)
 

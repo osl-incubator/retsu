@@ -56,23 +56,7 @@ class CeleryTask:
         return chain_tasks
 
 
-class ParallelCeleryTask(CeleryTask, ParallelTask):
-    def __init__(
-        self,
-        result_path: Path,
-        workers: int = 1,
-        app: Celery = Celery(),
-    ) -> None:
-        super().__init__(result_path, workers)
-        self.app = app
+class ParallelCeleryTask(CeleryTask, ParallelTask): ...
 
 
-class SerialCeleryTask(CeleryTask, SerialTask):
-    def __init__(
-        self,
-        result_path: Path,
-        workers: int = 1,
-        app: Celery = Celery(),
-    ) -> None:
-        super().__init__(result_path, workers)
-        self.app = app
+class SerialCeleryTask(CeleryTask, SerialTask): ...

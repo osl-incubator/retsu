@@ -8,7 +8,7 @@ import celery
 import redis
 
 from celery import Celery
-from retsu import TaskManager
+from retsu import ResultTask, TaskManager
 from retsu.celery import ParallelCeleryTask, SerialCeleryTask
 from settings import RESULTS_PATH
 
@@ -106,6 +106,8 @@ class MySerialTask1(SerialCeleryTask):
 
 
 class MyParallelTask1(ParallelCeleryTask):
+    """MyParallelTask1."""
+
     def request(self, a: int, b: int) -> str:
         """Receive the request for processing."""
         return super().request(a=a, b=b)
@@ -158,9 +160,11 @@ class MyParallelTask1(ParallelCeleryTask):
 
 
 class MyTaskManager(TaskManager):
+    """MyTaskManager"""
+
     def __init__(self) -> None:
         """Create a list of retsu tasks."""
         self.tasks = {
-            "serial": MySerialTask1(RESULTS_PATH, app=app),
-            "serial": MyParallelTask1(RESULTS_PATH, workers=2, app=app),
+            "serial": MySerialTask1(RESULTS_PATH),
+            "parallel": MyParallelTask1(RESULTS_PATH, workers=2),
         }
