@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from functools import wraps
-from typing import Any, Callable, Optional
+from pathlib import Path
+from typing import Optional
 
 import celery
 

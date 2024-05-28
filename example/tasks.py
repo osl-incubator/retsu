@@ -2,14 +2,11 @@
 
 from __future__ import annotations
 
-import multiprocessing as mp
-import os
-
 from time import sleep
 
 import redis
 
-from celery import Celery, chain, chord
+from celery import Celery
 from retsu import TaskManager
 from retsu.celery import ParallelCeleryTask, SerialCeleryTask
 from settings import RESULTS_PATH
@@ -142,7 +139,6 @@ class MyParallelTask1(ParallelCeleryTask):
 class MyTaskManager(TaskManager):
     def __init__(self) -> None:
         """Create a list of retsu tasks."""
-
         self.tasks = {
             "serial": MySerialTask1(RESULTS_PATH, app=app),
             "serial": MyParallelTask1(RESULTS_PATH, workers=2, app=app),
