@@ -14,7 +14,7 @@ from retsu.core import ParallelTask, SerialTask
 class CeleryTask:
     """Celery Task class."""
 
-    def task(self, *args, task_id: str, **kwargs) -> None:
+    def task(self, *args, task_id: str, **kwargs) -> None:  # type: ignore
         """Define the task to be executed."""
         chord_tasks, chord_callback = self.get_chord_tasks(
             *args, task_id=task_id, **kwargs
@@ -32,7 +32,7 @@ class CeleryTask:
             workflow_chain = chain(chord_tasks)()
             workflow_chain.apply_async()
 
-    def get_chord_tasks(
+    def get_chord_tasks(  # type: ignore
         self, *args, **kwargs
     ) -> tuple[
         list[celery.local.PromiseProxy], Optional[celery.local.PromiseProxy]
@@ -49,7 +49,7 @@ class CeleryTask:
         callback_task = None
         return (chord_tasks, callback_task)
 
-    def get_chain_tasks(
+    def get_chain_tasks(  # type: ignore
         self, *args, **kwargs
     ) -> list[celery.local.PromiseProxy]:
         """Run tasks with chain."""

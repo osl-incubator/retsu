@@ -64,7 +64,7 @@ class Task:
         self.active = True
         self.workers = workers
         self.result = ResultTask(result_path)
-        self.queue_in: mp.Queue = mp.Queue()
+        self.queue_in: mp.Queue[Any] = mp.Queue()
         self.processes: list[mp.Process] = []
 
     @public
@@ -99,7 +99,7 @@ class Task:
         self.queue_in.join_thread()
 
     @public
-    def request(self, *args, **kwargs) -> str:
+    def request(self, *args, **kwargs) -> str:  # type: ignore
         """Feed the queue with data from the request for the task."""
         key = uuid4().hex
         print(
@@ -120,7 +120,7 @@ class Task:
         return key
 
     @abstractmethod
-    def task(self, *args, task_id: str, **kwargs) -> None:
+    def task(self, *args, task_id: str, **kwargs) -> None:  # type: ignore
         """Define the task to be executed."""
         raise Exception("`task` not implemented yet.")
 
@@ -176,7 +176,7 @@ class TaskManager:
 
     def __init__(self) -> None:
         """Create a list of retsu tasks."""
-        self.tasks: dict[str, Task] = []
+        self.tasks: dict[str, Task] = {}
 
     @public
     def get_task(self, name: str) -> Optional[Task]:

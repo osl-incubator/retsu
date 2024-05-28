@@ -60,7 +60,7 @@ class MySerialTask1(SerialCeleryTask):
 
     def get_chord_tasks(
         self, a: int, b: int, task_id: str
-    ) -> list[celery.local.PromiseProxy]:
+    ) -> tuple[list[celery.local.PromiseProxy], celery.local.PromiseProxy]:
         """Define the list of tasks for celery chord."""
         return (
             [
@@ -72,7 +72,7 @@ class MySerialTask1(SerialCeleryTask):
 
     @app.task
     @staticmethod
-    def task_a1(a: int, b: int, task_id: str) -> int:
+    def task_a1(a: int, b: int, task_id: str) -> int:  # type: ignore
         """Define the task_a1."""
         sleep(a + b)
         print("running task a1")
@@ -82,7 +82,7 @@ class MySerialTask1(SerialCeleryTask):
 
     @app.task
     @staticmethod
-    def task_a2(task_id: str) -> int:
+    def task_a2(task_id: str) -> int:  # type: ignore
         """Define the task_a2."""
         print("running task a2")
         result = redis_client.get(f"result-{task_id}")
@@ -90,7 +90,7 @@ class MySerialTask1(SerialCeleryTask):
 
     @app.task
     @staticmethod
-    def final_task(results, task_id: str) -> int:
+    def final_task(results, task_id: str) -> int:  # type: ignore
         """Define the final_task."""
         print("running final task")
 
@@ -126,7 +126,7 @@ class MyParallelTask1(ParallelCeleryTask):
 
     @app.task
     @staticmethod
-    def task_a1(a: int, b: int, task_id: str) -> int:
+    def task_a1(a: int, b: int, task_id: str) -> int:  # type: ignore
         """Define the task_a1."""
         sleep(a + b)
         print("running task a1")
@@ -136,7 +136,7 @@ class MyParallelTask1(ParallelCeleryTask):
 
     @app.task
     @staticmethod
-    def task_a2(task_id: str) -> int:
+    def task_a2(task_id: str) -> int:  # type: ignore
         """Define the task_a2."""
         print("running task a2")
         result = redis_client.get(f"result-{task_id}")
@@ -144,7 +144,7 @@ class MyParallelTask1(ParallelCeleryTask):
 
     @app.task
     @staticmethod
-    def final_task(results, task_id: str) -> int:
+    def final_task(results, task_id: str) -> int:  # type: ignore
         """Define the final_task."""
         print("running final task")
 
