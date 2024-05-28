@@ -30,13 +30,9 @@ repos:
 
       - id: mypy
         name: mypy
-        entry: mypy
+        entry: mypy .
         language: system
-        files: "src/retsu"
-        pass_filenames: true
-        serial: true
-        types:
-          - python
+        pass_filenames: false
 
       - id: bandit
         name: bandit

@@ -12,6 +12,8 @@ from retsu.core import ParallelTask, SerialTask
 
 
 class CeleryTask:
+    """Celery Task class."""
+
     def task(self, *args, task_id: str, **kwargs) -> None:
         """Define the task to be executed."""
         chord_tasks, chord_callback = self.get_chord_tasks(
@@ -55,7 +57,13 @@ class CeleryTask:
         return chain_tasks
 
 
-class ParallelCeleryTask(CeleryTask, ParallelTask): ...
+class ParallelCeleryTask(CeleryTask, ParallelTask):
+    """Parallel Task for Celery."""
+
+    ...
 
 
-class SerialCeleryTask(CeleryTask, SerialTask): ...
+class SerialCeleryTask(CeleryTask, SerialTask):
+    """Serial Task for Celery."""
+
+    ...

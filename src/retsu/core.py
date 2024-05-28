@@ -145,6 +145,8 @@ class Task:
 
 
 class SerialTask(Task):
+    """Serial Task class."""
+
     def __init__(self, result_path: Path, workers: int = 1) -> None:
         """Initialize a serial task object."""
         if workers != 1:
@@ -160,6 +162,7 @@ class ParallelTask(Task):
     """Initialize a parallel task object."""
 
     def __init__(self, result_path: Path, workers: int = 1) -> None:
+        """Initialize ParallelTask."""
         if workers <= 1:
             raise Exception("ParallelTask should have more than 1 worker.")
 
@@ -177,6 +180,7 @@ class TaskManager:
 
     @public
     def get_task(self, name: str) -> Optional[Task]:
+        """Get a task with the given name."""
         return self.tasks.get(name)
 
     @public
