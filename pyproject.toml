@@ -17,6 +17,16 @@ include = ["src/retsu/py.typed"]
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4"
+atpublic = ">=4.0"
+celery = ">=5"
+redis = ">=5"
+django = { version = ">=3", optional = true }
+
+[tool.poetry.extras]
+django = [
+  "django",
+]
+
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=7.3.2"
@@ -42,6 +52,11 @@ mkdocstrings-python = ">=1.1.2"
 makim = "1.15.1"
 # 'PosixPath' object has no attribute 'endswith'
 virtualenv = "<=20.25.1"
+flask = ">=3"
+containers-sugar = "1.13.0"
+compose-go = "2.27.0"
+django = ">=3"
+django-stubs = ">=3"
 
 [tool.pytest.ini_options]
 testpaths = [
@@ -79,7 +94,6 @@ select = [
   "RUF", # Ruff-specific rules
   "I001",  # isort
 ]
-fixable = ["I001"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
@@ -96,3 +110,4 @@ ignore_missing_imports = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unused_configs = true
+exclude = ["example/"]

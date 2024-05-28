@@ -1,13 +1,8 @@
 """Tests for retsu package."""
-import pytest
 
 
-@pytest.fixture
-def response_pytest():
-    """Sample pytest fixture."""
-    return True
+def test_import() -> None:
+    """Test retsu import."""
+    import retsu
 
-
-def test_content_pytest():
-    """Test with pytest."""
-    assert True
+    assert retsu is not None
