@@ -9,7 +9,8 @@ import warnings
 
 from abc import abstractmethod
 from pathlib import Path
-from typing import Any
+from time import sleep
+from typing import Any, Optional
 from uuid import uuid4
 
 from public import public
@@ -17,10 +18,12 @@ from public import public
 
 class ResultTask:
     """Result from a task."""
+
     def __init__(self, result_path: Path) -> None:
         """Initialize ResultTask."""
         self.result_path = result_path
 
+    @public
     def save(self, task_id: str, result: Any) -> None:
         """Save the result in a file."""
         with open(self.result_path / f"{task_id}.json", "w") as f:
@@ -30,6 +33,7 @@ class ResultTask:
                 indent=2,
             )
 
+    @public
     def load(self, task_id: str) -> dict[str, Any]:
         """Load the result from a file."""
         result_file = self.result_path / f"{task_id}.json"
@@ -40,11 +44,13 @@ class ResultTask:
         with open(result_file, "r") as f:
             return json.load(f)
 
+    @public
     def status(self, task_id: str) -> bool:
         """Return if the result for a given task was already stored."""
         result_file = self.result_path / f"{task_id}.json"
         return result_file.exists()
 
+    @public
     def get(self, task_id: str) -> Any:
         """Return the result for given task."""
         if not self.status(task_id):
@@ -89,6 +95,8 @@ class Task:
 
         for i in range(self.workers):
             self.queue_in.put(None)
+
+        for i in range(self.workers):
             p = self.processes[i]
             p.join()
 
@@ -167,17 +175,26 @@ class ParallelTask(Task):
 class TaskManager:
     """Manage tasks."""
 
-    tasks: list[Task]
+    tasks: dict[str, Task]
 
-    def __init__(self, tasks: list[Task] = []) -> None:
-        self.tasks = list(tasks)
+    def __init__(self) -> None:
+        """Create a list of retsu tasks."""
+        self.tasks: dict[str, Task] = []
 
+    @public
+    def get_task(self, name: str) -> Optional[Task]:
+        return self.tasks.get(name)
+
+    @public
     def start(self) -> None:
         """Start tasks."""
-        for task in self.tasks:
+        for task_name, task in self.tasks.items():
+            print(f"Task `{task_name}` is starting ...")
             task.start()
 
+    @public
     def stop(self) -> None:
         """Stop tasks."""
-        for task in self.tasks:
+        for task_name, task in self.tasks.items():
+            print(f"Task `{task_name}` is stopping ...")
             task.stop()

@@ -1,11 +1,4 @@
-"""
-
-See Also
---------
-
-- https://docs.python.org/3/library/multiprocessing.html#contexts-and-start-methods
-
-"""
+"""My retsu tasks."""
 from __future__ import annotations
 
 import multiprocessing as mp
@@ -16,7 +9,9 @@ from time import sleep
 import redis
 
 from celery import Celery, chain, chord
-from retsu import ParallelTask, SerialTask
+from retsu import TaskManager
+from retsu.celery import ParallelCeleryTask, SerialCeleryTask
+from settings import RESULTS_PATH
 
 app = Celery(
     'retsu',
@@ -53,38 +48,38 @@ except redis.ConnectionError as e:
     exit(1)
 
 
-class MySerialTask1(SerialTask):
+class MySerialTask1(SerialCeleryTask):
 
     def request(self, a: int, b: int) -> str:
         return super().request(a=a, b=b)
 
-    def task(self, a: int, b: int, task_id: str) -> None:
-        print("main task executed ...")
-        sleep(a + b)
-
-        workflow = chord([
-            self.task_a1.s(self, a, b, task_id),
-            self.task_a2.s(self, task_id),
-        ])(self.final_task.s(self, task_id))
-
-        workflow.apply_async()
-
-        print(f"{self.__class__.__name__} Done ({task_id})")
+    def get_chord_tasks(self, a: int, b: int, task_id: str) -> None:
+        return (
+            [
+                self.task_a1.s(a, b, task_id),
+                self.task_a2.s(task_id),
+            ],
+            self.final_task.s(task_id)
+        )
 
     @app.task
+    @staticmethod
     def task_a1(a: int, b: int, task_id: str):
+        sleep(a + b)
         print("running task a1")
         result = a + b
         redis_client.set(f"result-{task_id}", result)
         return result
 
     @app.task
+    @staticmethod
     def task_a2(task_id: str):
         print("running task a2")
         result = redis_client.get(f"result-{task_id}")
         return result
 
     @app.task
+    @staticmethod
     def final_task(results, task_id: str):
         print("running final task")
 
@@ -92,7 +87,9 @@ class MySerialTask1(SerialTask):
         final_result = f"Final result: {result}"
         print(final_result)
 
-        self.result.save(
+        task_result = ResultTask()
+
+        task_result.save(
             task_id=task_id,
             result=final_result
         )
@@ -100,28 +97,60 @@ class MySerialTask1(SerialTask):
         return final_result
 
 
-
-class MySerialTask2(MySerialTask1):
-    pass
-
-
-class MyParallelTask1(ParallelTask):
-
-    def __init__(self, result_path: str, workers: int=1) -> None:
-        super().__init__(result_path, workers=3)
+class MyParallelTask1(ParallelCeleryTask):
 
     def request(self, a: int, b: int) -> str:
         return super().request(a=a, b=b)
 
-    def task(self, a: int, b: int, task_id: str) -> None:
-        sleep(a + b)
-
-        self.result.save(
-            task_id=task_id,
-            result=a + b
+    def get_chord_tasks(self, a: int, b: int, task_id: str) -> None:
+        return (
+            [
+                self.task_a1.s(a, b, task_id),
+                self.task_a2.s(task_id),
+            ],
+            self.final_task.s(task_id)
         )
-        print(f"{self.__class__.__name__} Done ({task_id})")
+
+    @app.task
+    @staticmethod
+    def task_a1(a: int, b: int, task_id: str):
+        sleep(a + b)
+        print("running task a1")
+        result = a + b
+        redis_client.set(f"result-{task_id}", result)
+        return result
+
+    @app.task
+    @staticmethod
+    def task_a2(task_id: str):
+        print("running task a2")
+        result = redis_client.get(f"result-{task_id}")
+        return result
+
+    @app.task
+    @staticmethod
+    def final_task(results, task_id: str):
+        print("running final task")
+
+        result = redis_client.get(f"result-{task_id}")
+        final_result = f"Final result: {result}"
+        print(final_result)
+
+        task_result = ResultTask()
+
+        task_result.save(
+            task_id=task_id,
+            result=final_result
+        )
+
+        return final_result
 
 
-class MyParallelTask2(MyParallelTask1):
-    pass
+class MyTaskManager(TaskManager):
+    def __init__(self) -> None:
+        """Create a list of retsu tasks."""
+
+        self.tasks = {
+            "serial": MySerialTask1(RESULTS_PATH, app=app),
+            "serial": MyParallelTask1(RESULTS_PATH, workers=2, app=app),
+        }

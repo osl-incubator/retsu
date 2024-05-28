@@ -1,76 +1,85 @@
-"""
-# celeryconfig.py
-broker_url = 'redis://localhost:6379/0'
-result_backend = 'redis://localhost:6379/0'
+"""Retsu tasks with celery."""
 
-# Optional: Define task routes if needed
-task_queues = {
-    'default': {
-        'exchange': 'tasks',
-        'routing_key': 'task.default',
-    },
-    'queue_a1': {
-        'exchange': 'tasks',
-        'routing_key': 'task.a1',
-    },
-    'queue_a2': {
-        'exchange': 'tasks',
-        'routing_key': 'task.a2',
-    },
-    'queue_b': {
-        'exchange': 'tasks',
-        'routing_key': 'task.b',
-    },
-    'queue_c': {
-        'exchange': 'tasks',
-        'routing_key': 'task.c',
-    },
-}
-
-task_routes = {
-    'tasks.task_a1': {'queue': 'queue_a1'},
-    'tasks.task_a2': {'queue': 'queue_a2'},
-    'tasks.task_b': {'queue': 'queue_b'},
-    'tasks.task_c': {'queue': 'queue_c'},
-}
-"""
 from __future__ import annotations
 
 from functools import wraps
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
-from celery import Celery
+import celery
+
+from celery import Celery, chain, chord
 
 from retsu.core import ParallelTask, SerialTask
 
 
-class ParallelCeleryTask(ParallelTask):
+class CeleryTask:
+
+    def task(self, *args, task_id: str, **kwargs) -> None:
+        """Define the task to be executed."""
+        chord_tasks, chord_callback = self.get_chord_tasks(*args, task_id=task_id, **kwargs)
+        chain_tasks = self.get_chain_tasks(*args, task_id=task_id, **kwargs)
+
+        if chord_tasks:
+            _chord = chord(
+                chord_tasks
+            )
+            workflow_chord = (
+                _chord(chord_callback) if chord_callback else _chord()
+            )
+            workflow_chord.apply_async()
+
+        if chain_tasks:
+            workflow_chain = chain(
+                chord_tasks
+            )()
+            workflow_chain.apply_async()
+
+    def get_chord_tasks(
+        self, *args, **kwargs
+    ) -> tuple[
+        list[celery.local.PromiseProxy],
+        Optional[celery.local.PromiseProxy]
+    ]:
+        """
+        Run tasks with chord.
+
+        Return
+        ------
+        tuple:
+            list of tasks for the chord, and the task to be used as a callback
+        """
+        chord_tasks: list[celery.local.PromiseProxy] = []
+        callback_task = None
+        return (chord_tasks, callback_task)
+
+    def get_chain_tasks(
+        self, *args, **kwargs
+    ) -> list[celery.local.PromiseProxy]:
+        """Run tasks with chain."""
+        chain_tasks: list[celery.local.PromiseProxy] = []
+        return chain_tasks
+
+
+class ParallelCeleryTask(CeleryTask, ParallelTask):
+
     def __init__(
         self,
         result_path: Path,
         workers: int=1,
-        name: str="retsu",
-        broker_url: str='valkey://localhost:6379/0',
-        result_backend: str='valkey://localhost:6379/0'
+        app: Celery = Celery(),
     ) -> None:
         super().__init__(result_path, workers)
-        self.name = name
-        self.app = Celery(self.name)
-        self.broker_url = 'valkey://localhost:6379/0'
-        self.result_backend = 'valkey://localhost:6379/0'
+        self.app = app
 
 
-class SerialCeleryTask(ParallelTask):
+
+class SerialCeleryTask(CeleryTask, SerialTask):
+
     def __init__(
         self,
         result_path: Path,
         workers: int=1,
-        name: str="retsu",
-        broker_url: str='valkey://localhost:6379/0',
-        result_backend: str='valkey://localhost:6379/0'
+        app: Celery = Celery(),
     ) -> None:
         super().__init__(result_path, workers)
-        self.name = name
-        self.app = Celery(self.name)
-        self.broker_url = 'valkey://localhost:6379/0'
-        self.result_backend = 'valkey://localhost:6379/0'
+        self.app = app
