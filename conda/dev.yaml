@@ -7,3 +7,6 @@ dependencies:
   - pip
   - poetry
   - nodejs # used by semantic-release
+  - pip:
+    # fix issues with distlib
+    - paginate
