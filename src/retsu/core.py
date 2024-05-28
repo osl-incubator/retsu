@@ -8,7 +8,7 @@ import warnings
 
 from abc import abstractmethod
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, cast
 from uuid import uuid4
 
 from public import public
@@ -38,7 +38,7 @@ class ResultTask:
         if not result_file.exists():
             raise Exception(f"File {result_file} doesn't exist.")
         with open(result_file, "r") as f:
-            return json.load(f)
+            return cast(dict[str, Any], json.load(f))
 
     @public
     def status(self, task_id: str) -> bool:
@@ -64,8 +64,8 @@ class Task:
         self.active = True
         self.workers = workers
         self.result = ResultTask(result_path)
-        self.queue_in = mp.Queue()
-        self.processes: list[Process] = []
+        self.queue_in: mp.Queue = mp.Queue()
+        self.processes: list[mp.Process] = []
 
     @public
     def get_result(self, task_id: str) -> Any:
@@ -133,7 +133,7 @@ class Task:
         )
 
     @public
-    def run(self):
+    def run(self) -> None:
         """Run the task with data from the queue."""
         while self.active:
             data = self.queue_in.get()

@@ -1,4 +1,4 @@
-""""""
+"""Settings used by the example."""
 
 import os
 

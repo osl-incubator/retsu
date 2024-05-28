@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from time import sleep
 
+import celery
 import redis
 
 from celery import Celery
@@ -17,11 +18,15 @@ app = Celery(
     backend="redis://localhost:6379/0",
 )
 
+LOG_FORMAT_PREFIX = "[%(asctime)s: %(levelname)s/%(processName)s]"
+
 app.conf.update(
     broker_url="redis://localhost:6379/0",
     result_backend="redis://localhost:6379/0",
-    worker_log_format="[%(asctime)s: %(levelname)s/%(processName)s] %(message)s",
-    worker_task_log_format="[%(asctime)s: %(levelname)s/%(processName)s] %(task_name)s[%(task_id)s]: %(message)s",
+    worker_log_format=f"{LOG_FORMAT_PREFIX} %(message)s",
+    worker_task_log_format=(
+        f"{LOG_FORMAT_PREFIX} %(task_name)s[%(task_id)s]: %(message)s"
+    ),
     task_annotations={"*": {"rate_limit": "10/s"}},
     task_track_started=True,
     task_time_limit=30 * 60,
@@ -47,10 +52,16 @@ except redis.ConnectionError as e:
 
 
 class MySerialTask1(SerialCeleryTask):
+    """MySerialTask1."""
+
     def request(self, a: int, b: int) -> str:
+        """Receive the request for processing."""
         return super().request(a=a, b=b)
 
-    def get_chord_tasks(self, a: int, b: int, task_id: str) -> None:
+    def get_chord_tasks(
+        self, a: int, b: int, task_id: str
+    ) -> list[celery.local.PromiseProxy]:
+        """Define the list of tasks for celery chord."""
         return (
             [
                 self.task_a1.s(a, b, task_id),
@@ -61,7 +72,8 @@ class MySerialTask1(SerialCeleryTask):
 
     @app.task
     @staticmethod
-    def task_a1(a: int, b: int, task_id: str):
+    def task_a1(a: int, b: int, task_id: str) -> int:
+        """Define the task_a1."""
         sleep(a + b)
         print("running task a1")
         result = a + b
@@ -70,14 +82,16 @@ class MySerialTask1(SerialCeleryTask):
 
     @app.task
     @staticmethod
-    def task_a2(task_id: str):
+    def task_a2(task_id: str) -> int:
+        """Define the task_a2."""
         print("running task a2")
         result = redis_client.get(f"result-{task_id}")
         return result
 
     @app.task
     @staticmethod
-    def final_task(results, task_id: str):
+    def final_task(results, task_id: str) -> int:
+        """Define the final_task."""
         print("running final task")
 
         result = redis_client.get(f"result-{task_id}")
@@ -93,9 +107,13 @@ class MySerialTask1(SerialCeleryTask):
 
 class MyParallelTask1(ParallelCeleryTask):
     def request(self, a: int, b: int) -> str:
+        """Receive the request for processing."""
         return super().request(a=a, b=b)
 
-    def get_chord_tasks(self, a: int, b: int, task_id: str) -> None:
+    def get_chord_tasks(
+        self, a: int, b: int, task_id: str
+    ) -> list[celery.local.PromiseProxy]:
+        """Define the list of tasks for celery chord."""
         return (
             [
                 self.task_a1.s(a, b, task_id),
@@ -106,7 +124,8 @@ class MyParallelTask1(ParallelCeleryTask):
 
     @app.task
     @staticmethod
-    def task_a1(a: int, b: int, task_id: str):
+    def task_a1(a: int, b: int, task_id: str) -> int:
+        """Define the task_a1."""
         sleep(a + b)
         print("running task a1")
         result = a + b
@@ -115,14 +134,16 @@ class MyParallelTask1(ParallelCeleryTask):
 
     @app.task
     @staticmethod
-    def task_a2(task_id: str):
+    def task_a2(task_id: str) -> int:
+        """Define the task_a2."""
         print("running task a2")
         result = redis_client.get(f"result-{task_id}")
         return result
 
     @app.task
     @staticmethod
-    def final_task(results, task_id: str):
+    def final_task(results, task_id: str) -> int:
+        """Define the final_task."""
         print("running final task")
 
         result = redis_client.get(f"result-{task_id}")
