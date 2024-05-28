@@ -1,4 +1,5 @@
 """My retsu tasks."""
+
 from __future__ import annotations
 
 import multiprocessing as mp
@@ -14,25 +15,25 @@ from retsu.celery import ParallelCeleryTask, SerialCeleryTask
 from settings import RESULTS_PATH
 
 app = Celery(
-    'retsu',
-    broker='redis://localhost:6379/0',
-    backend='redis://localhost:6379/0'
+    "retsu",
+    broker="redis://localhost:6379/0",
+    backend="redis://localhost:6379/0",
 )
 
 app.conf.update(
-    broker_url='redis://localhost:6379/0',
-    result_backend='redis://localhost:6379/0',
+    broker_url="redis://localhost:6379/0",
+    result_backend="redis://localhost:6379/0",
     worker_log_format="[%(asctime)s: %(levelname)s/%(processName)s] %(message)s",
     worker_task_log_format="[%(asctime)s: %(levelname)s/%(processName)s] %(task_name)s[%(task_id)s]: %(message)s",
-    task_annotations={'*': {'rate_limit': '10/s'}},
+    task_annotations={"*": {"rate_limit": "10/s"}},
     task_track_started=True,
     task_time_limit=30 * 60,
     task_soft_time_limit=30 * 60,
-    worker_redirect_stdouts_level='DEBUG'
+    worker_redirect_stdouts_level="DEBUG",
 )
 
 redis_client = redis.Redis(
-    host='localhost',
+    host="localhost",
     port=6379,
     db=0,
     ssl=False,
@@ -49,7 +50,6 @@ except redis.ConnectionError as e:
 
 
 class MySerialTask1(SerialCeleryTask):
-
     def request(self, a: int, b: int) -> str:
         return super().request(a=a, b=b)
 
@@ -59,7 +59,7 @@ class MySerialTask1(SerialCeleryTask):
                 self.task_a1.s(a, b, task_id),
                 self.task_a2.s(task_id),
             ],
-            self.final_task.s(task_id)
+            self.final_task.s(task_id),
         )
 
     @app.task
@@ -89,16 +89,12 @@ class MySerialTask1(SerialCeleryTask):
 
         task_result = ResultTask()
 
-        task_result.save(
-            task_id=task_id,
-            result=final_result
-        )
+        task_result.save(task_id=task_id, result=final_result)
 
         return final_result
 
 
 class MyParallelTask1(ParallelCeleryTask):
-
     def request(self, a: int, b: int) -> str:
         return super().request(a=a, b=b)
 
@@ -108,7 +104,7 @@ class MyParallelTask1(ParallelCeleryTask):
                 self.task_a1.s(a, b, task_id),
                 self.task_a2.s(task_id),
             ],
-            self.final_task.s(task_id)
+            self.final_task.s(task_id),
         )
 
     @app.task
@@ -138,10 +134,7 @@ class MyParallelTask1(ParallelCeleryTask):
 
         task_result = ResultTask()
 
-        task_result.save(
-            task_id=task_id,
-            result=final_result
-        )
+        task_result.save(task_id=task_id, result=final_result)
 
         return final_result
 

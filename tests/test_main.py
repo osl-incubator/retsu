@@ -1,4 +1,5 @@
 """Tests for retsu package."""
+
 import pytest
 
 

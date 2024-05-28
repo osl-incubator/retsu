@@ -5,8 +5,7 @@ from retsu.core import TaskManager
 
 
 def create_app_config(
-    manager: TaskManager,
-    app_name: str="myapp"
+    manager: TaskManager, app_name: str = "myapp"
 ) -> AppConfig:
     """Create a django app config class."""
 

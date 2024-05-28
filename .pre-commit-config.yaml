@@ -8,9 +8,19 @@ repos:
 
   - repo: local
     hooks:
-      - id: ruff
-        name: ruff
-        entry: ruff --fix
+      - id: ruff format
+        name: ruff format
+        entry: ruff format
+        language: system
+        pass_filenames: true
+        require_serial: yes
+        files: "./"
+        types:
+          - python
+
+      - id: ruff check
+        name: ruff check
+        entry: ruff check
         language: system
         pass_filenames: true
         require_serial: yes

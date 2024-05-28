@@ -1,4 +1,5 @@
 """Retsu core classes."""
+
 from __future__ import annotations
 
 import asyncio
@@ -38,9 +39,7 @@ class ResultTask:
         """Load the result from a file."""
         result_file = self.result_path / f"{task_id}.json"
         if not result_file.exists():
-            raise Exception(
-                f"File {result_file} doesn't exist."
-            )
+            raise Exception(f"File {result_file} doesn't exist.")
         with open(result_file, "r") as f:
             return json.load(f)
 
@@ -63,14 +62,13 @@ class ResultTask:
 class Task:
     """Main class for handling a task."""
 
-    def __init__(self, result_path: Path, workers: int=1) -> None:
+    def __init__(self, result_path: Path, workers: int = 1) -> None:
         """Initialize a task object."""
         self.active = True
         self.workers = workers
         self.result = ResultTask(result_path)
         self.queue_in = mp.Queue()
         self.processes: list[Process] = []
-
 
     @public
     def get_result(self, task_id: str) -> Any:
@@ -120,7 +118,7 @@ class Task:
                 "args": args,
                 "kwargs": kwargs,
             },
-            block=False
+            block=False,
         )
         return key
 
@@ -137,7 +135,6 @@ class Task:
             **data["kwargs"],
         )
 
-
     @public
     def run(self):
         """Run the task with data from the queue."""
@@ -150,9 +147,8 @@ class Task:
             self.prepare_task(data)
 
 
-
 class SerialTask(Task):
-    def __init__(self, result_path: Path, workers: int=1) -> None:
+    def __init__(self, result_path: Path, workers: int = 1) -> None:
         """Initialize a serial task object."""
         if workers != 1:
             warnings.warn(
@@ -165,7 +161,8 @@ class SerialTask(Task):
 
 class ParallelTask(Task):
     """Initialize a parallel task object."""
-    def __init__(self, result_path: Path, workers: int=1) -> None:
+
+    def __init__(self, result_path: Path, workers: int = 1) -> None:
         if workers <= 1:
             raise Exception("ParallelTask should have more than 1 worker.")
 

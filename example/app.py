@@ -17,6 +17,7 @@ def signal_handler(signum, frame):
     # Perform any other cleanup here if necessary
     os._exit(0)
 
+
 # Register the signal handler
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
