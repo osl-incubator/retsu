@@ -23,3 +23,13 @@ version = get_version()
 __version__ = version
 __author__ = "Ivan Ogasawara"
 __email__ = "ivan.ogasawara@gmail.com"
+
+__all__ = [
+    "__version__",
+    "__author__",
+    "__email__",
+    "ParallelTask",
+    "ResultTask",
+    "SerialTask",
+    "TaskManager",
+]

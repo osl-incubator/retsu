@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Optional
 
 import celery
 
-from celery import Celery, chain, chord
+from celery import chain, chord
 
 from retsu.core import ParallelTask, SerialTask
 

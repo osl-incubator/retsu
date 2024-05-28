@@ -160,7 +160,7 @@ class MyParallelTask1(ParallelCeleryTask):
 
 
 class MyTaskManager(TaskManager):
-    """MyTaskManager"""
+    """MyTaskManager."""
 
     def __init__(self) -> None:
         """Create a list of retsu tasks."""
