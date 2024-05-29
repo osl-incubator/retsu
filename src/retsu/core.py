@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import multiprocessing as mp
+import os
 import warnings
 
 from abc import abstractmethod
@@ -17,9 +18,10 @@ from public import public
 class ResultTask:
     """Result from a task."""
 
-    def __init__(self, result_path: Path) -> None:
+    def __init__(self) -> None:
         """Initialize ResultTask."""
-        self.result_path = result_path
+        self.result_path = os.getenv("RETSU_RESULT_PATH", "/tmp/retsu/results")
+        os.makedirs(self.result_path, exist_ok=True)
 
     @public
     def save(self, task_id: str, result: Any) -> None:
@@ -59,11 +61,11 @@ class ResultTask:
 class Task:
     """Main class for handling a task."""
 
-    def __init__(self, result_path: Path, workers: int = 1) -> None:
+    def __init__(self, workers: int = 1) -> None:
         """Initialize a task object."""
         self.active = True
         self.workers = workers
-        self.result = ResultTask(result_path)
+        self.result = ResultTask()
         self.queue_in: mp.Queue[Any] = mp.Queue()
         self.processes: list[mp.Process] = []
 
