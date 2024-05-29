@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "retsu"
-version = "0.0.2"  # semantic-release
+version = "0.0.3"  # semantic-release
 description = "Retsu aims to wrap-up Celery in way to facilitate to create parallel and serial tasks"
 readme = "README.md"
 authors = ["Ivan Ogasawara <ivan.ogasawara@gmail.com>"]
