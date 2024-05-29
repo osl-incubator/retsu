@@ -20,7 +20,9 @@ class ResultTask:
 
     def __init__(self) -> None:
         """Initialize ResultTask."""
-        self.result_path = os.getenv("RETSU_RESULT_PATH", "/tmp/retsu/results")
+        self.result_path = Path(
+            os.getenv("RETSU_RESULT_PATH", "/tmp/retsu/results")
+        )
         os.makedirs(self.result_path, exist_ok=True)
 
     @public
@@ -157,7 +159,7 @@ class SerialTask(Task):
                 "Switching automatically to 1 ..."
             )
             workers = 1
-        super().__init__(result_path, workers=workers)
+        super().__init__(workers=workers)
 
 
 class ParallelTask(Task):
@@ -168,7 +170,7 @@ class ParallelTask(Task):
         if workers <= 1:
             raise Exception("ParallelTask should have more than 1 worker.")
 
-        super().__init__(result_path, workers=workers)
+        super().__init__(workers=workers)
 
 
 class TaskManager:
