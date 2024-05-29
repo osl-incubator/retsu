@@ -21,16 +21,24 @@ class CeleryTask:
         )
         chain_tasks = self.get_chain_tasks(*args, task_id=task_id, **kwargs)
 
+        # start the tasks
         if chord_tasks:
             if chord_callback:
                 workflow_chord = chord(chord_tasks, chord_callback)
             else:
                 workflow_chord = chord(chord_tasks)
-            workflow_chord.apply_async()
+            promise_chord = workflow_chord.apply_async()
 
         if chain_tasks:
             workflow_chain = chain(chord_tasks)
-            workflow_chain.apply_async()
+            promise_chain = workflow_chain.apply_async()
+
+        # wait for the tasks
+        if chord_tasks:
+            promise_chord.get()
+
+        if chain_tasks:
+            promise_chain.get()
 
     def get_chord_tasks(  # type: ignore
         self, *args, **kwargs
