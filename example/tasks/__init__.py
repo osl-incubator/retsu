@@ -1,8 +1,9 @@
 """Tasks for the example."""
 
-from parallel import MyParallelTask1
 from retsu import TaskManager
-from serial import MySerialTask1
+
+from .parallel import MyParallelTask1
+from .serial import MySerialTask1
 
 
 class MyTaskManager(TaskManager):

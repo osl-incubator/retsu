@@ -6,9 +6,10 @@ from time import sleep
 
 import celery
 
-from config import app, redis_client
 from retsu import ResultTask
 from retsu.celery import ParallelCeleryTask
+
+from .config import app, redis_client
 
 
 @app.task

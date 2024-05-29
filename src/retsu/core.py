@@ -151,7 +151,7 @@ class Task:
 class SerialTask(Task):
     """Serial Task class."""
 
-    def __init__(self, result_path: Path, workers: int = 1) -> None:
+    def __init__(self, workers: int = 1) -> None:
         """Initialize a serial task object."""
         if workers != 1:
             warnings.warn(
@@ -165,7 +165,7 @@ class SerialTask(Task):
 class ParallelTask(Task):
     """Initialize a parallel task object."""
 
-    def __init__(self, result_path: Path, workers: int = 1) -> None:
+    def __init__(self, workers: int = 1) -> None:
         """Initialize ParallelTask."""
         if workers <= 1:
             raise Exception("ParallelTask should have more than 1 worker.")
