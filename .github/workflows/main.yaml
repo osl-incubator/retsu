@@ -54,13 +54,10 @@ jobs:
           poetry install
 
       - name: start up services
-        run: |
-          sugar build
-          sugar ext restart --options -d
+        run: makim tests.setup
 
       - name: Run tests
-        run: |
-          makim tests.unit
+        run: makim tests.unit
 
       - name: Run style checks
         if: success() || failure()

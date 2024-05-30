@@ -68,6 +68,18 @@ groups:
           celery -A tasks.app worker --loglevel=debug &
           python app.py
 
+      setup:
+        help: Run the setup for the unit tests
+        shell: bash
+        run: |
+          set -ex
+          sugar build
+          sugar ext restart --options -d
+          sleep 5
+          pushd tests/
+          celery -A celery_tasks worker --loglevel=debug &
+          popd
+
       ci:
         help: run the sames tests executed on CI
         dependencies:

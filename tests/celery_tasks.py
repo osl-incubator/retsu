@@ -1,6 +1,11 @@
-"""Configuration for Celery app."""
+"""Celery Tasks."""
+
+from __future__ import annotations
 
 import os
+
+from datetime import datetime
+from time import sleep
 
 import redis
 
@@ -13,7 +18,7 @@ redis_db: int = int(os.getenv("RETSU_REDIS_DB", 0))
 redis_uri = f"redis://{redis_host}:{redis_port}/{redis_db}"
 
 app = Celery(
-    "app",
+    "celery_tasks",
     broker=redis_uri,
     backend=redis_uri,
 )
@@ -48,3 +53,17 @@ try:
 except redis.ConnectionError as e:
     print(f"Failed to connect to Redis: {e}")
     exit(1)
+
+
+@app.task  # type: ignore
+def task_sum(x: int, y: int, task_id: str) -> int:
+    """Sum two numbers, x and y."""
+    result = x + y
+    return result
+
+
+@app.task  # type: ignore
+def task_sleep(seconds: int, task_id: str) -> int:
+    """Sum two numbers, x and y, and sleep the same amount of the sum."""
+    sleep(seconds)
+    return int(datetime.now().timestamp())
