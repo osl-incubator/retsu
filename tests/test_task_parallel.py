@@ -8,10 +8,10 @@ from typing import Any, Generator
 
 import pytest
 
-from retsu import SerialTask, Task
+from retsu import ParallelTask, Task
 
 
-class MyResultTask(SerialTask):
+class MyResultTask(ParallelTask):
     """Task for the test."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
@@ -22,7 +22,7 @@ class MyResultTask(SerialTask):
         return result
 
 
-class MyTimestampTask(SerialTask):
+class MyTimestampTask(ParallelTask):
     """Task for the test."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
@@ -35,7 +35,7 @@ class MyTimestampTask(SerialTask):
 @pytest.fixture
 def task_result() -> Generator[Task, None, None]:
     """Create a fixture for MyResultTask."""
-    task = MyResultTask()
+    task = MyResultTask(workers=10)
     task.start()
     yield task
     task.stop()
@@ -44,17 +44,17 @@ def task_result() -> Generator[Task, None, None]:
 @pytest.fixture
 def task_timestamp() -> Generator[Task, None, None]:
     """Create a fixture for MyResultTask."""
-    task = MyTimestampTask()
+    task = MyTimestampTask(workers=10)
     task.start()
     yield task
     task.stop()
 
 
-class TestSerialTask:
-    """TestSerialTask."""
+class TestParallelTask:
+    """TestParallelTask."""
 
-    def test_serial_result(self, task_result: Task) -> None:
-        """Run simple test for a serial task."""
+    def test_parallel_result(self, task_result: Task) -> None:
+        """Run simple test for a parallel task."""
         results: dict[str, int] = {}
 
         task = task_result
@@ -69,8 +69,8 @@ class TestSerialTask:
                 result == expected
             ), f"Expected Result: {expected}, Actual Result: {result}"
 
-    def test_serial_timestamp(self, task_timestamp: Task) -> None:
-        """Run simple test for a serial task."""
+    def test_parallel_timestamp(self, task_timestamp: Task) -> None:
+        """Run simple test for a parallel task."""
         results: list[tuple[str, int]] = []
 
         task = task_timestamp
@@ -86,7 +86,7 @@ class TestSerialTask:
         # check results
         previous_timestamp = results[0][1]
         for _, current_timestamp in results[1:]:
-            assert current_timestamp > previous_timestamp, (
+            assert current_timestamp < previous_timestamp, (
                 f"Previous timestamp: {previous_timestamp}, "
                 f"Current timestamp: {current_timestamp}"
             )
