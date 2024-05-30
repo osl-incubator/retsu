@@ -7,9 +7,19 @@ import pickle
 
 from datetime import datetime
 from time import sleep
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, cast
+
+try:
+    # Python 3.12+
+    from typing import Unpack  # type: ignore[attr-defined]
+except ImportError:
+    # < Python 3.12
+    from typing_extensions import Unpack
+
 
 import redis
+
+from public import public
 
 
 class TaskMetadataManager:
@@ -22,11 +32,13 @@ class TaskMetadataManager:
 
     def get_all(self, task_id: str) -> dict[str, bytes]:
         """Get the entire metadata for a given task."""
-        return self.client.hgetall(f"task:{task_id}:metadata")
+        result = self.client.hgetall(f"task:{task_id}:metadata")
+        return cast(dict[str, bytes], result)
 
     def get(self, task_id: str, attribute: str) -> bytes:
         """Get a specific metadata attribute for a given task."""
-        return self.client.hget(f"task:{task_id}:metadata", attribute)
+        result = self.client.hget(f"task:{task_id}:metadata", attribute)
+        return cast(bytes, result)
 
     def create(self, task_id: str, metadata: dict[str, Any]) -> None:
         """Create an initial metadata for given task."""
@@ -51,11 +63,13 @@ class StepMetadataManager:
 
     def get_all(self, task_id: str, step_id: str) -> dict[str, bytes]:
         """Get the whole metadata for a given task and step."""
-        return self.client.hgetall(f"task:{task_id}:step:{step_id}")
+        result = self.client.hgetall(f"task:{task_id}:step:{step_id}")
+        return cast(dict[str, bytes], result)
 
     def get(self, task_id: str, step_id: str, attribute: str) -> bytes:
         """Get the value of a given attribute for a given task and step."""
-        return self.client.hget(f"task:{task_id}:step:{step_id}", attribute)
+        result = self.client.hget(f"task:{task_id}:step:{step_id}", attribute)
+        return cast(bytes, result)
 
     def create(
         self, task_id: str, step_id: str, metadata: dict[str, Any]
@@ -78,10 +92,13 @@ class StepMetadataManager:
         )
 
 
+@public
 class ResultTaskManager:
     """Manage the result and metadata from tasks."""
 
-    def __init__(self, host="localhost", port=6379, db=0):
+    def __init__(
+        self, host: str = "localhost", port: int = 6379, db: int = 0
+    ) -> None:
         """Initialize ResultTaskManager."""
         self.client = redis.Redis(
             host=host, port=port, db=db, decode_responses=False
@@ -92,10 +109,11 @@ class ResultTaskManager:
         """Get the result for a given task."""
         time_step = 0.5
         if timeout:
+            timeout_countdown = float(timeout)
             while self.status(task_id) != "completed":
                 sleep(time_step)
-                timeout -= time_step
-                if timeout <= 0:
+                timeout_countdown -= time_step
+                if timeout_countdown <= 0:
                     status = self.status(task_id)
                     raise Exception(
                         "Timeout(get): Task result is not ready yet. "
@@ -122,6 +140,7 @@ class ResultTaskManager:
         return status.decode("utf8")
 
 
+@public
 def create_result_task_manager() -> ResultTaskManager:
     """Create a ResultTaskManager with parameters from the environment."""
     redis_host: str = os.getenv("RETSU_REDIS_HOST", "localhost")
@@ -131,13 +150,16 @@ def create_result_task_manager() -> ResultTaskManager:
     return ResultTaskManager(host=redis_host, port=redis_port, db=redis_db)
 
 
-def track_step(task_metadata: TaskMetadataManager) -> Callable[(Any,), Any]:
+@public
+def track_step(task_metadata: TaskMetadataManager) -> Callable[..., Any]:
     """Decorate a function with TaskMetadataManager."""
 
-    def decorator(task_func: Callable[(Any,), Any]) -> Callable[(Any,), Any]:
+    def decorator(task_func: Callable[..., Any]) -> Callable[..., Any]:
         """Return a decorator for the given task."""
 
-        def wrapper(self, *args, **kwargs) -> Any:
+        def wrapper(
+            *args: Unpack[Any], **kwargs: Unpack[dict[str, Any]]
+        ) -> Any:
             """Wrap a function for registering the task metadata."""
             task_id = kwargs["task_id"]
             step_id = kwargs.get("step_id", task_func.__name__)
@@ -145,7 +167,7 @@ def track_step(task_metadata: TaskMetadataManager) -> Callable[(Any,), Any]:
             step_metadata = task_metadata.step
 
             step_metadata.update(task_id, step_id, "status", "started")
-            result = task_func(self, *args, **kwargs)
+            result = task_func(*args, **kwargs)
             step_metadata.update(task_id, step_id, "status", "completed")
             result_pickled = pickle.dumps(result)
             step_metadata.update(task_id, step_id, "result", result_pickled)

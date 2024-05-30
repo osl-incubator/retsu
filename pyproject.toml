@@ -21,6 +21,7 @@ atpublic = ">=4.0"
 celery = ">=5"
 redis = ">=5"
 django = { version = ">=3", optional = true }
+typing-extensions = ">=4.12.0"
 
 [tool.poetry.extras]
 django = [

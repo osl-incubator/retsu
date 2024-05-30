@@ -1,12 +1,16 @@
 """Tests for retsu package."""
 
-from retsu import SerialTask
+from __future__ import annotations
+
+from typing import Any
+
+from retsu import SerialTask, Task
 
 
 class MyTask(SerialTask):
     """Task for the test."""
 
-    def task(self, *args, task_id: str, **kwargs) -> None:  # type: ignore
+    def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
         """Task that sum the given 2 numbers."""
         a = kwargs.pop("a", 0)
         b = kwargs.pop("b", 0)
@@ -15,6 +19,8 @@ class MyTask(SerialTask):
 
 class SetupTask:
     """Setup the task workflow for the test."""
+
+    task: Task
 
     @classmethod
     def setup_class(cls) -> None:
@@ -31,7 +37,7 @@ class SetupTask:
 class TestSerialTask(SetupTask):
     """TestSerialTask."""
 
-    def test_serial_simple(self):
+    def test_serial_simple(self) -> None:
         """Run simple test for a serial task."""
         results: dict[str, int] = {}
 
