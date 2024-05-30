@@ -53,6 +53,11 @@ jobs:
         run: |
           poetry install
 
+      - name: start up services
+        run: |
+          sugar build
+          sugar ext restart --options -d
+
       - name: Run tests
         run: |
           makim tests.unit
