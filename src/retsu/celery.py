@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Optional
 
 import celery
 
-from celery import chain, chord
+from celery import chain, chord, group
 from public import public
 
 from retsu.core import ParallelTask, SerialTask
@@ -15,7 +15,7 @@ from retsu.core import ParallelTask, SerialTask
 class CeleryTask:
     """Celery Task class."""
 
-    def task(self, *args, task_id: str, **kwargs) -> None:  # type: ignore
+    def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
         """Define the task to be executed."""
         chord_tasks, chord_callback = self.get_chord_tasks(
             *args, task_id=task_id, **kwargs
@@ -27,7 +27,7 @@ class CeleryTask:
             if chord_callback:
                 workflow_chord = chord(chord_tasks, chord_callback)
             else:
-                workflow_chord = chord(chord_tasks)
+                workflow_chord = group(chord_tasks)
             promise_chord = workflow_chord.apply_async()
 
         if chain_tasks:
@@ -35,11 +35,14 @@ class CeleryTask:
             promise_chain = workflow_chain.apply_async()
 
         # wait for the tasks
+        results: list[Any] = []
         if chord_tasks:
-            promise_chord.get()
+            results.extend(promise_chord.get())
 
         if chain_tasks:
-            promise_chain.get()
+            results.append(promise_chain.get())
+
+        return results
 
     def get_chord_tasks(  # type: ignore
         self, *args, **kwargs

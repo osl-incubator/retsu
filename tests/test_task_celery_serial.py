@@ -2,19 +2,23 @@
 
 from __future__ import annotations
 
-from typing import Generator
+from typing import Generator, Optional
 
+import celery
 import pytest
 
+from retsu import Task
 from retsu.celery import SerialCeleryTask
 
-from .celery_tasks import task_sum
+from .celery_tasks import task_sleep, task_sum
 
 
 class MyResultTask(SerialCeleryTask):
     """Task for the test."""
 
-    def get_chord_tasks(self, *args, **kwargs) -> list[celery.Signature]:
+    def get_chord_tasks(  # type: ignore
+        self, *args, **kwargs
+    ) -> tuple[list[celery.Signature], Optional[celery.Signature]]:
         """Define the list of tasks for celery chord."""
         x = kwargs.get("x")
         y = kwargs.get("y")
@@ -28,12 +32,14 @@ class MyResultTask(SerialCeleryTask):
 class MyTimestampTask(SerialCeleryTask):
     """Task for the test."""
 
-    def get_chord_tasks(self, *args, **kwargs) -> list[celery.Signature]:
+    def get_chord_tasks(  # type: ignore
+        self, *args, **kwargs
+    ) -> tuple[list[celery.Signature], Optional[celery.Signature]]:
         """Define the list of tasks for celery chord."""
         seconds = kwargs.get("seconds")
         task_id = kwargs.get("task_id")
         return (
-            [task_sum.s(x, y, task_id, task_id)],
+            [task_sleep.s(seconds, task_id, task_id)],
             None,
         )
 
@@ -56,8 +62,8 @@ def task_timestamp() -> Generator[Task, None, None]:
     task.stop()
 
 
-class TestSerialTask:
-    """TestSerialTask."""
+class TestSerialCeleryTask:
+    """TestSerialCeleryTask."""
 
     def test_serial_result(self, task_result: Task) -> None:
         """Run simple test for a serial task."""
@@ -66,11 +72,11 @@ class TestSerialTask:
         task = task_result
 
         for i in range(10):
-            task_id = task.request(a=i, b=i)
+            task_id = task.request(x=i, y=i)
             results[task_id] = i + i
 
         for task_id, expected in results.items():
-            result = task.result.get(task_id, timeout=2)
+            result = task.result.get(task_id, timeout=10)
             assert (
                 result == expected
             ), f"Expected Result: {expected}, Actual Result: {result}"
@@ -82,7 +88,7 @@ class TestSerialTask:
         task = task_timestamp
 
         for sleep_time in range(5, 1, -1):
-            task_id = task.request(sleep=sleep_time)
+            task_id = task.request(seconds=sleep_time)
             results.append((task_id, 0))
 
         # gather results

@@ -54,7 +54,9 @@ jobs:
           poetry install
 
       - name: start up services
-        run: makim tests.setup
+        run: |
+          sugar build
+          sugar ext restart --options -d
 
       - name: Run tests
         run: makim tests.unit
@@ -64,3 +66,7 @@ jobs:
         run: |
           pre-commit install
           makim tests.linter
+
+      - name: teardown services
+        run: |
+          sugar ext stop

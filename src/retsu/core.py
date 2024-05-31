@@ -78,7 +78,7 @@ class Task:
         """Define the task to be executed."""
         raise Exception("`task` not implemented yet.")
 
-    def prepare_task(self, data: Any) -> None:
+    def prepare_task(self, data: dict[str, Any]) -> None:
         """Call the task with the necessary arguments."""
         task_id = data.pop("task_id")
         self.result.metadata.update(task_id, "status", "running")

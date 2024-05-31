@@ -15,16 +15,14 @@ import pytest
 def setup() -> Generator[None, None, None]:
     """Set up the services needed by the tests."""
     try:
-        # Run the `sugar build` command
-        subprocess.run(["sugar", "build"], check=True)
-
-        # Run the `sugar ext restart --options -d` command
-        subprocess.run(
-            ["sugar", "ext", "restart", "--options", "-d"], check=True
-        )
-
-        # Sleep for 5 seconds
-        time.sleep(5)
+        # # Run the `sugar build` command
+        # subprocess.run(["sugar", "build"], check=True)
+        # # Run the `sugar ext restart --options -d` command
+        # subprocess.run(
+        #     ["sugar", "ext", "restart", "--options", "-d"], check=True
+        # )
+        # # Sleep for 5 seconds
+        # time.sleep(5)
 
         # Change directory to `tests/`
         os.chdir("tests/")
@@ -33,6 +31,8 @@ def setup() -> Generator[None, None, None]:
         celery_process = subprocess.Popen(
             ["celery", "-A", "celery_tasks", "worker", "--loglevel=debug"]
         )
+
+        time.sleep(5)
 
         # Change directory back to the original
         os.chdir("..")
@@ -43,4 +43,4 @@ def setup() -> Generator[None, None, None]:
         # Teardown: Terminate the Celery worker
         celery_process.terminate()
         celery_process.wait()
-        subprocess.run(["sugar", "ext", "stop"], check=True)
+        # subprocess.run(["sugar", "ext", "stop"], check=True)
