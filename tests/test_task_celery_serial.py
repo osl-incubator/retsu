@@ -39,7 +39,7 @@ class MyTimestampTask(SerialCeleryTask):
         seconds = kwargs.get("seconds")
         task_id = kwargs.get("task_id")
         return (
-            [task_sleep.s(seconds, task_id, task_id)],
+            [task_sleep.s(seconds, task_id)],
             None,
         )
 
@@ -76,7 +76,7 @@ class TestSerialCeleryTask:
             results[task_id] = i + i
 
         for task_id, expected in results.items():
-            result = task.result.get(task_id, timeout=10)
+            result = task.result.get(task_id, timeout=10)[0]
             assert (
                 result == expected
             ), f"Expected Result: {expected}, Actual Result: {result}"

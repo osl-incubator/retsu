@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import subprocess
 import time
 
@@ -24,18 +23,18 @@ def setup() -> Generator[None, None, None]:
         # # Sleep for 5 seconds
         # time.sleep(5)
 
-        # Change directory to `tests/`
-        os.chdir("tests/")
-
         # Start the Celery worker
         celery_process = subprocess.Popen(
-            ["celery", "-A", "celery_tasks", "worker", "--loglevel=debug"]
+            [
+                "celery",
+                "-A",
+                "tests.celery_tasks",
+                "worker",
+                "--loglevel=debug",
+            ],
         )
 
         time.sleep(5)
-
-        # Change directory back to the original
-        os.chdir("..")
 
         yield
 
