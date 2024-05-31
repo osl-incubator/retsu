@@ -7,6 +7,7 @@ from typing import Optional
 import celery
 
 from celery import chain, chord
+from public import public
 
 from retsu.core import ParallelTask, SerialTask
 
@@ -63,12 +64,14 @@ class CeleryTask:
         return chain_tasks
 
 
+@public
 class ParallelCeleryTask(CeleryTask, ParallelTask):
     """Parallel Task for Celery."""
 
     ...
 
 
+@public
 class SerialCeleryTask(CeleryTask, SerialTask):
     """Serial Task for Celery."""
 

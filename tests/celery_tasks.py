@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import sys
 
 from datetime import datetime
 from time import sleep
@@ -52,7 +53,7 @@ try:
     print("Redis connection is working.")
 except redis.ConnectionError as e:
     print(f"Failed to connect to Redis: {e}")
-    exit(1)
+    sys.exit(1)
 
 
 @app.task  # type: ignore

@@ -2,34 +2,40 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from time import sleep
-from typing import Any, Generator
+from typing import Generator
 
 import pytest
 
-from retsu import SerialTask, Task
+from retsu.celery import SerialCeleryTask
+
+from .celery_tasks import task_sum
 
 
-class MyResultTask(SerialTask):
+class MyResultTask(SerialCeleryTask):
     """Task for the test."""
 
-    def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
-        """Return the sum of the given 2 numbers."""
-        a = kwargs.pop("a", 0)
-        b = kwargs.pop("b", 0)
-        result = a + b
-        return result
+    def get_chord_tasks(self, *args, **kwargs) -> list[celery.Signature]:
+        """Define the list of tasks for celery chord."""
+        x = kwargs.get("x")
+        y = kwargs.get("y")
+        task_id = kwargs.get("task_id")
+        return (
+            [task_sum.s(x, y, task_id)],
+            None,
+        )
 
 
-class MyTimestampTask(SerialTask):
+class MyTimestampTask(SerialCeleryTask):
     """Task for the test."""
 
-    def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
-        """Sleep the given seconds, and return the current timestamp."""
-        sleep_time = kwargs.pop("sleep", 0)
-        sleep(sleep_time)
-        return datetime.now().timestamp()
+    def get_chord_tasks(self, *args, **kwargs) -> list[celery.Signature]:
+        """Define the list of tasks for celery chord."""
+        seconds = kwargs.get("seconds")
+        task_id = kwargs.get("task_id")
+        return (
+            [task_sum.s(x, y, task_id, task_id)],
+            None,
+        )
 
 
 @pytest.fixture

@@ -1,6 +1,7 @@
 """Configuration for Celery app."""
 
 import os
+import sys
 
 import redis
 
@@ -47,4 +48,4 @@ try:
     print("Redis connection is working.")
 except redis.ConnectionError as e:
     print(f"Failed to connect to Redis: {e}")
-    exit(1)
+    sys.exit(1)
