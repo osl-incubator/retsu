@@ -88,7 +88,7 @@ class TestParallelCeleryTask:
         task = task_timestamp
 
         for sleep_time in range(5, 1, -1):
-            task_id = task.request(seconds=sleep_time)
+            task_id = task.request(seconds=sleep_time * 1.5)
             results.append((task_id, 0))
 
         # gather results
