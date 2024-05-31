@@ -3,3 +3,4 @@
     * [<code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> core](core.md)
     * [<code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> plugins](plugins/index.md)
         * [<code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> django](plugins/django.md)
+    * [<code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> tracking](tracking.md)

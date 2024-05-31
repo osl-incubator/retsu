@@ -2,62 +2,67 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://osl-incubator.github.io/retsu/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/changelog/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/contributing/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/example/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/installation/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/api/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/api/SUMMARY/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/api/celery/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/api/core/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/api/references/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://osl-incubator.github.io/retsu/api/tracking/</loc>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/api/plugins/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://osl-incubator.github.io/retsu/api/plugins/django/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-05-31</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
