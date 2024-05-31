@@ -4,9 +4,12 @@ from importlib import metadata as importlib_metadata
 
 from retsu.core import (
     ParallelTask,
-    ResultTask,
     SerialTask,
+    Task,
     TaskManager,
+)
+from retsu.tracking import (
+    ResultTaskManager,
 )
 
 
@@ -29,7 +32,8 @@ __all__ = [
     "__author__",
     "__email__",
     "ParallelTask",
-    "ResultTask",
+    "ResultTaskManager",
     "SerialTask",
+    "Task",
     "TaskManager",
 ]

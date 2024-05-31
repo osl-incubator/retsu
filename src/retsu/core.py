@@ -2,61 +2,17 @@
 
 from __future__ import annotations
 
-import json
 import multiprocessing as mp
-import os
 import warnings
 
 from abc import abstractmethod
-from pathlib import Path
-from typing import Any, Optional, cast
+from datetime import datetime
+from typing import Any, Optional
 from uuid import uuid4
 
 from public import public
 
-
-class ResultTask:
-    """Result from a task."""
-
-    def __init__(self) -> None:
-        """Initialize ResultTask."""
-        self.result_path = Path(
-            os.getenv("RETSU_RESULT_PATH", "/tmp/retsu/results")
-        )
-        os.makedirs(self.result_path, exist_ok=True)
-
-    @public
-    def save(self, task_id: str, result: Any) -> None:
-        """Save the result in a file."""
-        with open(self.result_path / f"{task_id}.json", "w") as f:
-            json.dump(
-                {"task_id": task_id, "result": result},
-                f,
-                indent=2,
-            )
-
-    @public
-    def load(self, task_id: str) -> dict[str, Any]:
-        """Load the result from a file."""
-        result_file = self.result_path / f"{task_id}.json"
-        if not result_file.exists():
-            raise Exception(f"File {result_file} doesn't exist.")
-        with open(result_file, "r") as f:
-            return cast(dict[str, Any], json.load(f))
-
-    @public
-    def status(self, task_id: str) -> bool:
-        """Return if the result for a given task was already stored."""
-        result_file = self.result_path / f"{task_id}.json"
-        return result_file.exists()
-
-    @public
-    def get(self, task_id: str) -> Any:
-        """Return the result for given task."""
-        if not self.status(task_id):
-            return {"status": False, "message": "Result not ready."}
-
-        return self.load(task_id)
+from retsu.tracking import ResultTaskManager, create_result_task_manager
 
 
 @public
@@ -67,14 +23,9 @@ class Task:
         """Initialize a task object."""
         self.active = True
         self.workers = workers
-        self.result = ResultTask()
+        self.result: ResultTaskManager = create_result_task_manager()
         self.queue_in: mp.Queue[Any] = mp.Queue()
         self.processes: list[mp.Process] = []
-
-    @public
-    def get_result(self, task_id: str) -> Any:
-        """Get the result for given task id."""
-        return self.result.get(task_id)
 
     @public
     def start(self) -> None:
@@ -105,36 +56,39 @@ class Task:
     @public
     def request(self, *args, **kwargs) -> str:  # type: ignore
         """Feed the queue with data from the request for the task."""
-        key = uuid4().hex
-        print(
-            {
-                "task_id": key,
-                "args": args,
-                "kwargs": kwargs,
-            }
-        )
+        task_id = uuid4().hex
+        metadata = {
+            "status": "starting",
+            "created_at": datetime.now().isoformat(),
+            "updated_at": datetime.now().isoformat(),
+        }
+        self.result.create(task_id, metadata)
         self.queue_in.put(
             {
-                "task_id": key,
+                "task_id": task_id,
                 "args": args,
                 "kwargs": kwargs,
             },
             block=False,
         )
-        return key
+        return task_id
 
     @abstractmethod
-    def task(self, *args, task_id: str, **kwargs) -> None:  # type: ignore
+    def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
         """Define the task to be executed."""
         raise Exception("`task` not implemented yet.")
 
-    def prepare_task(self, data: Any) -> None:
+    def prepare_task(self, data: dict[str, Any]) -> None:
         """Call the task with the necessary arguments."""
-        self.task(
+        task_id = data.pop("task_id")
+        self.result.metadata.update(task_id, "status", "running")
+        result = self.task(
             *data["args"],
-            task_id=data["task_id"],
+            task_id=task_id,
             **data["kwargs"],
         )
+        self.result.save(task_id, result)
+        self.result.metadata.update(task_id, "status", "completed")
 
     @public
     def run(self) -> None:
