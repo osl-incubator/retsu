@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+## [0.0.4](https://github.com/osl-incubator/retsu/compare/0.0.3...0.0.4) (2024-05-31)
+
+
+### Bug Fixes
+
+* Improve the task metadata handling ([#7](https://github.com/osl-incubator/retsu/issues/7)) ([476e0b4](https://github.com/osl-incubator/retsu/commit/476e0b444e89d87203e3b1964e4ba091e74afd1c))
+
 ## [0.0.3](https://github.com/osl-incubator/retsu/compare/0.0.2...0.0.3) (2024-05-29)
 
 
