@@ -59,6 +59,7 @@ containers-sugar = "1.13.0"
 compose-go = "2.27.0"
 django = ">=3"
 django-stubs = ">=3"
+pandas = ">=1.5,<2"
 
 [tool.pytest.ini_options]
 testpaths = [
