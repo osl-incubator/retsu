@@ -137,6 +137,17 @@ class TaskManager:
         self.tasks: dict[str, Task] = {}
 
     @public
+    def create_tasks(self) -> None:
+        """Get a task with the given name."""
+        if self.tasks:
+            return
+
+        warnings.warn(
+            "`self.tasks` is empty. Override `create_tasks` and create "
+            "`self.tasks` with the proper tasks."
+        )
+
+    @public
     def get_task(self, name: str) -> Optional[Task]:
         """Get a task with the given name."""
         return self.tasks.get(name)
@@ -144,6 +155,9 @@ class TaskManager:
     @public
     def start(self) -> None:
         """Start tasks."""
+        if not self.tasks:
+            self.create_tasks()
+
         for task_name, task in self.tasks.items():
             print(f"Task `{task_name}` is starting ...")
             task.start()
@@ -151,6 +165,10 @@ class TaskManager:
     @public
     def stop(self) -> None:
         """Stop tasks."""
+        if not self.tasks:
+            warnings.warn("There is no tasks to be stopped.")
+            return
+
         for task_name, task in self.tasks.items():
             print(f"Task `{task_name}` is stopping ...")
             task.stop()
