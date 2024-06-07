@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+# [0.1.0](https://github.com/osl-incubator/retsu/compare/0.0.4...0.1.0) (2024-06-07)
+
+
+### Features
+
+* Add method create_task to the TaskManager class ([07379b8](https://github.com/osl-incubator/retsu/commit/07379b8da2dd3aeef4f7326e9fad8322cadd2db8))
+
 ## [0.0.4](https://github.com/osl-incubator/retsu/compare/0.0.3...0.0.4) (2024-05-31)
 
 
