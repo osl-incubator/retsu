@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+## [0.1.1](https://github.com/osl-incubator/retsu/compare/0.1.0...0.1.1) (2024-06-20)
+
+
+### Bug Fixes
+
+* Fix `get` command in the result attribute, and add `get_group_tasks` ([#11](https://github.com/osl-incubator/retsu/issues/11)) ([ff29334](https://github.com/osl-incubator/retsu/commit/ff293346b08c3c63d410830e4c68cd9ad428e78f))
+
 # [0.1.0](https://github.com/osl-incubator/retsu/compare/0.0.4...0.1.0) (2024-06-07)
 
 
