@@ -6,44 +6,36 @@ from time import sleep
 
 import celery
 
-from retsu import ResultTask
 from retsu.celery import ParallelCeleryTask
 
 from .config import app, redis_client
 
 
 @app.task
-def task_parallel_a1(a: int, b: int, task_id: str) -> int:  # type: ignore
-    """Define the task_a1."""
+def task_parallel_a_plus_b(a: int, b: int, task_id: str) -> int:  # type: ignore
+    """Define the task_parallel_a_plus_b."""
     sleep(a + b)
-    print("running task a1")
+    print("running task_parallel_a_plus_b")
     result = a + b
-    redis_client.set(f"result-{task_id}", result)
+    redis_client.set(f"parallel-result-a-plus-b-{task_id}", result)
     return result
 
 
 @app.task
-def task_parallel_a2(task_id: str) -> int:  # type: ignore
-    """Define the task_a2."""
-    print("running task a2")
-    result = redis_client.get(f"result-{task_id}")
+def task_parallel_result_plus_10(task_id: str) -> int:  # type: ignore
+    """Define the task_parallel_result_plus_10."""
+    print("running task_parallel_result_plus_10")
+    result = redis_client.get(f"parallel-result-a-plus-b-{task_id}")
+    redis_client.set(f"parallel-result-plus-10-{task_id}", result + 10)
     return result
 
 
 @app.task
-def task_parallel_final(results, task_id: str) -> int:  # type: ignore
-    """Define the final_task."""
-    print("running final task")
-
-    result = redis_client.get(f"result-{task_id}")
-    final_result = f"Final result: {result}"
-    print(final_result)
-
-    task_result = ResultTask()
-
-    task_result.save(task_id=task_id, result=final_result)
-
-    return final_result
+def task_parallel_result_square(results, task_id: str) -> int:  # type: ignore
+    """Define the task_parallel_result_square."""
+    print("running task_parallel_result_square")
+    result = redis_client.get(f"parallel-result-plus-10-{task_id}")
+    return result**2
 
 
 class MyParallelTask1(ParallelCeleryTask):
@@ -59,8 +51,8 @@ class MyParallelTask1(ParallelCeleryTask):
         """Define the list of tasks for celery chord."""
         return (
             [
-                task_parallel_a1.s(a, b, task_id),
-                task_parallel_a2.s(task_id),
+                task_parallel_a_plus_b.s(a, b, task_id),
+                task_parallel_result_plus_10.s(task_id),
             ],
-            task_parallel_final.s(task_id),
+            task_parallel_result_square.s(task_id),
         )
