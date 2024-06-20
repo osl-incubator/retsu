@@ -25,8 +25,14 @@ def task_serial_a_plus_b(a: int, b: int, task_id: str) -> int:  # type: ignore
 def task_serial_result_plus_10(task_id: str) -> int:  # type: ignore
     """Define the task_serial_result_plus_10."""
     print("running task_serial_result_plus_10")
-    result = redis_client.get(f"serial-result-a-plus-b-{task_id}")
-    redis_client.set(f"serial-result-plus-10-{task_id}", result + 10)
+    previous_result = None
+    while previous_result is None:
+        previous_result = redis_client.get(f"serial-result-a-plus-b-{task_id}")
+        sleep(1)
+
+    previous_result_int = int(previous_result)
+    result = previous_result_int + 10
+    redis_client.set(f"serial-result-plus-10-{task_id}", result)
     return result
 
 
@@ -34,8 +40,14 @@ def task_serial_result_plus_10(task_id: str) -> int:  # type: ignore
 def task_serial_result_square(results, task_id: str) -> int:  # type: ignore
     """Define the task_serial_result_square."""
     print("running task_serial_result_square")
-    result = redis_client.get(f"serial-result-plus-10-{task_id}")
-    return result**2
+    previous_result = None
+    while previous_result is None:
+        previous_result = redis_client.get(f"serial-result-plus-10-{task_id}")
+        sleep(1)
+
+    previous_result_int = int(previous_result)
+    result = previous_result_int**2
+    return result
 
 
 class MySerialTask1(SerialCeleryTask):

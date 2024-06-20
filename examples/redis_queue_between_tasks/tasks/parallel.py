@@ -25,17 +25,25 @@ def task_parallel_a_plus_b(a: int, b: int, task_id: str) -> int:  # type: ignore
 def task_parallel_result_plus_10(task_id: str) -> int:  # type: ignore
     """Define the task_parallel_result_plus_10."""
     print("running task_parallel_result_plus_10")
-    result = redis_client.get(f"parallel-result-a-plus-b-{task_id}")
-    redis_client.set(f"parallel-result-plus-10-{task_id}", result + 10)
-    return result
+    result = None
+    while result is None:
+        result = redis_client.get(f"parallel-result-a-plus-b-{task_id}")
+        sleep(1)
+
+    final_result = int(result) + 10
+    redis_client.set(f"parallel-result-plus-10-{task_id}", final_result)
+    return final_result
 
 
 @app.task
 def task_parallel_result_square(results, task_id: str) -> int:  # type: ignore
     """Define the task_parallel_result_square."""
     print("running task_parallel_result_square")
-    result = redis_client.get(f"parallel-result-plus-10-{task_id}")
-    return result**2
+    result = None
+    while result is None:
+        result = redis_client.get(f"parallel-result-plus-10-{task_id}")
+        sleep(1)
+    return int(result) ** 2
 
 
 class MyParallelTask1(ParallelCeleryTask):

@@ -3,7 +3,8 @@
 import os
 import signal
 
-from typing import Optional
+from time import sleep
+from typing import Any, Optional
 
 from flask import Flask
 from tasks import MyTaskManager
@@ -40,55 +41,84 @@ def api() -> str:
     * parallel
     * status
     * result
-    """
+
+    Example of endpoints:
+
+    - http://127.0.0.1:5000/serial/1/2
+    - http://127.0.0.1:5000/parallel/1/2
+    - http://127.0.0.1:5000/serial/result/[TASK_ID]
+    - http://127.0.0.1:5000/serial/status/[TASK_ID]
+    - http://127.0.0.1:5000/parallel/result/[TASK_ID]
+    - http://127.0.0.1:5000/parallel/status/[TASK_ID]
+
+    Remember to replace `[TASK_ID]` by the desired task id.
+    """.replace("\n", "<br/>")
 
     return menu
 
 
 @app.route("/serial/<int:a>/<int:b>")
-def serial(a: int, b: int) -> str:
+def serial(a: int, b: int) -> dict[str, Any]:
     """Define the serial endpoint."""
     task1 = task_manager.get_task("serial")
     key = task1.request(a=a, b=b)
-    return f"your task ({key}) is running now, please wait until it is done."
+    return {"message": f"Your task ({key}) is running now"}
 
 
 @app.route("/parallel/<int:a>/<int:b>")
-def parallel(a: int, b: int) -> str:
+def parallel(a: int, b: int) -> dict[str, Any]:
     """Define the parallel endpoint."""
     task2 = task_manager.get_task("parallel")
     key = task2.request(a=a, b=b)
-    return f"your task ({key}) is running now, please wait until it is done."
+    return {"message": f"Your task ({key}) is running now"}
 
 
 @app.route("/serial/status/<string:task_id>")
-def serial_status(task_id: str) -> str:
+def serial_status(task_id: str) -> dict[str, Any]:
     """Define serial/status endpoint."""
     task1 = task_manager.get_task("serial")
-    _status = task1.status(task_id)
+    _status = task1.result.status(task_id)
     return {"status": _status, "task_id": task_id}
 
 
 @app.route("/parallel/status/<string:task_id>")
-def parallel_status(task_id: str) -> str:
+def parallel_status(task_id: str) -> dict[str, Any]:
     """Define parallel/status endpoint."""
     task2 = task_manager.get_task("parallel")
-    _status = task2.status(task_id)
+    _status = task2.result.status(task_id)
     return {"status": _status, "task_id": task_id}
 
 
 @app.route("/serial/result/<string:task_id>")
-def serial_result(task_id: str) -> str:
+def serial_result(task_id: str) -> dict[str, Any]:
     """Define serial/result endpoint."""
     task1 = task_manager.get_task("serial")
-    return task1.get_result(task_id)
+    result = None
+    for _ in range(10):
+        try:
+            # note: with no timeout
+            result = task1.result.get(task_id)
+            break
+        except Exception:
+            sleep(1)
+
+    if result is None:
+        return {"Error": "Result is not ready yet."}
+    return {"result": result[0]}
 
 
 @app.route("/parallel/result/<string:task_id>")
-def parallel_result(task_id: str) -> str:
+def parallel_result(task_id: str) -> dict[str, Any]:
     """Define parallel/result endpoint."""
     task2 = task_manager.get_task("parallel")
-    return task2.get_result(task_id)
+
+    try:
+        # note: with timeout
+        result = task2.result.get(task_id, timeout=10)
+    except Exception:
+        return {"Error": "Result is not ready yet."}
+
+    return {"result": result[-1]}
 
 
 if __name__ == "__main__":
