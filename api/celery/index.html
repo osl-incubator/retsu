@@ -516,6 +516,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#retsu.celery.CeleryTask.get_group_tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_group_tasks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#retsu.celery.CeleryTask.task" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;task
@@ -770,6 +779,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#retsu.celery.CeleryTask.get_group_tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_group_tasks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#retsu.celery.CeleryTask.task" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;task
@@ -890,12 +908,12 @@
 
             <details class="quote">
               <summary>Source code in <code>src/retsu/celery.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_chain_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_chain_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
     <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">celery</span><span class="o">.</span><span class="n">Signature</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run tasks with chain.&quot;&quot;&quot;</span>
@@ -929,20 +947,20 @@
 </details>
             <details class="quote">
               <summary>Source code in <code>src/retsu/celery.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_chord_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_chord_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
     <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">celery</span><span class="o">.</span><span class="n">Signature</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">celery</span><span class="o">.</span><span class="n">Signature</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -956,6 +974,59 @@
     <span class="n">chord_tasks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">celery</span><span class="o">.</span><span class="n">Signature</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">callback_task</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">chord_tasks</span><span class="p">,</span> <span class="n">callback_task</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="retsu.celery.CeleryTask.get_group_tasks" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_group_tasks</span>
+
+
+<a href="#retsu.celery.CeleryTask.get_group_tasks" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">get_group_tasks</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a></span><span class="p">[</span><span class="n"><span title="celery.Signature">Signature</span></span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+      <p>Run tasks with group.</p>
+
+
+<details class="return" open>
+  <summary>Return</summary>
+  
+</details>
+            <details class="quote">
+              <summary>Source code in <code>src/retsu/celery.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_group_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">celery</span><span class="o">.</span><span class="n">Signature</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run tasks with group.</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ------</span>
+<span class="sd">    tuple:</span>
+<span class="sd">        list of tasks for the chord, and the task to be used as a callback</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">group_tasks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">celery</span><span class="o">.</span><span class="n">Signature</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="n">group_tasks</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1006,20 +1077,60 @@
 <span class="normal">42</span>
 <span class="normal">43</span>
 <span class="normal">44</span>
-<span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Define the task to be executed.&quot;&quot;&quot;</span>
     <span class="n">chord_tasks</span><span class="p">,</span> <span class="n">chord_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_chord_tasks</span><span class="p">(</span>
-        <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">chain_tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_chain_tasks</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">group_tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_tasks</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">chain_tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_chain_tasks</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># start the tasks</span>
     <span class="k">if</span> <span class="n">chord_tasks</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">chord_callback</span><span class="p">:</span>
-            <span class="n">workflow_chord</span> <span class="o">=</span> <span class="n">chord</span><span class="p">(</span><span class="n">chord_tasks</span><span class="p">,</span> <span class="n">chord_callback</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">workflow_chord</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">chord_tasks</span><span class="p">)</span>
+        <span class="n">workflow_chord</span> <span class="o">=</span> <span class="n">chord</span><span class="p">(</span><span class="n">chord_tasks</span><span class="p">,</span> <span class="n">chord_callback</span><span class="p">)</span>
         <span class="n">promise_chord</span> <span class="o">=</span> <span class="n">workflow_chord</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">group_tasks</span><span class="p">:</span>
+        <span class="n">workflow_group</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">group_tasks</span><span class="p">)</span>
+        <span class="n">promise_group</span> <span class="o">=</span> <span class="n">workflow_group</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">chain_tasks</span><span class="p">:</span>
         <span class="n">workflow_chain</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">chord_tasks</span><span class="p">)</span>
@@ -1028,10 +1139,26 @@
     <span class="c1"># wait for the tasks</span>
     <span class="n">results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">chord_tasks</span><span class="p">:</span>
-        <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">promise_chord</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+        <span class="n">chord_result</span> <span class="o">=</span> <span class="n">promise_chord</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chord_result</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">chord_result</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chord_result</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">group_tasks</span><span class="p">:</span>
+        <span class="n">group_result</span> <span class="o">=</span> <span class="n">promise_group</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group_result</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">group_result</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group_result</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">chain_tasks</span><span class="p">:</span>
-        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">promise_chain</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+        <span class="n">chain_result</span> <span class="o">=</span> <span class="n">promise_chain</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chain_result</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">chain_result</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chain_result</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">results</span>
 </code></pre></div></td></tr></table></div>
