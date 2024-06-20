@@ -4,13 +4,11 @@ services:
   valkey:
     image: valkey/valkey:7.2.5-alpine
     hostname: valkey
-    container_name: valkey
     ports:
       - 6379:6379
 
   # celery:
   #   hostname: celery
-  #   container_name: celery
   #   build:
   #     context: ..
   #     dockerfile: containers/celery/Dockerfile

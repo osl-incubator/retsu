@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Generator, Optional
+from typing import Generator
 
 import celery
 import pytest
@@ -16,32 +16,26 @@ from .celery_tasks import task_sleep, task_sum
 class MyResultTask(SerialCeleryTask):
     """Task for the test."""
 
-    def get_chord_tasks(  # type: ignore
+    def get_group_tasks(  # type: ignore
         self, *args, **kwargs
-    ) -> tuple[list[celery.Signature], Optional[celery.Signature]]:
+    ) -> list[celery.Signature]:
         """Define the list of tasks for celery chord."""
         x = kwargs.get("x")
         y = kwargs.get("y")
         task_id = kwargs.get("task_id")
-        return (
-            [task_sum.s(x, y, task_id)],
-            None,
-        )
+        return [task_sum.s(x, y, task_id)]
 
 
 class MyTimestampTask(SerialCeleryTask):
     """Task for the test."""
 
-    def get_chord_tasks(  # type: ignore
+    def get_group_tasks(  # type: ignore
         self, *args, **kwargs
-    ) -> tuple[list[celery.Signature], Optional[celery.Signature]]:
+    ) -> list[celery.Signature]:
         """Define the list of tasks for celery chord."""
         seconds = kwargs.get("seconds")
         task_id = kwargs.get("task_id")
-        return (
-            [task_sleep.s(seconds, task_id)],
-            None,
-        )
+        return [task_sleep.s(seconds, task_id)]
 
 
 @pytest.fixture

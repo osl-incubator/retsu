@@ -119,6 +119,13 @@ class ResultTaskManager:
                         "Timeout(get): Task result is not ready yet. "
                         f"Task status: {status}"
                     )
+
+        elif self.status(task_id) != "completed":
+            status = self.status(task_id)
+            raise Exception(
+                "Timeout(get): Task result is not ready yet. "
+                f"Task status: {status}"
+            )
         result = self.metadata.get(task_id, "result")
         return pickle.loads(result) if result else result
 

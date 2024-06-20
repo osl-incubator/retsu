@@ -56,18 +56,6 @@ groups:
         run: |
           pytest ${{ args.path }} ${{ args.params }}
 
-      example:
-        help: Run the example app
-        shell: bash
-        run: |
-          set -ex
-          sugar build
-          sugar ext restart --options -d
-          sleep 5
-          cd example/
-          celery -A tasks.app worker --loglevel=debug &
-          python app.py
-
       setup:
         help: Run the setup for the unit tests
         shell: bash
