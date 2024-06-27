@@ -129,22 +129,6 @@ class CleaningTask(SerialCeleryTask):
         ]
 
 
-###
-# class SerialProcessingTask(SerialCeleryTask):
-#     """Task to handle serial processing."""
-#     def get_group_tasks(self, research: Any, task_id: str) -> list[celery.Signature]:
-#         return [
-#             task_preprocess_prepared_corpuses.s(research, task_id),
-#             task_prepare_corpuses.s(research, task_id),
-#             task_preprocess_prepared_corpuses.s(research, task_id),
-#             task_cluster_preprocessed_corpuses.s(research, task_id),
-#             task_clean_intermediate_files.s(research, task_id),
-#             task_generate_plot.s(research, task_id),
-#             task_articles.s(research, task_id),
-#         ]
-
-
-###
 class MyTaskManager(TaskManager):
     """MyTaskManager."""
 
