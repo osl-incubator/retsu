@@ -9,7 +9,7 @@ import celery
 
 
 # from .config import app, redis_client
-from celery_qeue import app  # type: ignore
+from celery_app import app  # type: ignore
 from retsu import TaskManager
 from retsu.celery import ParallelCeleryTask, SerialCeleryTask
 

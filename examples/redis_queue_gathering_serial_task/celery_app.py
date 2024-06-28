@@ -16,7 +16,7 @@ redis_db: int = int(os.getenv("RETSU_REDIS_DB", 0))
 redis_uri = f"redis://{redis_host}:{redis_port}/{redis_db}"
 
 app = Celery(
-    "celery_qeue",
+    "celery_app",
     broker=redis_uri,
     backend=redis_uri,
     include=[
