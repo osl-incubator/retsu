@@ -8,10 +8,10 @@ from typing import Any, Generator
 
 import pytest
 
-from retsu import ParallelTask, Task
+from retsu import MultiProcess, Task
 
 
-class MyResultTask(ParallelTask):
+class MyResultTask(MultiProcess):
     """Task for the test."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
@@ -22,7 +22,7 @@ class MyResultTask(ParallelTask):
         return result
 
 
-class MyTimestampTask(ParallelTask):
+class MyTimestampTask(MultiProcess):
     """Task for the test."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
@@ -50,8 +50,8 @@ def task_timestamp() -> Generator[Task, None, None]:
     task.stop()
 
 
-class TestParallelTask:
-    """TestParallelTask."""
+class TestMultiProcess:
+    """TestMultiProcess."""
 
     def test_parallel_result(self, task_result: Task) -> None:
         """Run simple test for a parallel task."""

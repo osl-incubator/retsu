@@ -102,27 +102,27 @@ class Task:
             self.prepare_task(data)
 
 
-class SerialTask(Task):
-    """Serial Task class."""
+class SingleProcess(Task):
+    """Single Task class."""
 
     def __init__(self, workers: int = 1) -> None:
         """Initialize a serial task object."""
         if workers != 1:
             warnings.warn(
-                "SerialTask should have just 1 worker. "
+                "SingleProcess should have just 1 worker. "
                 "Switching automatically to 1 ..."
             )
             workers = 1
         super().__init__(workers=workers)
 
 
-class ParallelTask(Task):
+class MultiProcess(Task):
     """Initialize a parallel task object."""
 
     def __init__(self, workers: int = 1) -> None:
-        """Initialize ParallelTask."""
+        """Initialize MultiProcess."""
         if workers <= 1:
-            raise Exception("ParallelTask should have more than 1 worker.")
+            raise Exception("MultiProcess should have more than 1 worker.")
 
         super().__init__(workers=workers)
 

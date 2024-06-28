@@ -6,7 +6,7 @@ from time import sleep
 
 import celery
 
-from retsu.celery import SerialCeleryTask
+from retsu.celery import SingleCeleryProcess
 
 from .config import app, redis_client
 
@@ -50,8 +50,8 @@ def task_serial_result_square(results, task_id: str) -> int:  # type: ignore
     return result
 
 
-class MySerialTask1(SerialCeleryTask):
-    """MySerialTask1."""
+class MySingleProcess1(SingleCeleryProcess):
+    """MySingleProcess1."""
 
     def request(self, a: int, b: int) -> str:
         """Receive the request for processing."""

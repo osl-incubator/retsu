@@ -3,8 +3,8 @@
 from importlib import metadata as importlib_metadata
 
 from retsu.core import (
-    ParallelTask,
-    SerialTask,
+    MultiProcess,
+    SingleProcess,
     Task,
     TaskManager,
 )
@@ -31,9 +31,9 @@ __all__ = [
     "__version__",
     "__author__",
     "__email__",
-    "ParallelTask",
+    "MultiProcess",
     "ResultTaskManager",
-    "SerialTask",
+    "SingleProcess",
     "Task",
     "TaskManager",
 ]

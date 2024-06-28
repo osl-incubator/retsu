@@ -8,10 +8,10 @@ from typing import Any, Generator
 
 import pytest
 
-from retsu import SerialTask, Task
+from retsu import SingleProcess, Task
 
 
-class MyResultTask(SerialTask):
+class MyResultTask(SingleProcess):
     """Task for the test."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
@@ -22,7 +22,7 @@ class MyResultTask(SerialTask):
         return result
 
 
-class MyTimestampTask(SerialTask):
+class MyTimestampTask(SingleProcess):
     """Task for the test."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
@@ -50,8 +50,8 @@ def task_timestamp() -> Generator[Task, None, None]:
     task.stop()
 
 
-class TestSerialTask:
-    """TestSerialTask."""
+class TestSingleProcess:
+    """TestSingleProcess."""
 
     def test_serial_result(self, task_result: Task) -> None:
         """Run simple test for a serial task."""

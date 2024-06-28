@@ -8,12 +8,12 @@ import celery
 import pytest
 
 from retsu import Task
-from retsu.celery import ParallelCeleryTask
+from retsu.celery import MultiCeleryProcess
 
 from .celery_tasks import task_sleep, task_sum
 
 
-class MyResultTask(ParallelCeleryTask):
+class MyResultTask(MultiCeleryProcess):
     """Task for the test."""
 
     def get_group_tasks(  # type: ignore
@@ -26,7 +26,7 @@ class MyResultTask(ParallelCeleryTask):
         return [task_sum.s(x, y, task_id)]
 
 
-class MyTimestampTask(ParallelCeleryTask):
+class MyTimestampTask(MultiCeleryProcess):
     """Task for the test."""
 
     def get_group_tasks(  # type: ignore
@@ -56,8 +56,8 @@ def task_timestamp() -> Generator[Task, None, None]:
     task.stop()
 
 
-class TestParallelCeleryTask:
-    """TestParallelCeleryTask."""
+class TestMultiCeleryProcess:
+    """TestMultiCeleryProcess."""
 
     def test_serial_result(self, task_result: Task) -> None:
         """Run simple test for a serial task."""
