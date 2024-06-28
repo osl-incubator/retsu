@@ -134,6 +134,106 @@ def check_task_completion(
     return None, "timeout"
 
 
+@app.route("/collectors/<search>/<begin>/<end>/<collectors>")
+def collectors_name(
+    search: str,
+    begin: datetime.date,
+    end: datetime.date,
+    collectors: list[str],
+) -> dict[str, Any]:
+    """Handle collector requests by processing a series of tasks sequentially."""
+    COLLECTORS = {
+        "ARXIV": "arXiv",
+        # "BIORXIV": "bioRxiv",
+        # "MEDRXIV": "medRxiv",
+        # "PMC": "PubMed Central",
+        # "PUBMED": "PubMed",
+        # "EMBASE_RIS": "Embase RIS",
+        # "WOS_RIS": "WoS RIS",
+    }
+
+    collectors_names = {
+        COLLECTORS["ARXIV"]: "ArXiv",
+        # COLLECTORS["BIORXIV"]: "BiorXiv",
+        # COLLECTORS["MEDRXIV"]: "MedrXiv",
+        # COLLECTORS["PMC"]: "PubMedCentral",
+        # COLLECTORS["PUBMED"]: "PubMed",
+    }
+
+    article = 0
+
+    for collector_name, collector_title in collectors_names.items():
+        logging.info(
+            f"Starting {collector_title}GetMaxArticle task with search: {search}"
+        )
+        task_name = f"{collector_title}GetMaxArticle"
+
+        try:
+            task = task_manager.get_task(task_name)
+            logging.info(f"Starting {task} task")
+            task_id = task.request(search=search, begin=begin, end=end)  # type: ignore[attr-defined]
+            logging.info(
+                f"{task_name} task {task_id} started with search: {search}"
+            )
+            article += task.result.get(task_id, timeout=5)[0]  # type: ignore[attr-defined]
+            logging.info(
+                f"{task_name} task {task_id} completed with result: {article}, status: completed"
+            )
+        except Exception as e:
+            log.warning(
+                f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {e}: {task_name}"
+            )
+
+    return {"article": article}
+
+
+"""
+
+COLLECTORS = {
+    "ARXIV": "arXiv",
+    "BIORXIV": "bioRxiv",
+    "MEDRXIV": "medRxiv",
+    "PMC": "PubMed Central",
+    "PUBMED": "PubMed",
+    "EMBASE_RIS": "Embase RIS",
+    "WOS_RIS": "WoS RIS",
+}
+
+def max_article(
+    search: str,
+    begin: datetime.date,
+    end: datetime.date,
+    collectors: list[str],
+) -> int:
+    collectors_names = {
+        COLLECTORS["ARXIV"]: "ArXiv",
+        COLLECTORS["BIORXIV"]: "BiorXiv",
+        COLLECTORS["MEDRXIV"]: "MedrXiv",
+        COLLECTORS["PMC"]: "PubMedCentral",
+        COLLECTORS["PUBMED"]: "PubMed",
+    }
+
+    article = 0
+
+    for collector_name, collector_title in collectors_names.items():
+        task_name = f"{collector_title}GetMaxArticle"
+
+        if collector_name not in collectors:
+            continue
+        try:
+            task = tasks_manager.get_task(task_name)
+            task_id = task.request(search=search, begin=begin, end=end)  # type: ignore[attr-defined]
+            article += task.result.get(task_id, timeout=5)[0]  # type: ignore[attr-defined]
+        except Exception as e:
+            logging.error(f"* Error while obtaining {collector_name}")
+            logging.error(e)
+
+    # TODO: count max articles for files collectors
+
+    return article
+"""
+
+
 if __name__ == "__main__":
     try:
         app.run(

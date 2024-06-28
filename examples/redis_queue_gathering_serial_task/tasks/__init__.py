@@ -2,9 +2,17 @@
 
 from retsu import TaskManager
 
-# from .parallel import MyParallelTask1
-from .serial import ArticleTask, CleaningTask, ClusteringTask, PlottingTask, PreparingTask, PreprocessingTask
+from .parallel import ArXivGetMaxArticlesTask
 
+# from .parallel import MyParallelTask1
+from .serial import (
+    ArticleTask,
+    CleaningTask,
+    ClusteringTask,
+    PlottingTask,
+    PreparingTask,
+    PreprocessingTask,
+)
 
 
 class MyTaskManager(TaskManager):
@@ -19,4 +27,5 @@ class MyTaskManager(TaskManager):
             "plotting": PlottingTask(),
             "preparing": PreparingTask(),
             "preprocessing": PreprocessingTask(),
+            "ArXivGetMaxArticle": ArXivGetMaxArticlesTask(),
         }
