@@ -13,19 +13,30 @@ from tasks import MyTaskManager
 
 # Setup Redis connection and logging
 redis_client = redis.Redis(host="localhost", port=6379, db=0)
-log = logging.getLogger(__name__)
-# logging.basicConfig(level=logging.ERROR)]
 
-# Configure logging to display errors and custom formatted warnings
-logging.basicConfig(level=logging.INFO)
+if not logging.getLogger().hasHandlers():
+    # Configuring the basic logger settings
+    logging.basicConfig(
+        level=logging.INFO,
+        format="[%(asctime)s: %(levelname)s/MainProcess] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+
+log = logging.getLogger(__name__)
+
+handler = logging.StreamHandler()
 formatter = logging.Formatter(
     "[%(asctime)s: %(levelname)s/MainProcess] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
-handler = logging.StreamHandler()
 handler.setFormatter(formatter)
-log.addHandler(handler)
+handler.setLevel(logging.INFO)  # Set this as needed
+
+if not log.handlers:
+    log.addHandler(handler)
+
 log.setLevel(logging.INFO)
+
 
 task_manager = MyTaskManager()
 task_manager.start()
@@ -144,41 +155,50 @@ def collectors_name(
     """Handle collector requests by processing a series of tasks sequentially."""
     COLLECTORS = {
         "ARXIV": "arXiv",
-        # "BIORXIV": "bioRxiv",
-        # "MEDRXIV": "medRxiv",
-        # "PMC": "PubMed Central",
-        # "PUBMED": "PubMed",
-        # "EMBASE_RIS": "Embase RIS",
-        # "WOS_RIS": "WoS RIS",
+        "BIORXIV": "bioRxiv",
+        "MEDRXIV": "medRxiv",
+        "PMC": "PubMed Central",
+        "PUBMED": "PubMed",
+        "EMBASE_RIS": "Embase RIS",
+        "WOS_RIS": "WoS RIS",
     }
 
     collectors_names = {
         COLLECTORS["ARXIV"]: "ArXiv",
-        # COLLECTORS["BIORXIV"]: "BiorXiv",
-        # COLLECTORS["MEDRXIV"]: "MedrXiv",
-        # COLLECTORS["PMC"]: "PubMedCentral",
-        # COLLECTORS["PUBMED"]: "PubMed",
+        COLLECTORS["BIORXIV"]: "BiorXiv",
+        COLLECTORS["MEDRXIV"]: "MedrXiv",
+        COLLECTORS["PMC"]: "PubMedCentral",
+        COLLECTORS["PUBMED"]: "PubMed",
     }
 
     article = 0
-
+    gathering_ids = []
     for collector_name, collector_title in collectors_names.items():
-        logging.info(
-            f"Starting {collector_title}GetMaxArticle task with search: {search}"
-        )
+
+        if collector_name not in collectors:
+            continue
+    
         task_name = f"{collector_title}GetMaxArticle"
 
         try:
             task = task_manager.get_task(task_name)
-            logging.info(f"Starting {task} task")
+
+            log.info(f"Starting {task} task")
+
             task_id = task.request(search=search, begin=begin, end=end)  # type: ignore[attr-defined]
-            logging.info(
+            
+            gathering_ids.append(f"{task_name}-{task_id}")
+
+            log.info(
                 f"{task_name} task {task_id} started with search: {search}"
             )
+
             article += task.result.get(task_id, timeout=5)[0]  # type: ignore[attr-defined]
-            logging.info(
+
+            log.info(
                 f"{task_name} task {task_id} completed with result: {article}, status: completed"
             )
+
         except Exception as e:
             log.warning(
                 f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {e}: {task_name}"

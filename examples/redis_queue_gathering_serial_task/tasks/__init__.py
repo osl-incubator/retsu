@@ -2,10 +2,10 @@
 
 from retsu import TaskManager
 
-from .parallel import ArXivGetMaxArticlesTask
+from .get_max_article import ArXivGetMaxArticlesTask, PubMedGetMaxArticlesTask, MedrXivGetMaxArticlesTask, BiorXivGetMaxArticlesTask, EmbaseGetMaxArticlesTask, WebOfScienceGetMaxArticlesTask
 
 # from .parallel import MyParallelTask1
-from .serial import (
+from .get_back_process import (
     ArticleTask,
     CleaningTask,
     ClusteringTask,
@@ -27,5 +27,11 @@ class MyTaskManager(TaskManager):
             "plotting": PlottingTask(),
             "preparing": PreparingTask(),
             "preprocessing": PreprocessingTask(),
+            # tasks.collectors.CollectorsGatheringTask(list(task_id))
             "ArXivGetMaxArticle": ArXivGetMaxArticlesTask(),
+            "PubMedGetMaxArticle": PubMedGetMaxArticlesTask(),
+            "MedrXivGetMaxArticle": MedrXivGetMaxArticlesTask(),
+            "BiorXivGetMaxArticle": BiorXivGetMaxArticlesTask(),
+            "EmbaseGetMaxArticle": EmbaseGetMaxArticlesTask(),
+            "WebOfScienceGetMaxArticle": WebOfScienceGetMaxArticlesTask(),
         }

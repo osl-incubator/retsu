@@ -1,4 +1,4 @@
 """Module for the celery app."""
 
-from .parallel import *  # noqa: F403
-from .serial import *  # noqa: F403
+from .get_max_article import *  # noqa: F403
+from .get_back_process import *  # noqa: F403
