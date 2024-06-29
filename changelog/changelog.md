@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+# [0.2.0](https://github.com/osl-incubator/retsu/compare/0.1.1...0.2.0) (2024-06-29)
+
+
+### Features
+
+* Use redis for queues ([#13](https://github.com/osl-incubator/retsu/issues/13)) ([750fb6b](https://github.com/osl-incubator/retsu/commit/750fb6b71300b0b40831f6e8917d324edb58592a))
+
 ## [0.1.1](https://github.com/osl-incubator/retsu/compare/0.1.0...0.1.1) (2024-06-20)
 
 
@@ -13,7 +20,7 @@
 
 ### Features
 
-* Add method create_task to the TaskManager class ([07379b8](https://github.com/osl-incubator/retsu/commit/07379b8da2dd3aeef4f7326e9fad8322cadd2db8))
+* Add method create_task to the ProcessManager class ([07379b8](https://github.com/osl-incubator/retsu/commit/07379b8da2dd3aeef4f7326e9fad8322cadd2db8))
 
 ## [0.0.4](https://github.com/osl-incubator/retsu/compare/0.0.3...0.0.4) (2024-05-31)
 

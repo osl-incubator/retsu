@@ -397,6 +397,8 @@
       
         
       
+        
+      
     
     
     
@@ -539,18 +541,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#retsu.celery.ParallelCeleryTask" class="md-nav__link">
+  <a href="#retsu.celery.MultiCeleryProcess" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;ParallelCeleryTask
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;MultiCeleryProcess
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#retsu.celery.SerialCeleryTask" class="md-nav__link">
+  <a href="#retsu.celery.SingleCeleryProcess" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SerialCeleryTask
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SingleCeleryProcess
     </span>
   </a>
   
@@ -675,11 +677,32 @@
   
   
     <li class="md-nav__item">
-      <a href="../tracking/" class="md-nav__link">
+      <a href="../queues/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> tracking
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> queues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../results/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> results
   </span>
   
 
@@ -802,18 +825,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#retsu.celery.ParallelCeleryTask" class="md-nav__link">
+  <a href="#retsu.celery.MultiCeleryProcess" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;ParallelCeleryTask
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;MultiCeleryProcess
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#retsu.celery.SerialCeleryTask" class="md-nav__link">
+  <a href="#retsu.celery.SingleCeleryProcess" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SerialCeleryTask
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SingleCeleryProcess
     </span>
   </a>
   
@@ -1179,32 +1202,32 @@
 
 
 
-<h2 id="retsu.celery.ParallelCeleryTask" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">ParallelCeleryTask</span>
+<h2 id="retsu.celery.MultiCeleryProcess" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">MultiCeleryProcess</span>
 
 
-<a href="#retsu.celery.ParallelCeleryTask" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">ParallelCeleryTask</span><span class="p">(</span><span class="n">workers</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<a href="#retsu.celery.MultiCeleryProcess" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">MultiCeleryProcess</span><span class="p">(</span><span class="n">workers</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="retsu.celery.CeleryTask" href="#retsu.celery.CeleryTask">CeleryTask</a></code>, <code><a class="autorefs autorefs-internal" title="retsu.core.ParallelTask" href="../core/#retsu.core.ParallelTask">ParallelTask</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="retsu.celery.CeleryTask" href="#retsu.celery.CeleryTask">CeleryTask</a></code>, <code><a class="autorefs autorefs-internal" title="retsu.core.MultiProcess" href="../core/#retsu.core.MultiProcess">MultiProcess</a></code></p>
 
 
-      <p>Parallel Task for Celery.</p>
+      <p>Multi Task for Celery.</p>
 
                   <details class="quote">
                     <summary>Source code in <code>src/retsu/core.py</code></summary>
-                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize ParallelTask.&quot;&quot;&quot;</span>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize MultiProcess.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">workers</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ParallelTask should have more than 1 worker.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;MultiProcess should have more than 1 worker.&quot;</span><span class="p">)</span>
 
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -1218,36 +1241,36 @@
 
 
 
-<h2 id="retsu.celery.SerialCeleryTask" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">SerialCeleryTask</span>
+<h2 id="retsu.celery.SingleCeleryProcess" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">SingleCeleryProcess</span>
 
 
-<a href="#retsu.celery.SerialCeleryTask" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">SerialCeleryTask</span><span class="p">(</span><span class="n">workers</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<a href="#retsu.celery.SingleCeleryProcess" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">SingleCeleryProcess</span><span class="p">(</span><span class="n">workers</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="retsu.celery.CeleryTask" href="#retsu.celery.CeleryTask">CeleryTask</a></code>, <code><a class="autorefs autorefs-internal" title="retsu.core.SerialTask" href="../core/#retsu.core.SerialTask">SerialTask</a></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="retsu.celery.CeleryTask" href="#retsu.celery.CeleryTask">CeleryTask</a></code>, <code><a class="autorefs autorefs-internal" title="retsu.core.SingleProcess" href="../core/#retsu.core.SingleProcess">SingleProcess</a></code></p>
 
 
-      <p>Serial Task for Celery.</p>
+      <p>Single Task for Celery.</p>
 
                   <details class="quote">
                     <summary>Source code in <code>src/retsu/core.py</code></summary>
-                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize a serial task object.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">workers</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;SerialTask should have just 1 worker. &quot;</span>
+            <span class="s2">&quot;SingleProcess should have just 1 worker. &quot;</span>
             <span class="s2">&quot;Switching automatically to 1 ...&quot;</span>
         <span class="p">)</span>
         <span class="n">workers</span> <span class="o">=</span> <span class="mi">1</span>

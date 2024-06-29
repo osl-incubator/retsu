@@ -14,7 +14,7 @@
         <link rel="prev" href="../">
       
       
-        <link rel="next" href="../../tracking/">
+        <link rel="next" href="../../queues/">
       
       
       <link rel="icon" href="../../../images/favicon.ico">
@@ -397,6 +397,8 @@
       
         
       
+        
+      
     
     
     
@@ -617,11 +619,32 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tracking/" class="md-nav__link">
+      <a href="../../queues/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> tracking
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> queues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../results/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> results
   </span>
   
 
@@ -753,7 +776,7 @@
 
 
 <a href="#retsu.plugins.django.create_app_config" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">create_app_config</span><span class="p">(</span><span class="n">manager</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="retsu.core.TaskManager" href="../../core/#retsu.core.TaskManager">TaskManager</a></span><span class="p">,</span> <span class="n">app_name</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">=</span> <span class="s1">&#39;myapp&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Type" href="https://docs.python.org/3/library/typing.html#typing.Type">Type</a></span><span class="p">[</span><span class="n"><span title="django.apps.AppConfig">AppConfig</span></span><span class="p">]</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">create_app_config</span><span class="p">(</span><span class="n">manager</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="retsu.core.ProcessManager" href="../../core/#retsu.core.ProcessManager">ProcessManager</a></span><span class="p">,</span> <span class="n">app_name</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">=</span> <span class="s1">&#39;myapp&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Type" href="https://docs.python.org/3/library/typing.html#typing.Type">Type</a></span><span class="p">[</span><span class="n"><span title="django.apps.AppConfig">AppConfig</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -782,7 +805,7 @@
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">create_app_config</span><span class="p">(</span>
-    <span class="n">manager</span><span class="p">:</span> <span class="n">TaskManager</span><span class="p">,</span> <span class="n">app_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;myapp&quot;</span>
+    <span class="n">manager</span><span class="p">:</span> <span class="n">ProcessManager</span><span class="p">,</span> <span class="n">app_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;myapp&quot;</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">AppConfig</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a django app config class.&quot;&quot;&quot;</span>
 
