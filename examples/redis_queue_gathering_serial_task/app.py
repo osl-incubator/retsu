@@ -78,17 +78,11 @@ def api() -> str:
     return "Select an endpoint for your request:<br>Remember to replace `[TASK_ID]` by the desired task id."
 
 
-@app.route("/research/<research>")
-def research_name(research: str) -> dict[str, Any]:
-    """Handle research requests by processing a series of tasks sequentially."""
-    research_steps = [
-        "article",
-        "preparing",
-        "preprocessing",
-        "clustering",
-        "plotting",
-        "cleaning",
-    ]
+
+@app.route("/start-research/<research>")
+def start_research(research: str) -> dict[str, Any]:
+    """Initiate research requests by queuing a series of tasks."""
+    research_steps = ["article", "preparing", "preprocessing", "clustering", "plotting", "cleaning"]
     queue_name = f"research_tasks:{research}"
 
     for step in research_steps:
@@ -96,27 +90,34 @@ def research_name(research: str) -> dict[str, Any]:
         task_id = task.request(research)
         add_to_queue(queue_name, f"{step}:{task_id}")
 
+    return {"message": f"Research '{research}' has been initiated and is now running."}
+
+@app.route("/check-research/<research>")
+def check_research(research: str) -> dict[str, Any]:
+    """Check the status of queued research tasks and return results if completed."""
+    queue_name = f"research_tasks:{research}"
     message_details = []
+    all_completed = True
+
     while True:
         task_detail = get_from_queue(queue_name)
         if not task_detail:
-            break
+            if all_completed:
+                return {"message": " ".join(message_details)}
+            else:
+                return {"message": f"Research '{research}' is still processing.", "details": message_details}
+        
         step, task_id = task_detail.split(":")
-        result, status = check_task_completion(
-            task_manager.get_task(step), task_id
-        )
+        result, status = check_task_completion(task_manager.get_task(step), task_id)
+        
         if status != "completed":
-            log.info(
-                f"Re-enqueueing {step} task {task_id} due to non-completion."
-            )
+            all_completed = False
+            log.info(f"Re-enqueueing {step} task {task_id} due to non-completion.")
             add_to_queue(queue_name, f"{step}:{task_id}")  # Re-enqueue task
         else:
-            message_details.append(
-                f"{step} task {task_id} completed with result: {result}, status: {status}"
-            )
+            message_details.append(f"{step} task {task_id} completed with result: {result}, status: {status}")
 
-    return {"message": " ".join(message_details)}
-
+    return {"message": "Research is still in progress.", "details": message_details}
 
 def check_task_completion(
     task, task_id, initial_timeout=25, extended_timeout=300
@@ -187,8 +188,6 @@ def collectors_name(
 
             task_id = task.request(search=search, begin=begin, end=end)  # type: ignore[attr-defined]
             
-            gathering_ids.append(f"{task_name}-{task_id}")
-
             log.info(
                 f"{task_name} task {task_id} started with search: {search}"
             )
@@ -204,7 +203,7 @@ def collectors_name(
                 f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {e}: {task_name}"
             )
 
-    return {"article": article}
+    return {"message": f"All tasks completed. Total articles collected: {article}"}
 
 
 """
