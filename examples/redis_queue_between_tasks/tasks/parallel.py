@@ -6,7 +6,7 @@ from time import sleep
 
 import celery
 
-from retsu.celery import ParallelCeleryTask
+from retsu.celery import MultiCeleryProcess
 
 from .config import app, redis_client
 
@@ -46,8 +46,8 @@ def task_parallel_result_square(results, task_id: str) -> int:  # type: ignore
     return int(result) ** 2
 
 
-class MyParallelTask1(ParallelCeleryTask):
-    """MyParallelTask1."""
+class MyMultiProcess1(MultiCeleryProcess):
+    """MyMultiProcess1."""
 
     def request(self, a: int, b: int) -> str:
         """Receive the request for processing."""

@@ -10,9 +10,12 @@ from datetime import datetime
 from typing import Any, Optional
 from uuid import uuid4
 
+import redis
+
 from public import public
 
-from retsu.tracking import ResultTaskManager, create_result_task_manager
+from retsu.queues import RedisRetsuQueue, get_redis_queue_config
+from retsu.results import ResultProcessManager, create_result_task_manager
 
 
 @public
@@ -21,10 +24,17 @@ class Task:
 
     def __init__(self, workers: int = 1) -> None:
         """Initialize a task object."""
+        _klass = self.__class__
+        queue_in_name = f"{_klass.__module__}.{_klass.__qualname__}"
+
+        self._client = redis.Redis(
+            **get_redis_queue_config(),  # type: ignore
+            decode_responses=False,
+        )
         self.active = True
         self.workers = workers
-        self.result: ResultTaskManager = create_result_task_manager()
-        self.queue_in: mp.Queue[Any] = mp.Queue()
+        self.result: ResultProcessManager = create_result_task_manager()
+        self.queue_in = RedisRetsuQueue(queue_in_name)
         self.processes: list[mp.Process] = []
 
     @public
@@ -50,8 +60,8 @@ class Task:
             p = self.processes[i]
             p.join()
 
-        self.queue_in.close()
-        self.queue_in.join_thread()
+        # self.queue_in.close()
+        # self.queue_in.join_thread()
 
     @public
     def request(self, *args, **kwargs) -> str:  # type: ignore
@@ -69,7 +79,6 @@ class Task:
                 "args": args,
                 "kwargs": kwargs,
             },
-            block=False,
         )
         return task_id
 
@@ -102,32 +111,32 @@ class Task:
             self.prepare_task(data)
 
 
-class SerialTask(Task):
-    """Serial Task class."""
+class SingleProcess(Task):
+    """Single Task class."""
 
     def __init__(self, workers: int = 1) -> None:
         """Initialize a serial task object."""
         if workers != 1:
             warnings.warn(
-                "SerialTask should have just 1 worker. "
+                "SingleProcess should have just 1 worker. "
                 "Switching automatically to 1 ..."
             )
             workers = 1
         super().__init__(workers=workers)
 
 
-class ParallelTask(Task):
+class MultiProcess(Task):
     """Initialize a parallel task object."""
 
     def __init__(self, workers: int = 1) -> None:
-        """Initialize ParallelTask."""
+        """Initialize MultiProcess."""
         if workers <= 1:
-            raise Exception("ParallelTask should have more than 1 worker.")
+            raise Exception("MultiProcess should have more than 1 worker.")
 
         super().__init__(workers=workers)
 
 
-class TaskManager:
+class ProcessManager:
     """Manage tasks."""
 
     tasks: dict[str, Task]

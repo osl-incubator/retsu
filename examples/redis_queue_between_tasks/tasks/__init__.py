@@ -1,17 +1,17 @@
 """Tasks for the example."""
 
-from retsu import TaskManager
+from retsu import ProcessManager
 
-from .parallel import MyParallelTask1
-from .serial import MySerialTask1
+from .parallel import MyMultiProcess1
+from .serial import MySingleProcess1
 
 
-class MyTaskManager(TaskManager):
-    """MyTaskManager."""
+class MyProcessManager(ProcessManager):
+    """MyProcessManager."""
 
     def __init__(self) -> None:
         """Create a list of retsu tasks."""
         self.tasks = {
-            "serial": MySerialTask1(),
-            "parallel": MyParallelTask1(workers=2),
+            "serial": MySingleProcess1(),
+            "parallel": MyMultiProcess1(workers=2),
         }

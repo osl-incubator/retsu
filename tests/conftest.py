@@ -8,6 +8,15 @@ import time
 from typing import Generator
 
 import pytest
+import redis
+
+from retsu.queues import get_redis_queue_config
+
+
+def redis_flush() -> None:
+    """Wipe-out redis database."""
+    r = redis.Redis(**get_redis_queue_config())  # type: ignore
+    r.flushdb()
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -22,6 +31,9 @@ def setup() -> Generator[None, None, None]:
         # )
         # # Sleep for 5 seconds
         # time.sleep(5)
+
+        # Clean Redis queues
+        redis_flush()
 
         # Start the Celery worker
         celery_process = subprocess.Popen(

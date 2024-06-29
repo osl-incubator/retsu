@@ -13,7 +13,7 @@
 
 ### Features
 
-* Add method create_task to the TaskManager class ([07379b8](https://github.com/osl-incubator/retsu/commit/07379b8da2dd3aeef4f7326e9fad8322cadd2db8))
+* Add method create_task to the ProcessManager class ([07379b8](https://github.com/osl-incubator/retsu/commit/07379b8da2dd3aeef4f7326e9fad8322cadd2db8))
 
 ## [0.0.4](https://github.com/osl-incubator/retsu/compare/0.0.3...0.0.4) (2024-05-31)
 

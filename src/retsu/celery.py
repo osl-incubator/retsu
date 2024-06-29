@@ -9,7 +9,7 @@ import celery
 from celery import chain, chord, group
 from public import public
 
-from retsu.core import ParallelTask, SerialTask
+from retsu.core import MultiProcess, SingleProcess
 
 
 class CeleryTask:
@@ -110,14 +110,14 @@ class CeleryTask:
 
 
 @public
-class ParallelCeleryTask(CeleryTask, ParallelTask):
-    """Parallel Task for Celery."""
+class MultiCeleryProcess(CeleryTask, MultiProcess):
+    """Multi Task for Celery."""
 
     ...
 
 
 @public
-class SerialCeleryTask(CeleryTask, SerialTask):
-    """Serial Task for Celery."""
+class SingleCeleryProcess(CeleryTask, SingleProcess):
+    """Single Task for Celery."""
 
     ...
