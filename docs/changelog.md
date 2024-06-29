@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+# [0.2.0](https://github.com/osl-incubator/retsu/compare/0.1.1...0.2.0) (2024-06-29)
+
+
+### Features
+
+* Use redis for queues ([#13](https://github.com/osl-incubator/retsu/issues/13)) ([750fb6b](https://github.com/osl-incubator/retsu/commit/750fb6b71300b0b40831f6e8917d324edb58592a))
+
 ## [0.1.1](https://github.com/osl-incubator/retsu/compare/0.1.0...0.1.1) (2024-06-20)
 
 
