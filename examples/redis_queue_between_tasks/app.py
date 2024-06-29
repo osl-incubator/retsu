@@ -7,11 +7,11 @@ from time import sleep
 from typing import Any, Optional
 
 from flask import Flask
-from tasks import MyTaskManager
+from tasks import MyProcessManager
 
 app = Flask(__name__)
 
-task_manager = MyTaskManager()
+task_manager = MyProcessManager()
 task_manager.start()
 
 

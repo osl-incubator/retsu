@@ -7,11 +7,11 @@ from typing import Type
 from django.apps import AppConfig
 from django.core.signals import request_finished
 
-from retsu.core import TaskManager
+from retsu.core import ProcessManager
 
 
 def create_app_config(
-    manager: TaskManager, app_name: str = "myapp"
+    manager: ProcessManager, app_name: str = "myapp"
 ) -> Type[AppConfig]:
     """Create a django app config class."""
 

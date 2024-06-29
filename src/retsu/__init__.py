@@ -4,12 +4,12 @@ from importlib import metadata as importlib_metadata
 
 from retsu.core import (
     MultiProcess,
+    ProcessManager,
     SingleProcess,
     Task,
-    TaskManager,
 )
-from retsu.tracking import (
-    ResultTaskManager,
+from retsu.results import (
+    ResultProcessManager,
 )
 
 
@@ -32,8 +32,8 @@ __all__ = [
     "__author__",
     "__email__",
     "MultiProcess",
-    "ResultTaskManager",
+    "ResultProcessManager",
     "SingleProcess",
     "Task",
-    "TaskManager",
+    "ProcessManager",
 ]

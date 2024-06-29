@@ -59,8 +59,8 @@ def task_timestamp() -> Generator[Task, None, None]:
 class TestMultiCeleryProcess:
     """TestMultiCeleryProcess."""
 
-    def test_serial_result(self, task_result: Task) -> None:
-        """Run simple test for a serial task."""
+    def test_multi_result(self, task_result: Task) -> None:
+        """Run simple test for a multi task."""
         results: dict[str, int] = {}
 
         task = task_result
@@ -71,12 +71,13 @@ class TestMultiCeleryProcess:
 
         for task_id, expected in results.items():
             result = task.result.get(task_id, timeout=10)[0]
+
             assert (
                 result == expected
             ), f"Expected Result: {expected}, Actual Result: {result}"
 
-    def test_serial_timestamp(self, task_timestamp: Task) -> None:
-        """Run simple test for a serial task."""
+    def test_multi_timestamp(self, task_timestamp: Task) -> None:
+        """Run simple test for a multi task."""
         results: list[tuple[str, int]] = []
 
         task = task_timestamp

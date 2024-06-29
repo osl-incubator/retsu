@@ -1,8 +1,7 @@
-"""Retsu tracking classes."""
+"""Retsu results classes."""
 
 from __future__ import annotations
 
-import os
 import pickle
 
 from datetime import datetime
@@ -20,6 +19,8 @@ except ImportError:
 import redis
 
 from public import public
+
+from retsu.queues import get_redis_queue_config
 
 
 class TaskMetadataManager:
@@ -93,13 +94,13 @@ class StepMetadataManager:
 
 
 @public
-class ResultTaskManager:
+class ResultProcessManager:
     """Manage the result and metadata from tasks."""
 
     def __init__(
         self, host: str = "localhost", port: int = 6379, db: int = 0
     ) -> None:
-        """Initialize ResultTaskManager."""
+        """Initialize ResultProcessManager."""
         self.client = redis.Redis(
             host=host, port=port, db=db, decode_responses=False
         )
@@ -148,13 +149,9 @@ class ResultTaskManager:
 
 
 @public
-def create_result_task_manager() -> ResultTaskManager:
-    """Create a ResultTaskManager with parameters from the environment."""
-    redis_host: str = os.getenv("RETSU_REDIS_HOST", "localhost")
-    redis_port: int = int(os.getenv("RETSU_REDIS_PORT", 6379))
-    redis_db: int = int(os.getenv("RETSU_REDIS_DB", 0))
-
-    return ResultTaskManager(host=redis_host, port=redis_port, db=redis_db)
+def create_result_task_manager() -> ResultProcessManager:
+    """Create a ResultProcessManager with parameters from the environment."""
+    return ResultProcessManager(**get_redis_queue_config())  # type: ignore
 
 
 @public
