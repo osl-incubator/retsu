@@ -9,7 +9,7 @@ from typing import Any, Optional
 import redis
 
 from flask import Flask
-from tasks import MyTaskManager
+from tasks import MyProcessManager
 
 # Setup Redis connection and logging
 redis_client = redis.Redis(host="localhost", port=6379, db=0)
@@ -38,7 +38,7 @@ if not log.handlers:
 log.setLevel(logging.INFO)
 
 
-task_manager = MyTaskManager()
+task_manager = MyProcessManager()
 task_manager.start()
 
 app = Flask(__name__)

@@ -1,10 +1,10 @@
 """Tasks for the example."""
 
-from retsu import TaskManager
+from retsu import ProcessManager
 
 from .get_max_article import ArXivGetMaxArticlesTask, PubMedGetMaxArticlesTask, MedrXivGetMaxArticlesTask, BiorXivGetMaxArticlesTask, EmbaseGetMaxArticlesTask, WebOfScienceGetMaxArticlesTask
 
-# from .parallel import MyParallelTask1
+# from .parallel import MyMultiProcess1
 from .get_back_process import (
     ArticleTask,
     CleaningTask,
@@ -15,8 +15,8 @@ from .get_back_process import (
 )
 
 
-class MyTaskManager(TaskManager):
-    """MyTaskManager."""
+class MyProcessManager(ProcessManager):
+    """MyProcessManager."""
 
     def __init__(self) -> None:
         """Create a list of retsu tasks."""

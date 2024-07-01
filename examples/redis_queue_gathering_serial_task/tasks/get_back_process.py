@@ -7,7 +7,7 @@ from typing import Any
 import celery
 
 from celery_app import app  # type: ignore
-from retsu.celery import SerialCeleryTask
+from retsu.celery import SingleCeleryProcess
 
 from .libs.back_cleaning import clean_intermediate_files
 from .libs.back_clustering import cluster_preprocessed_corpuses
@@ -61,7 +61,7 @@ def task_articles(research: Any, task_id: str) -> Any:
     return back_process_articles(research)
 
 
-class ArticleTask(SerialCeleryTask):
+class ArticleTask(SingleCeleryProcess):
     """Task to handle articles processing."""
 
     def get_group_tasks(
@@ -70,7 +70,7 @@ class ArticleTask(SerialCeleryTask):
         return [task_articles.s(research, task_id)]
 
 
-class PreparingTask(SerialCeleryTask):
+class PreparingTask(SingleCeleryProcess):
     """Task to handle corpus preparation."""
 
     def get_group_tasks(
@@ -81,7 +81,7 @@ class PreparingTask(SerialCeleryTask):
         ]
 
 
-class PreprocessingTask(SerialCeleryTask):
+class PreprocessingTask(SingleCeleryProcess):
     """Task to handle corpus preprocessing."""
 
     def get_group_tasks(
@@ -92,7 +92,7 @@ class PreprocessingTask(SerialCeleryTask):
         ]
 
 
-class ClusteringTask(SerialCeleryTask):
+class ClusteringTask(SingleCeleryProcess):
     """Task to handle corpus clustering."""
 
     def get_group_tasks(
@@ -103,7 +103,7 @@ class ClusteringTask(SerialCeleryTask):
         ]
 
 
-class PlottingTask(SerialCeleryTask):
+class PlottingTask(SingleCeleryProcess):
     """Task to handle corpus plotting."""
 
     def get_group_tasks(
@@ -114,7 +114,7 @@ class PlottingTask(SerialCeleryTask):
         ]
 
 
-class CleaningTask(SerialCeleryTask):
+class CleaningTask(SingleCeleryProcess):
     """Task to handle corpus cleaning."""
 
     def get_group_tasks(

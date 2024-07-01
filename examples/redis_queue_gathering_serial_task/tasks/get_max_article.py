@@ -8,7 +8,7 @@ import celery
 
 from celery_app import app  # type: ignore
 
-from retsu.celery import SerialCeleryTask, ParallelCeleryTask
+from retsu.celery import SingleCeleryProcess, MultiCeleryProcess
 
 from .libs.collectors.arxiv import ArXivCollector
 
@@ -81,7 +81,7 @@ def task_wos_get_max_articles(
     return collector.get_max_articles(search, begin, end)
 
 
-class WebOfScienceGetMaxArticlesTask(SerialCeleryTask):
+class WebOfScienceGetMaxArticlesTask(SingleCeleryProcess):
     """Task for the test."""
 
     def get_group_tasks(  # type: ignore
@@ -95,7 +95,7 @@ class WebOfScienceGetMaxArticlesTask(SerialCeleryTask):
         return [task_wos_get_max_articles.s(search, dt_begin, dt_end, task_id)]
 
 
-class PubMedCentralGetMaxArticlesTask(SerialCeleryTask):
+class PubMedCentralGetMaxArticlesTask(SingleCeleryProcess):
     """Task for the test."""
 
     def get_group_tasks(  # type: ignore
@@ -109,7 +109,7 @@ class PubMedCentralGetMaxArticlesTask(SerialCeleryTask):
         return [task_pmc_get_max_articles.s(search, dt_begin, dt_end, task_id)]
 
 
-class PubMedGetMaxArticlesTask(SerialCeleryTask):
+class PubMedGetMaxArticlesTask(SingleCeleryProcess):
     """Task for the test."""
 
     def get_group_tasks(  # type: ignore
@@ -127,7 +127,7 @@ class PubMedGetMaxArticlesTask(SerialCeleryTask):
             ]
 
 
-class MedrXivGetMaxArticlesTask(SerialCeleryTask):
+class MedrXivGetMaxArticlesTask(SingleCeleryProcess):
     """Task for the test."""
 
     def get_group_tasks(  # type: ignore
@@ -145,7 +145,7 @@ class MedrXivGetMaxArticlesTask(SerialCeleryTask):
             ]
 
 
-class EmbaseGetMaxArticlesTask(SerialCeleryTask):
+class EmbaseGetMaxArticlesTask(SingleCeleryProcess):
     """Task for the test."""
 
     def get_group_tasks(  # type: ignore
@@ -163,7 +163,7 @@ class EmbaseGetMaxArticlesTask(SerialCeleryTask):
             ]
 
 
-class BiorXivGetMaxArticlesTask(SerialCeleryTask):
+class BiorXivGetMaxArticlesTask(SingleCeleryProcess):
     """Task for the test."""
 
     def get_group_tasks(  # type: ignore
@@ -181,7 +181,7 @@ class BiorXivGetMaxArticlesTask(SerialCeleryTask):
             ]
 
 
-class ArXivGetMaxArticlesTask(SerialCeleryTask):
+class ArXivGetMaxArticlesTask(SingleCeleryProcess):
     """Task to handle articles processing."""
 
     def get_group_tasks(
