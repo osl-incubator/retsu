@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+## [0.2.1](https://github.com/osl-incubator/retsu/compare/0.2.0...0.2.1) (2024-08-12)
+
+
+### Bug Fixes
+
+* Force process termination ([#14](https://github.com/osl-incubator/retsu/issues/14)) ([0e4f088](https://github.com/osl-incubator/retsu/commit/0e4f08858ad17642338648bc123749259b3e06b8))
+
 # [0.2.0](https://github.com/osl-incubator/retsu/compare/0.1.1...0.2.0) (2024-06-29)
 
 
