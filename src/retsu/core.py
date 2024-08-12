@@ -58,6 +58,7 @@ class Task:
 
         for i in range(self.workers):
             p = self.processes[i]
+            p.terminate()
             p.join()
 
         # self.queue_in.close()
