@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+## [0.2.2](https://github.com/osl-incubator/retsu/compare/0.2.1...0.2.2) (2024-08-14)
+
+
+### Bug Fixes
+
+* Fix stopping workflow and refactor ([#15](https://github.com/osl-incubator/retsu/issues/15)) ([5ab8f9b](https://github.com/osl-incubator/retsu/commit/5ab8f9b8d1ce53a77572398f09f0164d90a3b2f8))
+
 ## [0.2.1](https://github.com/osl-incubator/retsu/compare/0.2.0...0.2.1) (2024-08-12)
 
 
