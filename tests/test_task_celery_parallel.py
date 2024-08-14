@@ -7,14 +7,14 @@ from typing import Generator
 import celery
 import pytest
 
-from retsu import Task
+from retsu import Process
 from retsu.celery import MultiCeleryProcess
 
 from .celery_tasks import task_sleep, task_sum
 
 
 class MyResultTask(MultiCeleryProcess):
-    """Task for the test."""
+    """Process for the test."""
 
     def get_group_tasks(  # type: ignore
         self, *args, **kwargs
@@ -27,7 +27,7 @@ class MyResultTask(MultiCeleryProcess):
 
 
 class MyTimestampTask(MultiCeleryProcess):
-    """Task for the test."""
+    """Process for the test."""
 
     def get_group_tasks(  # type: ignore
         self, *args, **kwargs
@@ -39,7 +39,7 @@ class MyTimestampTask(MultiCeleryProcess):
 
 
 @pytest.fixture
-def task_result() -> Generator[Task, None, None]:
+def task_result() -> Generator[Process, None, None]:
     """Create a fixture for MyResultTask."""
     task = MyResultTask(workers=2)
     task.start()
@@ -48,7 +48,7 @@ def task_result() -> Generator[Task, None, None]:
 
 
 @pytest.fixture
-def task_timestamp() -> Generator[Task, None, None]:
+def task_timestamp() -> Generator[Process, None, None]:
     """Create a fixture for MyResultTask."""
     task = MyTimestampTask(workers=5)
     task.start()
@@ -59,7 +59,7 @@ def task_timestamp() -> Generator[Task, None, None]:
 class TestMultiCeleryProcess:
     """TestMultiCeleryProcess."""
 
-    def test_multi_result(self, task_result: Task) -> None:
+    def test_multi_result(self, task_result: Process) -> None:
         """Run simple test for a multi task."""
         results: dict[str, int] = {}
 
@@ -76,7 +76,7 @@ class TestMultiCeleryProcess:
                 result == expected
             ), f"Expected Result: {expected}, Actual Result: {result}"
 
-    def test_multi_timestamp(self, task_timestamp: Task) -> None:
+    def test_multi_timestamp(self, task_timestamp: Process) -> None:
         """Run simple test for a multi task."""
         results: list[tuple[str, int]] = []
 

@@ -60,7 +60,7 @@ def api() -> str:
 @app.route("/serial/<int:a>/<int:b>")
 def serial(a: int, b: int) -> dict[str, Any]:
     """Define the serial endpoint."""
-    task1 = task_manager.get_task("serial")
+    task1 = task_manager.get_process("serial")
     key = task1.request(a=a, b=b)
     return {"message": f"Your task ({key}) is running now"}
 
@@ -68,7 +68,7 @@ def serial(a: int, b: int) -> dict[str, Any]:
 @app.route("/parallel/<int:a>/<int:b>")
 def parallel(a: int, b: int) -> dict[str, Any]:
     """Define the parallel endpoint."""
-    task2 = task_manager.get_task("parallel")
+    task2 = task_manager.get_process("parallel")
     key = task2.request(a=a, b=b)
     return {"message": f"Your task ({key}) is running now"}
 
@@ -76,7 +76,7 @@ def parallel(a: int, b: int) -> dict[str, Any]:
 @app.route("/serial/status/<string:task_id>")
 def serial_status(task_id: str) -> dict[str, Any]:
     """Define serial/status endpoint."""
-    task1 = task_manager.get_task("serial")
+    task1 = task_manager.get_process("serial")
     _status = task1.result.status(task_id)
     return {"status": _status, "task_id": task_id}
 
@@ -84,7 +84,7 @@ def serial_status(task_id: str) -> dict[str, Any]:
 @app.route("/parallel/status/<string:task_id>")
 def parallel_status(task_id: str) -> dict[str, Any]:
     """Define parallel/status endpoint."""
-    task2 = task_manager.get_task("parallel")
+    task2 = task_manager.get_process("parallel")
     _status = task2.result.status(task_id)
     return {"status": _status, "task_id": task_id}
 
@@ -92,7 +92,7 @@ def parallel_status(task_id: str) -> dict[str, Any]:
 @app.route("/serial/result/<string:task_id>")
 def serial_result(task_id: str) -> dict[str, Any]:
     """Define serial/result endpoint."""
-    task1 = task_manager.get_task("serial")
+    task1 = task_manager.get_process("serial")
     result = None
     for _ in range(10):
         try:
@@ -110,7 +110,7 @@ def serial_result(task_id: str) -> dict[str, Any]:
 @app.route("/parallel/result/<string:task_id>")
 def parallel_result(task_id: str) -> dict[str, Any]:
     """Define parallel/result endpoint."""
-    task2 = task_manager.get_task("parallel")
+    task2 = task_manager.get_process("parallel")
 
     try:
         # note: with timeout

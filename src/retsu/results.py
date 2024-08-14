@@ -23,11 +23,11 @@ from public import public
 from retsu.queues import get_redis_queue_config
 
 
-class TaskMetadataManager:
+class ProcessMetadataManager:
     """Manage task metadata."""
 
     def __init__(self, client: redis.Redis):
-        """Initialize TaskMetadataManager."""
+        """Initialize ProcessMetadataManager."""
         self.client = client
         self.step = StepMetadataManager(self.client)
 
@@ -104,7 +104,7 @@ class ResultProcessManager:
         self.client = redis.Redis(
             host=host, port=port, db=db, decode_responses=False
         )
-        self.metadata = TaskMetadataManager(self.client)
+        self.metadata = ProcessMetadataManager(self.client)
 
     def get(self, task_id: str, timeout: Optional[int] = None) -> Any:
         """Get the result for a given task."""
@@ -117,15 +117,15 @@ class ResultProcessManager:
                 if timeout_countdown <= 0:
                     status = self.status(task_id)
                     raise Exception(
-                        "Timeout(get): Task result is not ready yet. "
-                        f"Task status: {status}"
+                        "Timeout(get): Process result is not ready yet. "
+                        f"Process status: {status}"
                     )
 
         elif self.status(task_id) != "completed":
             status = self.status(task_id)
             raise Exception(
-                "Timeout(get): Task result is not ready yet. "
-                f"Task status: {status}"
+                "Timeout(get): Process result is not ready yet. "
+                f"Process status: {status}"
             )
         result = self.metadata.get(task_id, "result")
         return pickle.loads(result) if result else result
@@ -155,8 +155,8 @@ def create_result_task_manager() -> ResultProcessManager:
 
 
 @public
-def track_step(task_metadata: TaskMetadataManager) -> Callable[..., Any]:
-    """Decorate a function with TaskMetadataManager."""
+def track_step(task_metadata: ProcessMetadataManager) -> Callable[..., Any]:
+    """Decorate a function with ProcessMetadataManager."""
 
     def decorator(task_func: Callable[..., Any]) -> Callable[..., Any]:
         """Return a decorator for the given task."""
