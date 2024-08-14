@@ -154,13 +154,13 @@ class ProcessManager:
         self.tasks: dict[str, Process] = {}
 
     @public
-    def create_tasks(self) -> None:
+    def setup_processes(self) -> None:
         """Get a task with the given name."""
         if self.tasks:
             return
 
         warnings.warn(
-            "`self.tasks` is empty. Override `create_tasks` and create "
+            "`self.tasks` is empty. Override `setup_processes` and create "
             "`self.tasks` with the proper tasks."
         )
 
@@ -173,7 +173,7 @@ class ProcessManager:
     def start(self) -> None:
         """Start tasks."""
         if not self.tasks:
-            self.create_tasks()
+            self.setup_processes()
 
         for task_name, task in self.tasks.items():
             task.start()
