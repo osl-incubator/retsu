@@ -165,7 +165,7 @@ class ProcessManager:
         )
 
     @public
-    def get_task(self, name: str) -> Optional[Process]:
+    def get_process(self, name: str) -> Optional[Process]:
         """Get a task with the given name."""
         return self.tasks.get(name)
 
