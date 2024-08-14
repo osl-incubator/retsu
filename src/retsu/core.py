@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import multiprocessing as mp
 import warnings
 
@@ -19,7 +20,7 @@ from retsu.results import ResultProcessManager, create_result_task_manager
 
 
 @public
-class Task:
+class Process:
     """Main class for handling a task."""
 
     def __init__(self, workers: int = 1) -> None:
@@ -37,9 +38,14 @@ class Task:
         self.queue_in = RedisRetsuQueue(queue_in_name)
         self.processes: list[mp.Process] = []
 
+    def __del__(self) -> None:
+        """Close queues and process."""
+        self.stop()
+
     @public
     def start(self) -> None:
         """Start processes."""
+        logging.info(f"Starting process {self.__class__.__name__}")
         for _ in range(self.workers):
             p = mp.Process(target=self.run)
             p.start()
@@ -48,6 +54,7 @@ class Task:
     @public
     def stop(self) -> None:
         """Stop processes."""
+        logging.info(f"Stopping process {self.__class__.__name__}")
         if not self.active:
             return
 
@@ -59,7 +66,7 @@ class Task:
         for i in range(self.workers):
             p = self.processes[i]
             p.terminate()
-            p.join()
+            p.join(timeout=1)
 
         # self.queue_in.close()
         # self.queue_in.join_thread()
@@ -112,8 +119,8 @@ class Task:
             self.prepare_task(data)
 
 
-class SingleProcess(Task):
-    """Single Task class."""
+class SingleProcess(Process):
+    """Single Process class."""
 
     def __init__(self, workers: int = 1) -> None:
         """Initialize a serial task object."""
@@ -126,7 +133,7 @@ class SingleProcess(Task):
         super().__init__(workers=workers)
 
 
-class MultiProcess(Task):
+class MultiProcess(Process):
     """Initialize a parallel task object."""
 
     def __init__(self, workers: int = 1) -> None:
@@ -140,11 +147,11 @@ class MultiProcess(Task):
 class ProcessManager:
     """Manage tasks."""
 
-    tasks: dict[str, Task]
+    tasks: dict[str, Process]
 
     def __init__(self) -> None:
         """Create a list of retsu tasks."""
-        self.tasks: dict[str, Task] = {}
+        self.tasks: dict[str, Process] = {}
 
     @public
     def create_tasks(self) -> None:
@@ -158,7 +165,7 @@ class ProcessManager:
         )
 
     @public
-    def get_task(self, name: str) -> Optional[Task]:
+    def get_task(self, name: str) -> Optional[Process]:
         """Get a task with the given name."""
         return self.tasks.get(name)
 
@@ -169,7 +176,6 @@ class ProcessManager:
             self.create_tasks()
 
         for task_name, task in self.tasks.items():
-            print(f"Task `{task_name}` is starting ...")
             task.start()
 
     @public
@@ -180,5 +186,4 @@ class ProcessManager:
             return
 
         for task_name, task in self.tasks.items():
-            print(f"Task `{task_name}` is stopping ...")
             task.stop()

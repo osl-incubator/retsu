@@ -8,11 +8,11 @@ from typing import Any, Generator
 
 import pytest
 
-from retsu import MultiProcess, Task
+from retsu import MultiProcess, Process
 
 
 class MyResultTask(MultiProcess):
-    """Task for the test."""
+    """Process for the test."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
         """Return the sum of the given 2 numbers."""
@@ -23,7 +23,7 @@ class MyResultTask(MultiProcess):
 
 
 class MyTimestampTask(MultiProcess):
-    """Task for the test."""
+    """Process for the test."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
         """Sleep the given seconds, and return the current timestamp."""
@@ -33,7 +33,7 @@ class MyTimestampTask(MultiProcess):
 
 
 @pytest.fixture
-def task_result() -> Generator[Task, None, None]:
+def task_result() -> Generator[Process, None, None]:
     """Create a fixture for MyResultTask."""
     task = MyResultTask(workers=10)
     task.start()
@@ -42,7 +42,7 @@ def task_result() -> Generator[Task, None, None]:
 
 
 @pytest.fixture
-def task_timestamp() -> Generator[Task, None, None]:
+def task_timestamp() -> Generator[Process, None, None]:
     """Create a fixture for MyResultTask."""
     task = MyTimestampTask(workers=10)
     task.start()
@@ -53,7 +53,7 @@ def task_timestamp() -> Generator[Task, None, None]:
 class TestMultiProcess:
     """TestMultiProcess."""
 
-    def test_parallel_result(self, task_result: Task) -> None:
+    def test_parallel_result(self, task_result: Process) -> None:
         """Run simple test for a parallel task."""
         results: dict[str, int] = {}
 
@@ -69,7 +69,7 @@ class TestMultiProcess:
                 result == expected
             ), f"Expected Result: {expected}, Actual Result: {result}"
 
-    def test_parallel_timestamp(self, task_timestamp: Task) -> None:
+    def test_parallel_timestamp(self, task_timestamp: Process) -> None:
         """Run simple test for a parallel task."""
         results: list[tuple[str, int]] = []
 

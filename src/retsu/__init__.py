@@ -4,9 +4,9 @@ from importlib import metadata as importlib_metadata
 
 from retsu.core import (
     MultiProcess,
+    Process,
     ProcessManager,
     SingleProcess,
-    Task,
 )
 from retsu.results import (
     ResultProcessManager,
@@ -34,6 +34,6 @@ __all__ = [
     "MultiProcess",
     "ResultProcessManager",
     "SingleProcess",
-    "Task",
+    "Process",
     "ProcessManager",
 ]

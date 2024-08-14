@@ -1,4 +1,4 @@
-"""Tasks for the example."""
+"""Processes for the example."""
 
 from retsu import ProcessManager
 

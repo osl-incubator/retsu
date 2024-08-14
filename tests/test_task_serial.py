@@ -8,11 +8,11 @@ from typing import Any, Generator
 
 import pytest
 
-from retsu import SingleProcess, Task
+from retsu import Process, SingleProcess
 
 
 class MyResultTask(SingleProcess):
-    """Task for the test."""
+    """Process for the test."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
         """Return the sum of the given 2 numbers."""
@@ -23,7 +23,7 @@ class MyResultTask(SingleProcess):
 
 
 class MyTimestampTask(SingleProcess):
-    """Task for the test."""
+    """Process for the test."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
         """Sleep the given seconds, and return the current timestamp."""
@@ -33,7 +33,7 @@ class MyTimestampTask(SingleProcess):
 
 
 @pytest.fixture
-def task_result() -> Generator[Task, None, None]:
+def task_result() -> Generator[Process, None, None]:
     """Create a fixture for MyResultTask."""
     task = MyResultTask()
     task.start()
@@ -42,7 +42,7 @@ def task_result() -> Generator[Task, None, None]:
 
 
 @pytest.fixture
-def task_timestamp() -> Generator[Task, None, None]:
+def task_timestamp() -> Generator[Process, None, None]:
     """Create a fixture for MyResultTask."""
     task = MyTimestampTask()
     task.start()
@@ -53,7 +53,7 @@ def task_timestamp() -> Generator[Task, None, None]:
 class TestSingleProcess:
     """TestSingleProcess."""
 
-    def test_serial_result(self, task_result: Task) -> None:
+    def test_serial_result(self, task_result: Process) -> None:
         """Run simple test for a serial task."""
         results: dict[str, int] = {}
 
@@ -69,7 +69,7 @@ class TestSingleProcess:
                 result == expected
             ), f"Expected Result: {expected}, Actual Result: {result}"
 
-    def test_serial_timestamp(self, task_timestamp: Task) -> None:
+    def test_serial_timestamp(self, task_timestamp: Process) -> None:
         """Run simple test for a serial task."""
         results: list[tuple[str, int]] = []
 

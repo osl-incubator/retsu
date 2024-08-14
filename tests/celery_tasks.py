@@ -1,4 +1,4 @@
-"""Celery Tasks."""
+"""Celery Process."""
 
 from __future__ import annotations
 

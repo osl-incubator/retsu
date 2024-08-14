@@ -12,8 +12,8 @@ from public import public
 from retsu.core import MultiProcess, SingleProcess
 
 
-class CeleryTask:
-    """Celery Task class."""
+class CeleryProcess:
+    """Celery Process class."""
 
     def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
         """Define the task to be executed."""
@@ -110,14 +110,14 @@ class CeleryTask:
 
 
 @public
-class MultiCeleryProcess(CeleryTask, MultiProcess):
-    """Multi Task for Celery."""
+class MultiCeleryProcess(CeleryProcess, MultiProcess):
+    """Multi Process for Celery."""
 
     ...
 
 
 @public
-class SingleCeleryProcess(CeleryTask, SingleProcess):
-    """Single Task for Celery."""
+class SingleCeleryProcess(CeleryProcess, SingleProcess):
+    """Single Process for Celery."""
 
     ...
