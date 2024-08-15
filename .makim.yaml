@@ -64,9 +64,7 @@ groups:
           sugar build
           sugar ext restart --options -d
           sleep 5
-          pushd tests/
-          celery -A celery_tasks worker --loglevel=debug &
-          popd
+          celery -A tests.celery_tasks worker --loglevel=debug &
 
       ci:
         help: run the sames tests executed on CI

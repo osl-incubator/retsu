@@ -21,7 +21,7 @@ def create_app_config(
         name = app_name
 
         def ready(self) -> None:
-            """Start the task manager when the django app is ready."""
+            """Start the process manager when the django app is ready."""
             manager.start()
             request_finished.connect(self.stop_multiprocessing)
 

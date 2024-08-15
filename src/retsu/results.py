@@ -24,7 +24,7 @@ from retsu.queues import get_redis_queue_config
 
 
 class ProcessMetadataManager:
-    """Manage task metadata."""
+    """Manage process metadata."""
 
     def __init__(self, client: redis.Redis):
         """Initialize ProcessMetadataManager."""
@@ -32,62 +32,64 @@ class ProcessMetadataManager:
         self.step = StepMetadataManager(self.client)
 
     def get_all(self, task_id: str) -> dict[str, bytes]:
-        """Get the entire metadata for a given task."""
-        result = self.client.hgetall(f"task:{task_id}:metadata")
+        """Get the entire metadata for a given process."""
+        result = self.client.hgetall(f"process:{task_id}:metadata")
         return cast(dict[str, bytes], result)
 
     def get(self, task_id: str, attribute: str) -> bytes:
-        """Get a specific metadata attribute for a given task."""
-        result = self.client.hget(f"task:{task_id}:metadata", attribute)
+        """Get a specific metadata attribute for a given process."""
+        result = self.client.hget(f"process:{task_id}:metadata", attribute)
         return cast(bytes, result)
 
     def create(self, task_id: str, metadata: dict[str, Any]) -> None:
-        """Create an initial metadata for given task."""
-        self.client.hset(f"task:{task_id}:metadata", mapping=metadata)
+        """Create an initial metadata for given process."""
+        self.client.hset(f"process:{task_id}:metadata", mapping=metadata)
 
     def update(self, task_id: str, attribute: str, value: Any) -> None:
-        """Update the value of given attribute for a given task."""
-        self.client.hset(f"task:{task_id}:metadata", attribute, value)
+        """Update the value of given attribute for a given process."""
+        self.client.hset(f"process:{task_id}:metadata", attribute, value)
         self.client.hset(
-            f"task:{task_id}:metadata",
+            f"process:{task_id}:metadata",
             "updated_at",
             datetime.now().isoformat(),
         )
 
 
 class StepMetadataManager:
-    """Manage metadata for steps of a task."""
+    """Manage metadata for steps of a process."""
 
     def __init__(self, redis_client: redis.Redis):
         """Initialize StepMetadataManager."""
         self.client = redis_client
 
     def get_all(self, task_id: str, step_id: str) -> dict[str, bytes]:
-        """Get the whole metadata for a given task and step."""
-        result = self.client.hgetall(f"task:{task_id}:step:{step_id}")
+        """Get the whole metadata for a given process and step."""
+        result = self.client.hgetall(f"process:{task_id}:step:{step_id}")
         return cast(dict[str, bytes], result)
 
     def get(self, task_id: str, step_id: str, attribute: str) -> bytes:
-        """Get the value of a given attribute for a given task and step."""
-        result = self.client.hget(f"task:{task_id}:step:{step_id}", attribute)
+        """Get the value of a given attribute for a given process and step."""
+        result = self.client.hget(
+            f"process:{task_id}:step:{step_id}", attribute
+        )
         return cast(bytes, result)
 
     def create(
         self, task_id: str, step_id: str, metadata: dict[str, Any]
     ) -> None:
-        """Create an initial metadata for given task and step."""
-        self.client.hset(f"task:{task_id}:step:{step_id}", mapping=metadata)
+        """Create an initial metadata for given process and step."""
+        self.client.hset(f"process:{task_id}:step:{step_id}", mapping=metadata)
 
     def update(
         self, task_id: str, step_id: str, attribute: str, value: Any
     ) -> None:
-        """Update the value of given attribute for a given task and step."""
+        """Update the value of given attribute for a given process and step."""
         if attribute == "status" and value not in ["started", "completed"]:
             raise Exception("Status should be started or completed.")
 
-        self.client.hset(f"task:{task_id}:step:{step_id}", attribute, value)
+        self.client.hset(f"process:{task_id}:step:{step_id}", attribute, value)
         self.client.hset(
-            f"task:{task_id}:step:{step_id}",
+            f"process:{task_id}:step:{step_id}",
             "updated_at",
             datetime.now().isoformat(),
         )
@@ -107,7 +109,7 @@ class ResultProcessManager:
         self.metadata = ProcessMetadataManager(self.client)
 
     def get(self, task_id: str, timeout: Optional[int] = None) -> Any:
-        """Get the result for a given task."""
+        """Get the result for a given process."""
         time_step = 0.5
         if timeout:
             timeout_countdown = float(timeout)
@@ -131,19 +133,19 @@ class ResultProcessManager:
         return pickle.loads(result) if result else result
 
     def load(self, task_id: str) -> dict[str, Any]:
-        """Load the whole metadata for a given task."""
+        """Load the whole metadata for a given process."""
         return self.metadata.get_all(task_id)
 
     def create(self, task_id: str, metadata: dict[str, Any]) -> None:
-        """Create a new metadata for a given task."""
+        """Create a new metadata for a given process."""
         self.metadata.create(task_id, metadata)
 
     def save(self, task_id: str, result: Any) -> None:
-        """Save the result for a given task."""
+        """Save the result for a given process."""
         self.metadata.update(task_id, "result", pickle.dumps(result))
 
     def status(self, task_id: str) -> str:
-        """Get the status for a given task."""
+        """Get the status for a given process."""
         status = self.metadata.get(task_id, "status")
         return status.decode("utf8")
 
@@ -159,12 +161,12 @@ def track_step(task_metadata: ProcessMetadataManager) -> Callable[..., Any]:
     """Decorate a function with ProcessMetadataManager."""
 
     def decorator(task_func: Callable[..., Any]) -> Callable[..., Any]:
-        """Return a decorator for the given task."""
+        """Return a decorator for the given process."""
 
         def wrapper(
             *args: Unpack[Any], **kwargs: Unpack[dict[str, Any]]
         ) -> Any:
-            """Wrap a function for registering the task metadata."""
+            """Wrap a function for registering the process metadata."""
             task_id = kwargs["task_id"]
             step_id = kwargs.get("step_id", task_func.__name__)
 

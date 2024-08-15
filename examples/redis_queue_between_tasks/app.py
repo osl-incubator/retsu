@@ -51,7 +51,7 @@ def api() -> str:
     - http://127.0.0.1:5000/parallel/result/[TASK_ID]
     - http://127.0.0.1:5000/parallel/status/[TASK_ID]
 
-    Remember to replace `[TASK_ID]` by the desired task id.
+    Remember to replace `[TASK_ID]` by the desired process id.
     """.replace("\n", "<br/>")
 
     return menu
@@ -62,7 +62,7 @@ def serial(a: int, b: int) -> dict[str, Any]:
     """Define the serial endpoint."""
     task1 = task_manager.get_process("serial")
     key = task1.request(a=a, b=b)
-    return {"message": f"Your task ({key}) is running now"}
+    return {"message": f"Your process ({key}) is running now"}
 
 
 @app.route("/parallel/<int:a>/<int:b>")
@@ -70,7 +70,7 @@ def parallel(a: int, b: int) -> dict[str, Any]:
     """Define the parallel endpoint."""
     task2 = task_manager.get_process("parallel")
     key = task2.request(a=a, b=b)
-    return {"message": f"Your task ({key}) is running now"}
+    return {"message": f"Your process ({key}) is running now"}
 
 
 @app.route("/serial/status/<string:task_id>")
