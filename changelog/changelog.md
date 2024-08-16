@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+## [0.2.3](https://github.com/osl-incubator/retsu/compare/0.2.2...0.2.3) (2024-08-16)
+
+
+### Bug Fixes
+
+* Fix function names and fix minor issues ([#17](https://github.com/osl-incubator/retsu/issues/17)) ([f4cf368](https://github.com/osl-incubator/retsu/commit/f4cf368837450cfd95d7554cf75635f5421342d0))
+
 ## [0.2.2](https://github.com/osl-incubator/retsu/compare/0.2.1...0.2.2) (2024-08-14)
 
 
