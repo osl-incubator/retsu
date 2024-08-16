@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+## [0.2.4](https://github.com/osl-incubator/retsu/compare/0.2.3...0.2.4) (2024-08-16)
+
+
+### Bug Fixes
+
+* Fix __del__ and rename create_processes to setup ([#18](https://github.com/osl-incubator/retsu/issues/18)) ([c4654d7](https://github.com/osl-incubator/retsu/commit/c4654d77623477bbae0b86b0cb841bd8595593fb))
+
 ## [0.2.3](https://github.com/osl-incubator/retsu/compare/0.2.2...0.2.3) (2024-08-16)
 
 
