@@ -62,15 +62,9 @@ class Process:
         self.active = False
 
         for i in range(self.workers):
-            self.queue_in.put(None)
-
-        for i in range(self.workers):
             p = self.processes[i]
             p.terminate()
             p.join(timeout=1)
-
-        # self.queue_in.close()
-        # self.queue_in.join_thread()
 
     @public
     def request(self, *args, **kwargs) -> str:  # type: ignore
@@ -113,10 +107,6 @@ class Process:
         """Run the process with data from the queue."""
         while self.active:
             data = self.queue_in.get()
-            if data is None:
-                print("Process terminated.")
-                self.active = False
-                return
             self.prepare_process(data)
 
 
@@ -155,13 +145,13 @@ class ProcessManager:
         self.tasks: dict[str, Process] = {}
 
     @public
-    def create_tasks(self) -> None:
+    def create_processes(self) -> None:
         """Get a process with the given name."""
         if self.tasks:
             return
 
         warnings.warn(
-            "`self.tasks` is empty. Override `create_tasks` and create "
+            "`self.tasks` is empty. Override `create_processes` and create "
             "`self.tasks` with the proper tasks."
         )
 
@@ -174,7 +164,7 @@ class ProcessManager:
     def start(self) -> None:
         """Start tasks."""
         if not self.tasks:
-            self.create_tasks()
+            self.create_processes()
 
         for task_name, process in self.tasks.items():
             process.start()
