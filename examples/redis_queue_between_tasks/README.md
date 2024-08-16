@@ -8,4 +8,4 @@ following endpoints:
 - http://127.0.0.1:5000/serial/result/[TASK_ID]
 - http://127.0.0.1:5000/parallel/result/[TASK_ID]
 
-Remember to replace `[TASK_ID]` by the desired task id.
+Remember to replace `[TASK_ID]` by the desired process id.

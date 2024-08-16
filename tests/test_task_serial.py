@@ -14,7 +14,7 @@ from retsu import Process, SingleProcess
 class MyResultTask(SingleProcess):
     """Process for the test."""
 
-    def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
+    def process(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
         """Return the sum of the given 2 numbers."""
         a = kwargs.pop("a", 0)
         b = kwargs.pop("b", 0)
@@ -25,7 +25,7 @@ class MyResultTask(SingleProcess):
 class MyTimestampTask(SingleProcess):
     """Process for the test."""
 
-    def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
+    def process(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
         """Sleep the given seconds, and return the current timestamp."""
         sleep_time = kwargs.pop("sleep", 0)
         sleep(sleep_time)
@@ -35,53 +35,53 @@ class MyTimestampTask(SingleProcess):
 @pytest.fixture
 def task_result() -> Generator[Process, None, None]:
     """Create a fixture for MyResultTask."""
-    task = MyResultTask()
-    task.start()
-    yield task
-    task.stop()
+    process = MyResultTask()
+    process.start()
+    yield process
+    process.stop()
 
 
 @pytest.fixture
 def task_timestamp() -> Generator[Process, None, None]:
     """Create a fixture for MyResultTask."""
-    task = MyTimestampTask()
-    task.start()
-    yield task
-    task.stop()
+    process = MyTimestampTask()
+    process.start()
+    yield process
+    process.stop()
 
 
 class TestSingleProcess:
     """TestSingleProcess."""
 
     def test_serial_result(self, task_result: Process) -> None:
-        """Run simple test for a serial task."""
+        """Run simple test for a serial process."""
         results: dict[str, int] = {}
 
-        task = task_result
+        process = task_result
 
         for i in range(10):
-            task_id = task.request(a=i, b=i)
+            task_id = process.request(a=i, b=i)
             results[task_id] = i + i
 
         for task_id, expected in results.items():
-            result = task.result.get(task_id, timeout=2)
+            result = process.result.get(task_id, timeout=2)
             assert (
                 result == expected
             ), f"Expected Result: {expected}, Actual Result: {result}"
 
     def test_serial_timestamp(self, task_timestamp: Process) -> None:
-        """Run simple test for a serial task."""
+        """Run simple test for a serial process."""
         results: list[tuple[str, int]] = []
 
-        task = task_timestamp
+        process = task_timestamp
 
         for sleep_time in range(5, 1, -1):
-            task_id = task.request(sleep=sleep_time)
+            task_id = process.request(sleep=sleep_time)
             results.append((task_id, 0))
 
         # gather results
         for i, (task_id, _) in enumerate(results):
-            results[i] = (task_id, task.result.get(task_id, timeout=10))
+            results[i] = (task_id, process.result.get(task_id, timeout=10))
 
         # check results
         previous_timestamp = results[0][1]

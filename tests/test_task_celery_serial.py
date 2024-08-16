@@ -41,53 +41,53 @@ class MyTimestampTask(SingleCeleryProcess):
 @pytest.fixture
 def task_result() -> Generator[Process, None, None]:
     """Create a fixture for MyResultTask."""
-    task = MyResultTask()
-    task.start()
-    yield task
-    task.stop()
+    process = MyResultTask()
+    process.start()
+    yield process
+    process.stop()
 
 
 @pytest.fixture
 def task_timestamp() -> Generator[Process, None, None]:
     """Create a fixture for MyResultTask."""
-    task = MyTimestampTask()
-    task.start()
-    yield task
-    task.stop()
+    process = MyTimestampTask()
+    process.start()
+    yield process
+    process.stop()
 
 
 class TestSingleCeleryProcess:
     """TestSingleCeleryProcess."""
 
     def test_serial_result(self, task_result: Process) -> None:
-        """Run simple test for a serial task."""
+        """Run simple test for a serial process."""
         results: dict[str, int] = {}
 
-        task = task_result
+        process = task_result
 
         for i in range(10):
-            task_id = task.request(x=i, y=i)
+            task_id = process.request(x=i, y=i)
             results[task_id] = i + i
 
         for task_id, expected in results.items():
-            result = task.result.get(task_id, timeout=10)[0]
+            result = process.result.get(task_id, timeout=10)[0]
             assert (
                 result == expected
             ), f"Expected Result: {expected}, Actual Result: {result}"
 
     def test_serial_timestamp(self, task_timestamp: Process) -> None:
-        """Run simple test for a serial task."""
+        """Run simple test for a serial process."""
         results: list[tuple[str, int]] = []
 
-        task = task_timestamp
+        process = task_timestamp
 
         for sleep_time in range(5, 1, -1):
-            task_id = task.request(seconds=sleep_time)
+            task_id = process.request(seconds=sleep_time)
             results.append((task_id, 0))
 
         # gather results
         for i, (task_id, _) in enumerate(results):
-            results[i] = (task_id, task.result.get(task_id, timeout=10))
+            results[i] = (task_id, process.result.get(task_id, timeout=10))
 
         # check results
         previous_timestamp = results[0][1]

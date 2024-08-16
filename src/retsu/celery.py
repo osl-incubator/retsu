@@ -15,8 +15,8 @@ from retsu.core import MultiProcess, SingleProcess
 class CeleryProcess:
     """Celery Process class."""
 
-    def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
-        """Define the task to be executed."""
+    def process(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
+        """Define the process to be executed."""
         chord_tasks, chord_callback = self.get_chord_tasks(
             *args,
             task_id=task_id,

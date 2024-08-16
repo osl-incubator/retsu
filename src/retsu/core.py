@@ -21,10 +21,10 @@ from retsu.results import ResultProcessManager, create_result_task_manager
 
 @public
 class Process:
-    """Main class for handling a task."""
+    """Main class for handling a process."""
 
     def __init__(self, workers: int = 1) -> None:
-        """Initialize a task object."""
+        """Initialize a process object."""
         _klass = self.__class__
         queue_in_name = f"{_klass.__module__}.{_klass.__qualname__}"
 
@@ -40,6 +40,7 @@ class Process:
 
     def __del__(self) -> None:
         """Close queues and process."""
+        logging.info(f"Deleting process {self.__class__.__name__}")
         self.stop()
 
     @public
@@ -61,19 +62,13 @@ class Process:
         self.active = False
 
         for i in range(self.workers):
-            self.queue_in.put(None)
-
-        for i in range(self.workers):
             p = self.processes[i]
             p.terminate()
             p.join(timeout=1)
 
-        # self.queue_in.close()
-        # self.queue_in.join_thread()
-
     @public
     def request(self, *args, **kwargs) -> str:  # type: ignore
-        """Feed the queue with data from the request for the task."""
+        """Feed the queue with data from the request for the process."""
         task_id = uuid4().hex
         metadata = {
             "status": "starting",
@@ -91,15 +86,15 @@ class Process:
         return task_id
 
     @abstractmethod
-    def task(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
-        """Define the task to be executed."""
-        raise Exception("`task` not implemented yet.")
+    def process(self, *args, task_id: str, **kwargs) -> Any:  # type: ignore
+        """Define the process to be executed."""
+        raise Exception("`process` not implemented yet.")
 
-    def prepare_task(self, data: dict[str, Any]) -> None:
-        """Call the task with the necessary arguments."""
+    def prepare_process(self, data: dict[str, Any]) -> None:
+        """Call the process with the necessary arguments."""
         task_id = data.pop("task_id")
         self.result.metadata.update(task_id, "status", "running")
-        result = self.task(
+        result = self.process(
             *data["args"],
             task_id=task_id,
             **data["kwargs"],
@@ -109,21 +104,17 @@ class Process:
 
     @public
     def run(self) -> None:
-        """Run the task with data from the queue."""
+        """Run the process with data from the queue."""
         while self.active:
             data = self.queue_in.get()
-            if data is None:
-                print("Process terminated.")
-                self.active = False
-                return
-            self.prepare_task(data)
+            self.prepare_process(data)
 
 
 class SingleProcess(Process):
     """Single Process class."""
 
     def __init__(self, workers: int = 1) -> None:
-        """Initialize a serial task object."""
+        """Initialize a serial process object."""
         if workers != 1:
             warnings.warn(
                 "SingleProcess should have just 1 worker. "
@@ -134,7 +125,7 @@ class SingleProcess(Process):
 
 
 class MultiProcess(Process):
-    """Initialize a parallel task object."""
+    """Initialize a parallel process object."""
 
     def __init__(self, workers: int = 1) -> None:
         """Initialize MultiProcess."""
@@ -154,29 +145,29 @@ class ProcessManager:
         self.tasks: dict[str, Process] = {}
 
     @public
-    def create_tasks(self) -> None:
-        """Get a task with the given name."""
+    def create_processes(self) -> None:
+        """Get a process with the given name."""
         if self.tasks:
             return
 
         warnings.warn(
-            "`self.tasks` is empty. Override `create_tasks` and create "
+            "`self.tasks` is empty. Override `create_processes` and create "
             "`self.tasks` with the proper tasks."
         )
 
     @public
     def get_process(self, name: str) -> Optional[Process]:
-        """Get a task with the given name."""
+        """Get a process with the given name."""
         return self.tasks.get(name)
 
     @public
     def start(self) -> None:
         """Start tasks."""
         if not self.tasks:
-            self.create_tasks()
+            self.create_processes()
 
-        for task_name, task in self.tasks.items():
-            task.start()
+        for task_name, process in self.tasks.items():
+            process.start()
 
     @public
     def stop(self) -> None:
@@ -185,5 +176,5 @@ class ProcessManager:
             warnings.warn("There is no tasks to be stopped.")
             return
 
-        for task_name, task in self.tasks.items():
-            task.stop()
+        for task_name, process in self.tasks.items():
+            process.stop()
