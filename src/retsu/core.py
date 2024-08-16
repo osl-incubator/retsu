@@ -41,7 +41,6 @@ class Process:
     def __del__(self) -> None:
         """Close queues and process."""
         logging.info(f"Deleting process {self.__class__.__name__}")
-        self.stop()
 
     @public
     def start(self) -> None:
@@ -145,13 +144,13 @@ class ProcessManager:
         self.tasks: dict[str, Process] = {}
 
     @public
-    def create_processes(self) -> None:
+    def setup(self) -> None:
         """Get a process with the given name."""
         if self.tasks:
             return
 
         warnings.warn(
-            "`self.tasks` is empty. Override `create_processes` and create "
+            "`self.tasks` is empty. Override `setup` and create "
             "`self.tasks` with the proper tasks."
         )
 
@@ -164,7 +163,7 @@ class ProcessManager:
     def start(self) -> None:
         """Start tasks."""
         if not self.tasks:
-            self.create_processes()
+            self.setup()
 
         for task_name, process in self.tasks.items():
             process.start()
