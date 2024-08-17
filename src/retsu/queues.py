@@ -32,6 +32,15 @@ class BaseRetsuQueue:
         """Initialize BaseRetsuQueue."""
         self.name = name
 
+
+@public
+class BaseRetsuRegularQueue(BaseRetsuQueue):
+    """Base Queue class."""
+
+    def __init__(self, name: str) -> None:
+        """Initialize BaseRetsuQueue."""
+        self.name = name
+
     @abstractmethod
     def put(self, data: Any) -> None:
         """Put data into the end of the queue."""
@@ -44,7 +53,7 @@ class BaseRetsuQueue:
 
 
 @public
-class RedisRetsuQueue(BaseRetsuQueue):
+class RedisRetsuQueue(BaseRetsuRegularQueue):
     """RedisRetsuQueue class."""
 
     def __init__(self, name: str) -> None:
