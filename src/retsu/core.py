@@ -177,3 +177,36 @@ class ProcessManager:
 
         for task_name, process in self.tasks.items():
             process.stop()
+
+
+class SemaphoreManager:
+    """Manages a semaphore using Redis to limit concurrent tasks."""
+
+    def __init__(
+        self, key: str, max_concurrent_tasks: int, redis_client: redis.Redis
+    ):
+        self.key: str = key
+        self.max_concurrent_tasks: int = max_concurrent_tasks
+        self.redis_client: redis.Redis = redis_client
+
+    def acquire(self) -> bool:
+        """Try to acquire a semaphore slot."""
+        current_count_tmp = self.redis_client.get(self.key)
+        current_count = 0
+
+        if current_count_tmp is None:
+            self.redis_client.set(self.key, 0)
+        else:
+            # note: Argument 1 to "int" has incompatible type
+            # "Union[Awaitable[Any], Any]"; expected
+            # "Union[str, Buffer, SupportsInt, SupportsIndex, SupportsTrunc]"
+            current_count = int(current_count_tmp)  # type: ignore
+
+        if current_count < self.max_concurrent_tasks:
+            self.redis_client.incr(self.key)
+            return True
+        return False
+
+    def release(self) -> None:
+        """Release a semaphore slot."""
+        self.redis_client.decr(self.key)

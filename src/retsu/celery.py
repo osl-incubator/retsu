@@ -2,14 +2,19 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional
+import logging
+import time
+
+from functools import wraps
+from typing import Any, Callable, Optional
 
 import celery
+import redis
 
 from celery import chain, chord, group
 from public import public
 
-from retsu.core import MultiProcess, SingleProcess
+from retsu.core import MultiProcess, SemaphoreManager, SingleProcess
 
 
 class CeleryProcess:
@@ -121,3 +126,38 @@ class SingleCeleryProcess(CeleryProcess, SingleProcess):
     """Single Process for Celery."""
 
     ...
+
+
+def limit_concurrent_tasks(
+    max_concurrent_tasks: int,
+    redis_client: redis.Redis,
+) -> Callable[[Any], Any]:
+    """Limit the number of concurrent Celery tasks."""
+
+    def decorator(func: Callable[[Any], Any]) -> Callable[[Any], Any]:
+        semaphore_manager = SemaphoreManager(
+            key=f"celery_task_semaphore_{func.__name__}",
+            max_concurrent_tasks=max_concurrent_tasks,
+            redis_client=redis_client,
+        )
+
+        @wraps(func)
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            # Acquire semaphore slot
+            acquired = semaphore_manager.acquire()
+            if not acquired:
+                logging.info(f"Task {func.__name__} is waiting for a slot...")
+                while not acquired:
+                    time.sleep(1)  # Polling interval
+                    acquired = semaphore_manager.acquire()
+
+            try:
+                result = func(*args, **kwargs)
+                return result
+            finally:
+                # Release semaphore slot
+                semaphore_manager.release()
+
+        return wrapper
+
+    return decorator

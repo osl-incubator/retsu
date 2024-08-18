@@ -2,56 +2,49 @@
 
 from __future__ import annotations
 
-import subprocess
-import time
+import logging
 
-from typing import Generator
+from typing import Any, Generator
 
 import pytest
 import redis
 
+from celery.contrib.testing.worker import start_worker
 from retsu.queues import get_redis_queue_config
+
+from tests.celery_tasks import app as celery_app
 
 
 def redis_flush() -> None:
     """Wipe-out redis database."""
+    logging.info("Wiping-out redis database.")
     r = redis.Redis(**get_redis_queue_config())  # type: ignore
     r.flushdb()
 
 
+@pytest.fixture(scope="session")
+def celery_worker_parameters() -> dict[str, Any]:
+    """Parameters for the Celery worker."""
+    return {
+        "loglevel": "debug",  # Set log level
+        "concurrency": 4,  # Number of concurrent workers
+        "perform_ping_check": False,
+    }
+
+
 @pytest.fixture(autouse=True, scope="session")
-def setup() -> Generator[None, None, None]:
+def setup(
+    celery_worker_parameters: dict[str, Any],
+) -> Generator[None, None, None]:
     """Set up the services needed by the tests."""
     try:
-        # # Run the `sugar build` command
-        # subprocess.run(["sugar", "build"], check=True)
-        # # Run the `sugar ext restart --options -d` command
-        # subprocess.run(
-        #     ["sugar", "ext", "restart", "--options", "-d"], check=True
-        # )
-        # # Sleep for 5 seconds
-        # time.sleep(5)
-
-        # Clean Redis queues
+        logging.info("Clean Redis queues")
         redis_flush()
 
-        # Start the Celery worker
-        celery_process = subprocess.Popen(
-            [
-                "celery",
-                "-A",
-                "tests.celery_tasks",
-                "worker",
-                "--loglevel=debug",
-            ],
-        )
-
-        time.sleep(5)
-
-        yield
+        logging.info("Start the Celery worker")
+        with start_worker(celery_app, **celery_worker_parameters) as worker:
+            # Ensure worker is up and running
+            yield worker  # Now you can use this worker in your tests
 
     finally:
-        # Teardown: Terminate the Celery worker
-        celery_process.terminate()
-        celery_process.wait()
-        # subprocess.run(["sugar", "ext", "stop"], check=True)
+        pass

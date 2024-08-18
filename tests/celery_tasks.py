@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import sys
+import time
 
 from datetime import datetime
 from time import sleep
@@ -68,3 +69,12 @@ def task_sleep(seconds: int, task_id: str) -> int:
     """Sum two numbers, x and y, and sleep the same amount of the sum."""
     sleep(seconds)
     return int(datetime.now().timestamp())
+
+
+# @limit_concurrent_tasks(max_concurrent_tasks=2, redis_client=redis_client)
+# (bind=True)
+@app.task  # type: ignore
+def task_get_time(request_id: int) -> tuple[int, float]:
+    """Limit simple task max concurrent."""
+    sleep(1)
+    return request_id, time.time()
