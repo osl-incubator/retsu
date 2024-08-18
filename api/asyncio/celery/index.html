@@ -8,16 +8,16 @@
       
       
       
-        <link rel="canonical" href="https://osl-incubator.github.io/retsu/api/celery/">
+        <link rel="canonical" href="https://osl-incubator.github.io/retsu/api/asyncio/celery/">
       
       
-        <link rel="prev" href="../asyncio/results/">
+        <link rel="prev" href="../">
       
       
         <link rel="next" href="../core/">
       
       
-      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="icon" href="../../../images/favicon.ico">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.25">
     
     
@@ -26,10 +26,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6543a935.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -48,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#retsu.celery" class="md-skip">
+        <a href="#retsu.asyncio.celery" class="md-skip">
           Skip to content
         </a>
       
@@ -92,9 +92,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Retsu" class="md-header__button md-logo" aria-label="Retsu" data-md-component="logo">
+    <a href="../../.." title="Retsu" class="md-header__button md-logo" aria-label="Retsu" data-md-component="logo">
       
-  <img src="../../images/logo.png" alt="logo">
+  <img src="../../../images/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -231,9 +231,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Retsu" class="md-nav__button md-logo" aria-label="Retsu" data-md-component="logo">
+    <a href="../../.." title="Retsu" class="md-nav__button md-logo" aria-label="Retsu" data-md-component="logo">
       
-  <img src="../../images/logo.png" alt="logo">
+  <img src="../../../images/logo.png" alt="logo">
 
     </a>
     Retsu
@@ -260,7 +260,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -280,7 +280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../installation/" class="md-nav__link">
+      <a href="../../../installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -300,7 +300,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../changelog/" class="md-nav__link">
+      <a href="../../../changelog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -320,7 +320,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/" class="md-nav__link">
+      <a href="../../../contributing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -413,7 +413,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -443,6 +443,8 @@
                 
   
   
+    
+  
   
   
     
@@ -463,16 +465,16 @@
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_2" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../asyncio/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -489,105 +491,13 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5_1_2">
             <span class="md-nav__icon md-icon"></span>
             <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> asyncio
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../asyncio/celery/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> celery
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../asyncio/core/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> core
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../asyncio/queues/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> queues
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../asyncio/results/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> results
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
               
             
               
@@ -643,17 +553,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#retsu.celery.CeleryProcess" class="md-nav__link">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;CeleryProcess
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;CeleryAsyncProcess
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" CeleryProcess">
+    <nav class="md-nav" aria-label=" CeleryAsyncProcess">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#retsu.celery.CeleryProcess.get_chain_tasks" class="md-nav__link">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.get_chain_tasks" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_chain_tasks
     </span>
@@ -662,7 +572,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#retsu.celery.CeleryProcess.get_chord_tasks" class="md-nav__link">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.get_chord_tasks" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_chord_tasks
     </span>
@@ -671,7 +581,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#retsu.celery.CeleryProcess.get_group_tasks" class="md-nav__link">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.get_group_tasks" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_group_tasks
     </span>
@@ -680,7 +590,16 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#retsu.celery.CeleryProcess.process" class="md-nav__link">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.prepare_process" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;prepare_process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.process" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;process
     </span>
@@ -688,44 +607,44 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.request" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;run
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.start" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;start
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.stop" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;stop
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retsu.celery.MultiCeleryProcess" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;MultiCeleryProcess
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retsu.celery.SingleCeleryProcess" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SingleCeleryProcess
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retsu.celery.limit_random_concurrent_tasks" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;limit_random_concurrent_tasks
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retsu.celery.limit_sequence_concurrent_tasks" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;limit_sequence_concurrent_tasks
-    </span>
-  </a>
   
 </li>
       
@@ -754,88 +673,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_5" >
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../plugins/" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> plugins
-  </span>
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_5_1_5" id="__nav_5_1_5_label" tabindex="0">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_1_5">
-            <span class="md-nav__icon md-icon"></span>
-            <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> plugins
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../plugins/django/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> django
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -891,6 +728,180 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../celery/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> celery
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../core/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> core
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../plugins/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> plugins
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_1_5" id="__nav_5_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> plugins
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/django/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> django
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../queues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> queues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../results/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> results
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -905,7 +916,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../example/" class="md-nav__link">
+      <a href="../../../example/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -945,17 +956,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#retsu.celery.CeleryProcess" class="md-nav__link">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;CeleryProcess
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;CeleryAsyncProcess
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" CeleryProcess">
+    <nav class="md-nav" aria-label=" CeleryAsyncProcess">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#retsu.celery.CeleryProcess.get_chain_tasks" class="md-nav__link">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.get_chain_tasks" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_chain_tasks
     </span>
@@ -964,7 +975,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#retsu.celery.CeleryProcess.get_chord_tasks" class="md-nav__link">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.get_chord_tasks" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_chord_tasks
     </span>
@@ -973,7 +984,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#retsu.celery.CeleryProcess.get_group_tasks" class="md-nav__link">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.get_group_tasks" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;get_group_tasks
     </span>
@@ -982,7 +993,16 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#retsu.celery.CeleryProcess.process" class="md-nav__link">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.prepare_process" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;prepare_process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.process" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;process
     </span>
@@ -990,44 +1010,44 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.request" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;run
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.start" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;start
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retsu.asyncio.celery.CeleryAsyncProcess.stop" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;stop
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retsu.celery.MultiCeleryProcess" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;MultiCeleryProcess
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retsu.celery.SingleCeleryProcess" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SingleCeleryProcess
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retsu.celery.limit_random_concurrent_tasks" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;limit_random_concurrent_tasks
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retsu.celery.limit_sequence_concurrent_tasks" class="md-nav__link">
-    <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;limit_sequence_concurrent_tasks
-    </span>
-  </a>
   
 </li>
       
@@ -1053,11 +1073,11 @@
 
 
 
-<h1 id="retsu.celery" class="doc doc-heading">
+<h1 id="retsu.asyncio.celery" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>            <span class="doc doc-object-name doc-module-name">celery</span>
 
 
-<a href="#retsu.celery" class="headerlink" title="Permanent link">&para;</a></h1>
+<a href="#retsu.asyncio.celery" class="headerlink" title="Permanent link">&para;</a></h1>
 
     <div class="doc doc-contents first">
 
@@ -1078,18 +1098,50 @@
 
 
 
-<h2 id="retsu.celery.CeleryProcess" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">CeleryProcess</span>
+<h2 id="retsu.asyncio.celery.CeleryAsyncProcess" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">CeleryAsyncProcess</span>
 
 
-<a href="#retsu.celery.CeleryProcess" class="headerlink" title="Permanent link">&para;</a></h2>
-
+<a href="#retsu.asyncio.celery.CeleryAsyncProcess" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">CeleryAsyncProcess</span><span class="p">(</span><span class="n">workers</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
 
     <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="retsu.asyncio.core.AsyncProcess" href="../core/#retsu.asyncio.core.AsyncProcess">AsyncProcess</a></code></p>
 
 
-      <p>Celery Process class.</p>
+      <p>Async Celery Process class.</p>
 
+                  <details class="quote">
+                    <summary>Source code in <code>src/retsu/asyncio/core.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize an async process object.&quot;&quot;&quot;</span>
+    <span class="n">_klass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+    <span class="n">queue_in_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_klass</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">_klass</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">aioredis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="o">**</span><span class="n">get_redis_queue_config</span><span class="p">())</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">workers</span> <span class="o">=</span> <span class="n">workers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">:</span> <span class="n">ResultProcessManagerAsync</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">create_result_task_manager_async</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">queue_in</span> <span class="o">=</span> <span class="n">RedisRetsuAsyncQueue</span><span class="p">(</span><span class="n">queue_in_name</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+</code></pre></div></td></tr></table></div>
+                  </details>
 
 
 
@@ -1106,11 +1158,15 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="retsu.celery.CeleryProcess.get_chain_tasks" class="doc doc-heading">
+<h3 id="retsu.asyncio.celery.CeleryAsyncProcess.get_chain_tasks" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_chain_tasks</span>
 
 
-<a href="#retsu.celery.CeleryProcess.get_chain_tasks" class="headerlink" title="Permanent link">&para;</a></h3>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#retsu.asyncio.celery.CeleryAsyncProcess.get_chain_tasks" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">get_chain_tasks</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a></span><span class="p">[</span><span class="n"><span title="celery.Signature">Signature</span></span><span class="p">]</span>
 </code></pre></div>
 
@@ -1119,13 +1175,13 @@
       <p>Run tasks with chain.</p>
 
             <details class="quote">
-              <summary>Source code in <code>src/retsu/celery.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_chain_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+              <summary>Source code in <code>src/retsu/asyncio/celery.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_chain_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
     <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">celery</span><span class="o">.</span><span class="n">Signature</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run tasks with chain.&quot;&quot;&quot;</span>
@@ -1140,11 +1196,15 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="retsu.celery.CeleryProcess.get_chord_tasks" class="doc doc-heading">
+<h3 id="retsu.asyncio.celery.CeleryAsyncProcess.get_chord_tasks" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_chord_tasks</span>
 
 
-<a href="#retsu.celery.CeleryProcess.get_chord_tasks" class="headerlink" title="Permanent link">&para;</a></h3>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#retsu.asyncio.celery.CeleryAsyncProcess.get_chord_tasks" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">get_chord_tasks</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#tuple">tuple</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a></span><span class="p">[</span><span class="n"><span title="celery.Signature">Signature</span></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a></span><span class="p">[</span><span class="n"><span title="celery.Signature">Signature</span></span><span class="p">]]</span>
 </code></pre></div>
 
@@ -1158,21 +1218,21 @@
   
 </details>
             <details class="quote">
-              <summary>Source code in <code>src/retsu/celery.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">86</span>
-<span class="normal">87</span>
-<span class="normal">88</span>
-<span class="normal">89</span>
-<span class="normal">90</span>
-<span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span>
-<span class="normal">94</span>
-<span class="normal">95</span>
-<span class="normal">96</span>
-<span class="normal">97</span>
-<span class="normal">98</span>
-<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_chord_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+              <summary>Source code in <code>src/retsu/asyncio/celery.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_chord_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
     <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">celery</span><span class="o">.</span><span class="n">Signature</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">celery</span><span class="o">.</span><span class="n">Signature</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1195,11 +1255,15 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="retsu.celery.CeleryProcess.get_group_tasks" class="doc doc-heading">
+<h3 id="retsu.asyncio.celery.CeleryAsyncProcess.get_group_tasks" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_group_tasks</span>
 
 
-<a href="#retsu.celery.CeleryProcess.get_group_tasks" class="headerlink" title="Permanent link">&para;</a></h3>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#retsu.asyncio.celery.CeleryAsyncProcess.get_group_tasks" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">get_group_tasks</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a></span><span class="p">[</span><span class="n"><span title="celery.Signature">Signature</span></span><span class="p">]</span>
 </code></pre></div>
 
@@ -1213,20 +1277,20 @@
   
 </details>
             <details class="quote">
-              <summary>Source code in <code>src/retsu/celery.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_group_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+              <summary>Source code in <code>src/retsu/asyncio/celery.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">get_group_tasks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
     <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">celery</span><span class="o">.</span><span class="n">Signature</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1248,21 +1312,83 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="retsu.celery.CeleryProcess.process" class="doc doc-heading">
+<h3 id="retsu.asyncio.celery.CeleryAsyncProcess.prepare_process" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">prepare_process</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#retsu.asyncio.celery.CeleryAsyncProcess.prepare_process" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">prepare_process</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+      <p>Call the process with the necessary arguments.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/retsu/asyncio/core.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">prepare_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Call the process with the necessary arguments.&quot;&quot;&quot;</span>
+    <span class="n">task_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;task_id&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;running&quot;</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">],</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;kwargs&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;completed&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="retsu.asyncio.celery.CeleryAsyncProcess.process" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">process</span>
 
 
-<a href="#retsu.celery.CeleryProcess.process" class="headerlink" title="Permanent link">&para;</a></h3>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#retsu.asyncio.celery.CeleryAsyncProcess.process" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">process</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
 
-      <p>Define the process to be executed.</p>
+      <p>Define the async process to be executed.</p>
 
             <details class="quote">
-              <summary>Source code in <code>src/retsu/celery.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">29</span>
+              <summary>Source code in <code>src/retsu/asyncio/celery.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
@@ -1287,12 +1413,70 @@
 <span class="normal">51</span>
 <span class="normal">52</span>
 <span class="normal">53</span>
-<span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
+<span class="normal">54</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Define the async process to be executed.&quot;&quot;&quot;</span>
+    <span class="n">chord_tasks</span><span class="p">,</span> <span class="n">chord_callback</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_chord_tasks</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">group_tasks</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_tasks</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">chain_tasks</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_chain_tasks</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Start the tasks asynchronously</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">chord_tasks</span><span class="p">:</span>
+        <span class="n">workflow_chord</span> <span class="o">=</span> <span class="n">chord</span><span class="p">(</span><span class="n">chord_tasks</span><span class="p">,</span> <span class="n">chord_callback</span><span class="p">)</span>
+        <span class="n">promise_chord</span> <span class="o">=</span> <span class="n">workflow_chord</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">promise_chord</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">group_tasks</span><span class="p">:</span>
+        <span class="n">workflow_group</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">group_tasks</span><span class="p">)</span>
+        <span class="n">promise_group</span> <span class="o">=</span> <span class="n">workflow_group</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">promise_group</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">chain_tasks</span><span class="p">:</span>
+        <span class="n">workflow_chain</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">chain_tasks</span><span class="p">)</span>
+        <span class="n">promise_chain</span> <span class="o">=</span> <span class="n">workflow_chain</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">promise_chain</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="retsu.asyncio.celery.CeleryAsyncProcess.request" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">request</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#retsu.asyncio.celery.CeleryAsyncProcess.request" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">request</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+      <p>Feed the queue with data from the request for the process.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/retsu/asyncio/core.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">59</span>
 <span class="normal">60</span>
 <span class="normal">61</span>
 <span class="normal">62</span>
@@ -1308,71 +1492,165 @@
 <span class="normal">72</span>
 <span class="normal">73</span>
 <span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Define the process to be executed.&quot;&quot;&quot;</span>
-    <span class="n">chord_tasks</span><span class="p">,</span> <span class="n">chord_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_chord_tasks</span><span class="p">(</span>
-        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
-        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Feed the queue with data from the request for the process.&quot;&quot;&quot;</span>
+    <span class="n">task_id</span> <span class="o">=</span> <span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;starting&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;created_at&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="s2">&quot;updated_at&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+    <span class="p">}</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>  <span class="c1"># Ensure this is awaited</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue_in</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;task_id&quot;</span><span class="p">:</span> <span class="n">task_id</span><span class="p">,</span>
+            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">,</span>
+            <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">}</span>
     <span class="p">)</span>
-    <span class="n">group_tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_tasks</span><span class="p">(</span>
-        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
-        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">chain_tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_chain_tasks</span><span class="p">(</span>
-        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
-        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">task_id</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
 
-    <span class="c1"># start the tasks</span>
-    <span class="k">if</span> <span class="n">chord_tasks</span><span class="p">:</span>
-        <span class="n">workflow_chord</span> <span class="o">=</span> <span class="n">chord</span><span class="p">(</span><span class="n">chord_tasks</span><span class="p">,</span> <span class="n">chord_callback</span><span class="p">)</span>
-        <span class="n">promise_chord</span> <span class="o">=</span> <span class="n">workflow_chord</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+</div>
 
-    <span class="k">if</span> <span class="n">group_tasks</span><span class="p">:</span>
-        <span class="n">workflow_group</span> <span class="o">=</span> <span class="n">group</span><span class="p">(</span><span class="n">group_tasks</span><span class="p">)</span>
-        <span class="n">promise_group</span> <span class="o">=</span> <span class="n">workflow_group</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
+<div class="doc doc-object doc-function">
 
-    <span class="k">if</span> <span class="n">chain_tasks</span><span class="p">:</span>
-        <span class="n">workflow_chain</span> <span class="o">=</span> <span class="n">chain</span><span class="p">(</span><span class="n">chord_tasks</span><span class="p">)</span>
-        <span class="n">promise_chain</span> <span class="o">=</span> <span class="n">workflow_chain</span><span class="o">.</span><span class="n">apply_async</span><span class="p">()</span>
 
-    <span class="c1"># wait for the tasks</span>
-    <span class="n">results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="n">chord_tasks</span><span class="p">:</span>
-        <span class="n">chord_result</span> <span class="o">=</span> <span class="n">promise_chord</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chord_result</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">chord_result</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chord_result</span><span class="p">)</span>
+<h3 id="retsu.asyncio.celery.CeleryAsyncProcess.run" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">run</span>
 
-    <span class="k">if</span> <span class="n">group_tasks</span><span class="p">:</span>
-        <span class="n">group_result</span> <span class="o">=</span> <span class="n">promise_group</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group_result</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">group_result</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group_result</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">chain_tasks</span><span class="p">:</span>
-        <span class="n">chain_result</span> <span class="o">=</span> <span class="n">promise_chain</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chain_result</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">chain_result</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chain_result</span><span class="p">)</span>
+<a href="#retsu.asyncio.celery.CeleryAsyncProcess.run" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
 
-    <span class="k">return</span> <span class="n">results</span>
+    <div class="doc doc-contents ">
+
+      <p>Run the async process with data from the queue.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/retsu/asyncio/core.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the async process with data from the queue.&quot;&quot;&quot;</span>
+    <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue_in</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_process</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Task </span><span class="si">{</span><span class="n">asyncio</span><span class="o">.</span><span class="n">current_task</span><span class="p">()</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span><span class="si">}</span><span class="s2"> cancelled.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">break</span>  <span class="c1"># Break out of the loop if the task is canceled</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in process: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">break</span>  <span class="c1"># Break out of the loop on any other exceptions</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="retsu.asyncio.celery.CeleryAsyncProcess.start" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">start</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#retsu.asyncio.celery.CeleryAsyncProcess.start" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">start</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+      <p>Start async tasks.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/retsu/asyncio/core.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Start async tasks.&quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting async process </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workers</span><span class="p">):</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="retsu.asyncio.celery.CeleryAsyncProcess.stop" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">stop</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#retsu.asyncio.celery.CeleryAsyncProcess.stop" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+      <p>Stop async tasks.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/retsu/asyncio/core.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stop async tasks.&quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stopping async process </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">:</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="p">(</span>
+                <span class="n">task</span>
+            <span class="p">)</span>  <span class="c1"># Ensure the task is properly awaited before moving on</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Task </span><span class="si">{</span><span class="n">task</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span><span class="si">}</span><span class="s2"> has been cancelled.&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1387,260 +1665,6 @@
 
 </div>
 
-<div class="doc doc-object doc-class">
-
-
-
-<h2 id="retsu.celery.MultiCeleryProcess" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">MultiCeleryProcess</span>
-
-
-<a href="#retsu.celery.MultiCeleryProcess" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">MultiCeleryProcess</span><span class="p">(</span><span class="n">workers</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-</code></pre></div>
-
-    <div class="doc doc-contents ">
-            <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="retsu.celery.CeleryProcess" href="#retsu.celery.CeleryProcess">CeleryProcess</a></code>, <code><a class="autorefs autorefs-internal" title="retsu.core.MultiProcess" href="../core/#retsu.core.MultiProcess">MultiProcess</a></code></p>
-
-
-      <p>Multi Process for Celery.</p>
-
-                  <details class="quote">
-                    <summary>Source code in <code>src/retsu/core.py</code></summary>
-                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize MultiProcess.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">workers</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;MultiProcess should have more than 1 worker.&quot;</span><span class="p">)</span>
-
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-                  </details>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
-<h2 id="retsu.celery.SingleCeleryProcess" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">SingleCeleryProcess</span>
-
-
-<a href="#retsu.celery.SingleCeleryProcess" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">SingleCeleryProcess</span><span class="p">(</span><span class="n">workers</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-</code></pre></div>
-
-    <div class="doc doc-contents ">
-            <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="retsu.celery.CeleryProcess" href="#retsu.celery.CeleryProcess">CeleryProcess</a></code>, <code><a class="autorefs autorefs-internal" title="retsu.core.SingleProcess" href="../core/#retsu.core.SingleProcess">SingleProcess</a></code></p>
-
-
-      <p>Single Process for Celery.</p>
-
-                  <details class="quote">
-                    <summary>Source code in <code>src/retsu/core.py</code></summary>
-                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize a serial process object.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">workers</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;SingleProcess should have just 1 worker. &quot;</span>
-            <span class="s2">&quot;Switching automatically to 1 ...&quot;</span>
-        <span class="p">)</span>
-        <span class="n">workers</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-                  </details>
-
-    </div>
-
-</div>
-
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="retsu.celery.limit_random_concurrent_tasks" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">limit_random_concurrent_tasks</span>
-
-
-<a href="#retsu.celery.limit_random_concurrent_tasks" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">limit_random_concurrent_tasks</span><span class="p">(</span><span class="n">max_concurrent_tasks</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">,</span> <span class="n">redis_client</span><span class="p">:</span> <span class="n"><span title="redis.Redis">Redis</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></span><span class="p">[[</span><span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">]</span>
-</code></pre></div>
-
-    <div class="doc doc-contents ">
-
-      <p>Limit the number of concurrent Celery tasks.</p>
-
-            <details class="quote">
-              <summary>Source code in <code>src/retsu/celery.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span>
-<span class="normal">157</span>
-<span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">limit_random_concurrent_tasks</span><span class="p">(</span>
-    <span class="n">max_concurrent_tasks</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">redis_client</span><span class="p">:</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Limit the number of concurrent Celery tasks.&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="n">semaphore_manager</span> <span class="o">=</span> <span class="n">RandomSemaphoreManager</span><span class="p">(</span>
-            <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;celery_task_semaphore_random_</span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">max_concurrent_tasks</span><span class="o">=</span><span class="n">max_concurrent_tasks</span><span class="p">,</span>
-            <span class="n">redis_client</span><span class="o">=</span><span class="n">redis_client</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-            <span class="c1"># Acquire semaphore slot</span>
-            <span class="n">acquired</span> <span class="o">=</span> <span class="n">semaphore_manager</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">acquired</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Task </span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is waiting for a slot...&quot;</span><span class="p">)</span>
-                <span class="k">while</span> <span class="ow">not</span> <span class="n">acquired</span><span class="p">:</span>
-                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>  <span class="c1"># Polling interval</span>
-                    <span class="n">acquired</span> <span class="o">=</span> <span class="n">semaphore_manager</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
-
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">result</span>
-            <span class="k">finally</span><span class="p">:</span>
-                <span class="c1"># Release semaphore slot</span>
-                <span class="n">semaphore_manager</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">wrapper</span>
-
-    <span class="k">return</span> <span class="n">decorator</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="retsu.celery.limit_sequence_concurrent_tasks" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">limit_sequence_concurrent_tasks</span>
-
-
-<a href="#retsu.celery.limit_sequence_concurrent_tasks" class="headerlink" title="Permanent link">&para;</a></h2>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span class="nf">limit_sequence_concurrent_tasks</span><span class="p">(</span><span class="n">max_concurrent_tasks</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">,</span> <span class="n">redis_client</span><span class="p">:</span> <span class="n"><span title="redis.Redis">Redis</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Callable" href="https://docs.python.org/3/library/typing.html#typing.Callable">Callable</a></span><span class="p">[[</span><span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">],</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span><span class="p">]</span>
-</code></pre></div>
-
-    <div class="doc doc-contents ">
-
-      <p>Limit the number of concurrent Celery tasks and maintain FIFO order.</p>
-
-            <details class="quote">
-              <summary>Source code in <code>src/retsu/celery.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span>
-<span class="normal">176</span>
-<span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span>
-<span class="normal">188</span>
-<span class="normal">189</span>
-<span class="normal">190</span>
-<span class="normal">191</span>
-<span class="normal">192</span>
-<span class="normal">193</span>
-<span class="normal">194</span>
-<span class="normal">195</span>
-<span class="normal">196</span>
-<span class="normal">197</span>
-<span class="normal">198</span>
-<span class="normal">199</span>
-<span class="normal">200</span>
-<span class="normal">201</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">limit_sequence_concurrent_tasks</span><span class="p">(</span>
-    <span class="n">max_concurrent_tasks</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">redis_client</span><span class="p">:</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Limit the number of concurrent Celery tasks and maintain FIFO order.&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="n">semaphore_manager</span> <span class="o">=</span> <span class="n">SequenceSemaphoreManager</span><span class="p">(</span>
-            <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;celery_task_semaphore_sequence_</span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">max_concurrent_tasks</span><span class="o">=</span><span class="n">max_concurrent_tasks</span><span class="p">,</span>
-            <span class="n">redis_client</span><span class="o">=</span><span class="n">redis_client</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-            <span class="n">task_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>  <span class="c1"># Unique identifier for each task</span>
-
-            <span class="c1"># Acquire semaphore slot with FIFO order</span>
-            <span class="n">acquired</span> <span class="o">=</span> <span class="n">semaphore_manager</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">acquired</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="n">result</span>
-                <span class="k">finally</span><span class="p">:</span>
-                    <span class="c1"># Release semaphore slot</span>
-                    <span class="n">semaphore_manager</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">wrapper</span>
-
-    <span class="k">return</span> <span class="n">decorator</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
 
 
 
@@ -1727,10 +1751,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "header.autohide", "navigation.indexes", "navigation.instant", "search.highlight", "search.share", "search.suggest"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "header.autohide", "navigation.indexes", "navigation.instant", "search.highlight", "search.share", "search.suggest"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.081f42fc.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.081f42fc.min.js"></script>
       
     
   </body>

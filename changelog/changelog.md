@@ -1,6 +1,14 @@
 # Release Notes
 ---
 
+# [0.3.0](https://github.com/osl-incubator/retsu/compare/0.2.4...0.3.0) (2024-08-18)
+
+
+### Features
+
+* Add initial support for async processes ([#19](https://github.com/osl-incubator/retsu/issues/19)) ([7ce37d1](https://github.com/osl-incubator/retsu/commit/7ce37d12990029d2d2d02446b4fd5fc7040205f0))
+* Add wrap-up decorator for managing celery tasks ([#20](https://github.com/osl-incubator/retsu/issues/20)) ([41c6fb3](https://github.com/osl-incubator/retsu/commit/41c6fb37a19c376b010aae13c22f1ac43cbd80fe))
+
 ## [0.2.4](https://github.com/osl-incubator/retsu/compare/0.2.3...0.2.4) (2024-08-16)
 
 
