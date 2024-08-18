@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import logging
 import multiprocessing as mp
+import time
 import warnings
 
 from abc import abstractmethod
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Optional, cast
 from uuid import uuid4
 
 import redis
@@ -177,3 +178,86 @@ class ProcessManager:
 
         for task_name, process in self.tasks.items():
             process.stop()
+
+
+class RandomSemaphoreManager:
+    """Manages a semaphore using Redis to limit concurrent tasks."""
+
+    def __init__(
+        self, key: str, max_concurrent_tasks: int, redis_client: redis.Redis
+    ):
+        self.key: str = key
+        self.max_concurrent_tasks: int = max_concurrent_tasks
+        self.redis_client: redis.Redis = redis_client
+
+    def acquire(self) -> bool:
+        """Try to acquire a semaphore slot."""
+        current_count_tmp = self.redis_client.get(self.key)
+        current_count = 0
+
+        if current_count_tmp is None:
+            self.redis_client.set(self.key, 0)
+        else:
+            # note: Argument 1 to "int" has incompatible type
+            # "Union[Awaitable[Any], Any]"; expected
+            # "Union[str, Buffer, SupportsInt, SupportsIndex, SupportsTrunc]"
+            current_count = int(current_count_tmp)  # type: ignore
+
+        if current_count < self.max_concurrent_tasks:
+            self.redis_client.incr(self.key)
+            return True
+        return False
+
+    def release(self) -> None:
+        """Release a semaphore slot."""
+        self.redis_client.decr(self.key)
+
+
+class SequenceSemaphoreManager:
+    """Manages a semaphore using Redis to limit concurrent tasks."""
+
+    def __init__(
+        self, key: str, max_concurrent_tasks: int, redis_client: redis.Redis
+    ):
+        self.key: str = key
+        self.max_concurrent_tasks: int = max_concurrent_tasks
+        self.redis_client: redis.Redis = redis_client
+
+    def acquire(self, task_id: str) -> bool:
+        """Try to acquire a semaphore slot and ensure FIFO order."""
+        task_bid = task_id.encode("utf8")
+        queue_name = f"{self.key}_queue"
+
+        # Add task to the queue
+        self.redis_client.rpush(queue_name, task_id)
+
+        while True:
+            # Get the list of current tasks in the queue
+            queue_tasks = self.redis_client.lrange(queue_name, 0, -1)
+            count_tmp = cast(bytes, self.redis_client.get(self.key) or b"0")
+            current_count = int(count_tmp)
+
+            # Check if the task is in the first `max_concurrent_tasks`
+            # in the queue
+            # mypy: Item "Awaitable[List[Any]]" of
+            #    "Union[Awaitable[List[Any]], List[Any]]"
+            #    has no attribute "index"
+            task_position = queue_tasks.index(task_bid)  # type: ignore
+
+            if (
+                task_position < self.max_concurrent_tasks
+                and current_count < self.max_concurrent_tasks
+            ):
+                # If a slot is available and the task is within the
+                # allowed concurrent limit
+                self.redis_client.incr(self.key)
+                return True
+
+            # If no slot is available or task is not in the allowed
+            # concurrent tasks, keep waiting
+            time.sleep(0.1)
+
+    def release(self) -> None:
+        """Release a semaphore slot and remove the task from the queue."""
+        self.redis_client.decr(self.key)
+        self.redis_client.lpop(f"{self.key}_queue")
