@@ -6,39 +6,43 @@ import time
 
 from celery import Task
 
-from .celery_tasks import task_sequence_get_time
+from .celery_tasks import (
+    task_random_get_time,
+    task_sequence_get_time,
+)
 
-# def test_task_random_get_time() -> None:
-#     """Test task_random_get_time."""
-#     results: dict[int, float] = {}
-#     tasks: list[Task] = []
-#     start_time = time.time()
 
-#     for i in range(10):
-#         task_promise = task_random_get_time.s(
-#             request_id=i, start_time=start_time
-#         )
-#         tasks.append(task_promise.apply_async())
+def test_task_random_get_time() -> None:
+    """Test task_random_get_time."""
+    results: dict[int, float] = {}
+    tasks: list[Task] = []
+    start_time = time.time()
 
-#     for i in range(10):
-#         task = tasks[i]
-#         task_id, result = task.get(timeout=10)
-#         assert i == task_id
-#         results[task_id] = result
+    for i in range(10):
+        task_promise = task_random_get_time.s(
+            request_id=i, start_time=start_time
+        )
+        tasks.append(task_promise.apply_async())
 
-#     previous_time = results[0]
-#     previous_id = 0
-#     tol = 0.2
-#     for i in range(10):
-#         current_time = results[i]
-#         diff = abs(current_time - previous_time)
-#         # print(
-#         #     f"task {previous_id}-{i}, diff: {diff}, "
-#         #     f"expected: {diff_expected}"
-#         # )
-#         assert diff - tol < 5, f"[EE] Task {previous_id}-{i}"
-#         previous_time = current_time
-#         previous_id = i
+    for i in range(10):
+        task = tasks[i]
+        task_id, result = task.get(timeout=10)
+        assert i == task_id
+        results[task_id] = result
+
+    previous_time = results[0]
+    previous_id = 0
+    tol = 0.2
+    for i in range(10):
+        current_time = results[i]
+        diff = abs(current_time - previous_time)
+        # print(
+        #     f"task {previous_id}-{i}, diff: {diff}, "
+        #     f"expected: {diff_expected}"
+        # )
+        assert diff - tol < 5, f"[EE] Task {previous_id}-{i}"
+        previous_time = current_time
+        previous_id = i
 
 
 def test_task_sequence_get_time() -> None:
@@ -79,10 +83,10 @@ def test_task_sequence_get_time() -> None:
         current_time = results[i]
         diff = current_time - previous_time
         diff_expected = diffs[i]
-        print(
-            f"task {previous_id}-{i}, diff: {diff}, "
-            f"expected: {diff_expected}"
-        )
+        # print(
+        #     f"task {previous_id}-{i}, diff: {diff}, "
+        #     f"expected: {diff_expected}"
+        # )
         assert diff >= diff_expected - tol, f"[EE] Task {previous_id}-{i}"
         assert diff <= diff_expected + tol, f"[EE] Task {previous_id}-{i}"
         previous_time = current_time
