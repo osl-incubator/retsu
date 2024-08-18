@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import time
+import uuid
 
 from functools import wraps
 from typing import Any, Callable, Optional
@@ -14,7 +15,12 @@ import redis
 from celery import chain, chord, group
 from public import public
 
-from retsu.core import MultiProcess, SemaphoreManager, SingleProcess
+from retsu.core import (
+    MultiProcess,
+    RandomSemaphoreManager,
+    SequenceSemaphoreManager,
+    SingleProcess,
+)
 
 
 class CeleryProcess:
@@ -128,15 +134,15 @@ class SingleCeleryProcess(CeleryProcess, SingleProcess):
     ...
 
 
-def limit_concurrent_tasks(
+def limit_random_concurrent_tasks(
     max_concurrent_tasks: int,
     redis_client: redis.Redis,
 ) -> Callable[[Any], Any]:
     """Limit the number of concurrent Celery tasks."""
 
     def decorator(func: Callable[[Any], Any]) -> Callable[[Any], Any]:
-        semaphore_manager = SemaphoreManager(
-            key=f"celery_task_semaphore_{func.__name__}",
+        semaphore_manager = RandomSemaphoreManager(
+            key=f"celery_task_semaphore_random_{func.__name__}",
             max_concurrent_tasks=max_concurrent_tasks,
             redis_client=redis_client,
         )
@@ -148,7 +154,7 @@ def limit_concurrent_tasks(
             if not acquired:
                 logging.info(f"Task {func.__name__} is waiting for a slot...")
                 while not acquired:
-                    time.sleep(1)  # Polling interval
+                    time.sleep(0.01)  # Polling interval
                     acquired = semaphore_manager.acquire()
 
             try:
@@ -157,6 +163,38 @@ def limit_concurrent_tasks(
             finally:
                 # Release semaphore slot
                 semaphore_manager.release()
+
+        return wrapper
+
+    return decorator
+
+
+def limit_sequence_concurrent_tasks(
+    max_concurrent_tasks: int,
+    redis_client: redis.Redis,
+) -> Callable[[Any], Any]:
+    """Limit the number of concurrent Celery tasks and maintain FIFO order."""
+
+    def decorator(func: Callable[[Any], Any]) -> Callable[[Any], Any]:
+        semaphore_manager = SequenceSemaphoreManager(
+            key=f"celery_task_semaphore_sequence_{func.__name__}",
+            max_concurrent_tasks=max_concurrent_tasks,
+            redis_client=redis_client,
+        )
+
+        @wraps(func)
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            task_id = str(uuid.uuid4())  # Unique identifier for each task
+
+            # Acquire semaphore slot with FIFO order
+            acquired = semaphore_manager.acquire(task_id)
+            if acquired:
+                try:
+                    result = func(*args, **kwargs)
+                    return result
+                finally:
+                    # Release semaphore slot
+                    semaphore_manager.release()
 
         return wrapper
 

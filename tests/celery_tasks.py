@@ -12,6 +12,10 @@ from time import sleep
 import redis
 
 from celery import Celery
+from retsu.celery import (
+    limit_random_concurrent_tasks,
+    limit_sequence_concurrent_tasks,
+)
 
 redis_host: str = os.getenv("RETSU_REDIS_HOST", "localhost")
 redis_port: int = int(os.getenv("RETSU_REDIS_PORT", 6379))
@@ -34,10 +38,10 @@ app.conf.update(
     worker_task_log_format=(
         f"{LOG_FORMAT_PREFIX} %(task_name)s[%(task_id)s]: %(message)s"
     ),
-    task_annotations={"*": {"rate_limit": "10/s"}},
+    # task_annotations={"*": {"rate_limit": "10/s"}},
     task_track_started=True,
-    task_time_limit=30 * 60,
-    task_soft_time_limit=30 * 60,
+    # task_time_limit=30 * 60,
+    # task_soft_time_limit=30 * 60,
     worker_redirect_stdouts_level="DEBUG",
 )
 
@@ -71,10 +75,33 @@ def task_sleep(seconds: int, task_id: str) -> int:
     return int(datetime.now().timestamp())
 
 
-# @limit_concurrent_tasks(max_concurrent_tasks=2, redis_client=redis_client)
-# (bind=True)
 @app.task  # type: ignore
-def task_get_time(request_id: int) -> tuple[int, float]:
+@limit_random_concurrent_tasks(
+    max_concurrent_tasks=2, redis_client=redis_client
+)
+def task_random_get_time(
+    request_id: int, start_time: float
+) -> tuple[int, float]:
     """Limit simple task max concurrent."""
+    print(
+        f"[Random] Started task {request_id} after:",
+        time.time() - start_time,
+    )
+    sleep(1)
+    return request_id, time.time()
+
+
+@app.task  # type: ignore
+@limit_sequence_concurrent_tasks(
+    max_concurrent_tasks=2, redis_client=redis_client
+)
+def task_sequence_get_time(
+    request_id: int, start_time: float
+) -> tuple[int, float]:
+    """Limit simple task max concurrent."""
+    print(
+        f"[Sequence] Started task {request_id} after:",
+        time.time() - start_time,
+    )
     sleep(1)
     return request_id, time.time()

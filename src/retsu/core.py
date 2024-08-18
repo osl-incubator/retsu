@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import logging
 import multiprocessing as mp
+import time
 import warnings
 
 from abc import abstractmethod
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Optional, cast
 from uuid import uuid4
 
 import redis
@@ -179,7 +180,7 @@ class ProcessManager:
             process.stop()
 
 
-class SemaphoreManager:
+class RandomSemaphoreManager:
     """Manages a semaphore using Redis to limit concurrent tasks."""
 
     def __init__(
@@ -210,3 +211,62 @@ class SemaphoreManager:
     def release(self) -> None:
         """Release a semaphore slot."""
         self.redis_client.decr(self.key)
+
+
+class SequenceSemaphoreManager:
+    """Manages a semaphore using Redis to limit concurrent tasks."""
+
+    def __init__(
+        self, key: str, max_concurrent_tasks: int, redis_client: redis.Redis
+    ):
+        self.key: str = key
+        self.max_concurrent_tasks: int = max_concurrent_tasks
+        self.redis_client: redis.Redis = redis_client
+
+    def acquire(self, task_id: str) -> bool:
+        """Try to acquire a semaphore slot and ensure FIFO order."""
+        task_bid = task_id.encode("utf8")
+        # logging.info(
+        #     f"[Semaphore] Task {task_id} is attempting to acquire a slot."
+        # )
+        # Add task to queue
+        queue_name = f"{self.key}_queue"
+        self.redis_client.rpush(queue_name, task_id)
+
+        while True:
+            # Get the current task at the front of the queue
+            current_task_id_tmp = self.redis_client.lindex(queue_name, 0)
+
+            if current_task_id_tmp is None:
+                time.sleep(0.1)  # Polling interval to wait for the slot
+                continue
+
+            current_task_id = cast(bytes, current_task_id_tmp)
+
+            # logging.info(
+            #     f"[Semaphore] Current task at front: {current_task_id}"
+            # )
+
+            # If the current task is this one, check if a semaphore slot is
+            # available
+            if current_task_id != task_bid:
+                time.sleep(0.1)  # Polling interval to wait for the slot
+                continue
+
+            count_tmp = self.redis_client.get(self.key)
+            current_count = int(cast(bytes, count_tmp) or 0)
+            # logging.info(f"[Semaphore] Current count: {current_count}")
+
+            if current_count < self.max_concurrent_tasks:
+                # logging.info(f"[Semaphore] Task {task_id} acquired a slot.")
+                self.redis_client.incr(self.key)
+                return True
+
+            # keep waiting until any slot is available
+            time.sleep(0.01)
+
+    def release(self) -> None:
+        """Release a semaphore slot and remove the task from the queue."""
+        # logging.info(f"[Semaphore] Releasing a slot.")
+        self.redis_client.decr(self.key)
+        self.redis_client.lpop(f"{self.key}_queue")

@@ -29,6 +29,7 @@ def celery_worker_parameters() -> dict[str, Any]:
         "loglevel": "debug",  # Set log level
         "concurrency": 4,  # Number of concurrent workers
         "perform_ping_check": False,
+        "pool": "prefork",
     }
 
 
