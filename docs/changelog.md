@@ -1,6 +1,13 @@
 # Release Notes
 ---
 
+## [0.4.1](https://github.com/osl-incubator/retsu/compare/0.4.0...0.4.1) (2026-05-22)
+
+
+### Bug Fixes
+
+* Fix release workflow ([#24](https://github.com/osl-incubator/retsu/issues/24)) ([ea661d2](https://github.com/osl-incubator/retsu/commit/ea661d2c5c94f5292c56167404fcb123598bee5e))
+
 # [0.4.0](https://github.com/osl-incubator/retsu/compare/0.3.0...0.4.0) (2026-05-22)
 
 
