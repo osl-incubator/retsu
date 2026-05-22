@@ -149,6 +149,8 @@ cython_debug/
 
 # AI
 PLAN.md
+.codex
+.agents
 
 /.quarto/
 .quarto-cache/
