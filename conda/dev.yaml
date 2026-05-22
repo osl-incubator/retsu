@@ -6,7 +6,10 @@ dependencies:
   - python >=3.10,<4
   - pip
   - poetry
-  - nodejs # used by semantic-release
+  # Keep semantic-release on a stable LTS runtime. Node 26 currently breaks
+  # @semantic-release/github release-asset uploads with an Undici
+  # "invalid content-length header" error.
+  - nodejs >=22,<23
   - pip:
     # fix issues with distlib
     - paginate
