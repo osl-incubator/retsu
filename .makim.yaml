@@ -45,6 +45,13 @@ groups:
             DENO_DIR=$PWD/.quarto-cache/deno \
             quarto preview --host 0.0.0.0
 
+  setup:
+    tasks:
+      containers:
+        help: Restart all container services
+        run: |
+          sugar compose-ext restart -- -d
+
   tests:
     tasks:
       linter:
@@ -55,6 +62,9 @@ groups:
 
       unit:
         help: run tests
+        hooks:
+          pre-run:
+            - task: setup.containers
         args:
           path:
             help: Specify the location of the tests

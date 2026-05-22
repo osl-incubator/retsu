@@ -13,7 +13,7 @@ from retsu.resources import (
 from retsu.state import JobRecord, JobStatus, LeaseRecord
 
 
-class Backend(Protocol):
+class Backend(Protocol):  # pragma: no cover
     """Storage and atomic accounting backend."""
 
     def define_resource(self, name: str, capacity: float) -> None:

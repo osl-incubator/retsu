@@ -16,7 +16,6 @@ dependencies = [
   "atpublic>=4.0",
   "redis>=5",
   "typing-extensions>=4.12.0",
-  "asyncio>=3.4.3",
 ]
 
 [project.optional-dependencies]
@@ -65,15 +64,14 @@ containers-sugar = ">=1.19.2"
 compose-go = ">=2.40.3"
 django = ">=3"
 django-stubs = ">=3"
-pytest-asyncio = ">=0.23.8"
 
 [tool.pytest.ini_options]
-# asyncio_mode = "auto"
 testpaths = [
     "tests",
 ]
 markers = [
     "no_services: test does not require Redis or Celery services",
+    "redis: test requires Redis or Valkey",
 ]
 
 [tool.bandit]
@@ -124,4 +122,4 @@ ignore_missing_imports = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unused_configs = true
-exclude = ["examples/", "scripts/", "src/retsu/asyncio/"]
+exclude = ["examples/", "scripts/"]

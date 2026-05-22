@@ -8,12 +8,6 @@ from retsu.config import (
     get_config,
     set_backend,
 )
-from retsu.core import (
-    MultiProcess,
-    Process,
-    ProcessManager,
-    SingleProcess,
-)
 from retsu.exceptions import (
     ResourceAcquireTimeout,
     ResourceDefinitionMissing,
@@ -33,9 +27,6 @@ from retsu.resources import (
     ResourceSpec,
     UsageItem,
     UsageSnapshot,
-)
-from retsu.results import (
-    ResultProcessManager,
 )
 from retsu.scheduler import Scheduler
 from retsu.state import (
@@ -80,9 +71,6 @@ __all__ = [
     "JobRecord",
     "JobStatus",
     "LeaseRecord",
-    "MultiProcess",
-    "Process",
-    "ProcessManager",
     "RayExecutor",
     "ResourceAcquireTimeout",
     "ResourceDefinitionMissing",
@@ -90,11 +78,9 @@ __all__ = [
     "ResourceRequest",
     "ResourceSpec",
     "ResourceUnavailable",
-    "ResultProcessManager",
     "RetsuBackendUnavailable",
     "RetsuError",
     "Scheduler",
-    "SingleProcess",
     "UsageItem",
     "UsageSnapshot",
     "__author__",
