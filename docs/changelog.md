@@ -1,6 +1,18 @@
 # Release Notes
 ---
 
+# [0.4.0](https://github.com/osl-incubator/retsu/compare/0.3.0...0.4.0) (2026-05-22)
+
+
+### Bug Fixes
+
+* Fix release workflow ([#23](https://github.com/osl-incubator/retsu/issues/23)) ([166dddc](https://github.com/osl-incubator/retsu/commit/166dddc46d78d3c511b7d2ea276fdb14b187fd86))
+
+
+### Features
+
+* Refactor retsu structure, improve tests, and update documentation ([#22](https://github.com/osl-incubator/retsu/issues/22)) ([001a636](https://github.com/osl-incubator/retsu/commit/001a636c73a4b78d008ba54916c2f6d734c145f6))
+
 # [0.3.0](https://github.com/osl-incubator/retsu/compare/0.2.4...0.3.0) (2024-08-18)
 
 
