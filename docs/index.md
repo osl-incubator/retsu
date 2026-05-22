@@ -1,12 +1,11 @@
-![LOGO](/images/logo.png)
+![LOGO](images/logo.png)
 
 # Retsu
 
-Retsu aims to wrap-up Celery in way to facilitate to create parallel and serial
-tasks
+A lightweight resource and concurrency control layer for Python background jobs.
 
 - License: BSD 3 Clause
-- Documentation: https://retsu.github.io
+- Documentation: https://osl-incubator.github.io/retsu
 
 ## Features
 

@@ -1,4 +1,3 @@
-version: 1.0
 groups:
   clean:
     tasks:
@@ -10,6 +9,8 @@ groups:
           rm -fr .eggs/
           rm -f .coverage
           rm -fr htmlcov/
+          rm -fr .quarto/
+          rm -fr .quarto-cache/
           rm -fr .pytest_cache
           rm -fr .mypy_cache
           rm -fr .ruff_cache
@@ -24,15 +25,32 @@ groups:
     tasks:
       build:
         help: Build documentation
+        backend: bash
         run: |
-          mkdocs build --config-file mkdocs.yaml
+          mkdir -p .quarto/tmp .quarto-cache/deno
+          env \
+            TMPDIR=$PWD/.quarto/tmp \
+            XDG_CACHE_HOME=$PWD/.quarto-cache \
+            DENO_DIR=$PWD/.quarto-cache/deno \
+            quarto render
 
       preview:
         help: Preview documentation page locally
-        dependencies:
-          - task: docs.build
+        backend: bash
         run: |
-          mkdocs serve --watch docs --config-file mkdocs.yaml
+          mkdir -p .quarto/tmp .quarto-cache/deno
+          env \
+            TMPDIR=$PWD/.quarto/tmp \
+            XDG_CACHE_HOME=$PWD/.quarto-cache \
+            DENO_DIR=$PWD/.quarto-cache/deno \
+            quarto preview --host 0.0.0.0
+
+  setup:
+    tasks:
+      containers:
+        help: Restart all container services
+        run: |
+          sugar compose-ext restart -- -d
 
   tests:
     tasks:
@@ -44,6 +62,9 @@ groups:
 
       unit:
         help: run tests
+        hooks:
+          pre-run:
+            - task: setup.containers
         args:
           path:
             help: Specify the location of the tests
@@ -54,23 +75,31 @@ groups:
             type: string
             default: "-vv"
         run: |
-          pytest ${{ args.path }} ${{ args.params }}
+          pytest ${{ args.path }} ${{ args.params }} \
+            --cov=retsu \
+            --cov-report=term-missing \
+            --cov-fail-under=90
 
       setup:
-        help: Run the setup for the unit tests
-        shell: bash
+        help: Start services needed by the unit tests
+        backend: bash
         run: |
           set -ex
-          sugar build
-          sugar ext restart --options -d
+          sugar compose pull --services valkey
+          sugar compose-ext restart --services valkey --options "-d"
           sleep 5
-          celery -A tests.celery_tasks worker --loglevel=debug &
+
+      teardown:
+        help: Stop services needed by the unit tests
+        run: |
+          sugar compose-ext stop --services valkey
 
       ci:
         help: run the sames tests executed on CI
-        dependencies:
-          - task: tests.unit
-          - task: tests.linter
+        hooks:
+          pre-run:
+            - task: tests.unit
+            - task: tests.linter
 
   package:
     tasks:

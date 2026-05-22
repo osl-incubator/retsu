@@ -4,15 +4,12 @@ from __future__ import annotations
 
 import logging
 
-from typing import Any, Generator
+from typing import Generator
 
 import pytest
 import redis
 
-from celery.contrib.testing.worker import start_worker
 from retsu.queues import get_redis_queue_config
-
-from tests.celery_tasks import app as celery_app
 
 
 def redis_flush() -> None:
@@ -22,30 +19,18 @@ def redis_flush() -> None:
     r.flushdb()
 
 
-@pytest.fixture(scope="session")
-def celery_worker_parameters() -> dict[str, Any]:
-    """Parameters for the Celery worker."""
-    return {
-        "loglevel": "debug",  # Set log level
-        "concurrency": 4,  # Number of concurrent workers
-        "perform_ping_check": False,
-        "pool": "prefork",
-    }
-
-
 @pytest.fixture(autouse=True, scope="session")
 def setup(
-    celery_worker_parameters: dict[str, Any],
+    request: pytest.FixtureRequest,
 ) -> Generator[None, None, None]:
     """Set up the services needed by the tests."""
-    try:
-        logging.info("Clean Redis queues")
-        redis_flush()
+    if request.session.items and all(
+        item.get_closest_marker("no_services")
+        for item in request.session.items
+    ):
+        yield
+        return
 
-        logging.info("Start the Celery worker")
-        with start_worker(celery_app, **celery_worker_parameters) as worker:
-            # Ensure worker is up and running
-            yield worker  # Now you can use this worker in your tests
-
-    finally:
-        pass
+    logging.info("Clean Redis database")
+    redis_flush()
+    yield
