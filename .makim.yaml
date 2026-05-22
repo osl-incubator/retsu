@@ -9,6 +9,8 @@ groups:
           rm -fr .eggs/
           rm -f .coverage
           rm -fr htmlcov/
+          rm -fr .quarto/
+          rm -fr .quarto-cache/
           rm -fr .pytest_cache
           rm -fr .mypy_cache
           rm -fr .ruff_cache
@@ -23,16 +25,25 @@ groups:
     tasks:
       build:
         help: Build documentation
+        backend: bash
         run: |
-          mkdocs build --config-file mkdocs.yaml
+          mkdir -p .quarto/tmp .quarto-cache/deno
+          env \
+            TMPDIR=$PWD/.quarto/tmp \
+            XDG_CACHE_HOME=$PWD/.quarto-cache \
+            DENO_DIR=$PWD/.quarto-cache/deno \
+            quarto render
 
       preview:
         help: Preview documentation page locally
-        hooks:
-          pre-run:
-            - task: docs.build
+        backend: bash
         run: |
-          mkdocs serve --watch docs --config-file mkdocs.yaml
+          mkdir -p .quarto/tmp .quarto-cache/deno
+          env \
+            TMPDIR=$PWD/.quarto/tmp \
+            XDG_CACHE_HOME=$PWD/.quarto-cache \
+            DENO_DIR=$PWD/.quarto-cache/deno \
+            quarto preview --host 0.0.0.0
 
   tests:
     tasks:
@@ -64,14 +75,14 @@ groups:
         backend: bash
         run: |
           set -ex
-          sugar pull --services valkey
-          sugar ext restart --options -d
+          sugar compose pull --services valkey
+          sugar compose-ext restart --services valkey --options "-d"
           sleep 5
 
       teardown:
         help: Stop services needed by the unit tests
         run: |
-          sugar ext stop
+          sugar compose-ext stop --services valkey
 
       ci:
         help: run the sames tests executed on CI
