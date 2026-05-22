@@ -2,36 +2,41 @@
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry]
+[project]
 name = "retsu"
-version = "0.3.0"  # semantic-release
+version = "0.3.0"
 description = "Retsu aims to wrap-up Celery in way to facilitate to create parallel and serial tasks"
 readme = "README.md"
-authors = ["Ivan Ogasawara <ivan.ogasawara@gmail.com>"]
+authors = [
+  {name = "Ivan Ogasawara", email = "ivan.ogasawara@gmail.com"},
+]
+license = "BSD-3-Clause"
+requires-python = ">=3.10,<4"
+dependencies = [
+  "atpublic>=4.0",
+  "celery>=5",
+  "redis>=5",
+  "typing-extensions>=4.12.0",
+  "asyncio>=3.4.3",
+]
+
+[project.optional-dependencies]
+django = [
+  "django>=3",
+]
+
+[project.scripts]
+retsu = "retsu.cli.main:main"
+
+[tool.poetry]
 packages = [
   {include = "retsu", from="src"},
 ]
-license = "BSD 3 Clause"
 exclude = [
   ".git/*",
   ".env*",
 ]
 include = ["src/retsu/py.typed"]
-
-
-[tool.poetry.dependencies]
-python = ">=3.8.1,<4"
-atpublic = ">=4.0"
-celery = ">=5"
-redis = ">=5"
-django = { version = ">=3", optional = true }
-typing-extensions = ">=4.12.0"
-asyncio = ">=3.4.3"
-
-[tool.poetry.extras]
-django = [
-  "django",
-]
 
 
 [tool.poetry.group.dev.dependencies]
@@ -70,6 +75,9 @@ pytest-asyncio = ">=0.23.8"
 # asyncio_mode = "auto"
 testpaths = [
     "tests",
+]
+markers = [
+    "no_services: test does not require Redis or Celery services",
 ]
 
 [tool.bandit]

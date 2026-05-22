@@ -12,8 +12,6 @@ import redis
 from celery.contrib.testing.worker import start_worker
 from retsu.queues import get_redis_queue_config
 
-from tests.celery_tasks import app as celery_app
-
 
 def redis_flush() -> None:
     """Wipe-out redis database."""
@@ -36,8 +34,18 @@ def celery_worker_parameters() -> dict[str, Any]:
 @pytest.fixture(autouse=True, scope="session")
 def setup(
     celery_worker_parameters: dict[str, Any],
+    request: pytest.FixtureRequest,
 ) -> Generator[None, None, None]:
     """Set up the services needed by the tests."""
+    if request.session.items and all(
+        item.get_closest_marker("no_services")
+        for item in request.session.items
+    ):
+        yield
+        return
+
+    from tests.celery_tasks import app as celery_app
+
     try:
         logging.info("Clean Redis queues")
         redis_flush()

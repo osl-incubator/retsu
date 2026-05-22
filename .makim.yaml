@@ -1,4 +1,3 @@
-version: 1.0
 groups:
   clean:
     tasks:
@@ -29,8 +28,9 @@ groups:
 
       preview:
         help: Preview documentation page locally
-        dependencies:
-          - task: docs.build
+        hooks:
+          pre-run:
+            - task: docs.build
         run: |
           mkdocs serve --watch docs --config-file mkdocs.yaml
 
@@ -54,11 +54,14 @@ groups:
             type: string
             default: "-vv"
         run: |
-          pytest ${{ args.path }} ${{ args.params }}
+          pytest ${{ args.path }} ${{ args.params }} \
+            --cov=retsu \
+            --cov-report=term-missing \
+            --cov-fail-under=90
 
       setup:
         help: Run the setup for the unit tests
-        shell: bash
+        backend: bash
         run: |
           set -ex
           sugar build
@@ -68,9 +71,10 @@ groups:
 
       ci:
         help: run the sames tests executed on CI
-        dependencies:
-          - task: tests.unit
-          - task: tests.linter
+        hooks:
+          pre-run:
+            - task: tests.unit
+            - task: tests.linter
 
   package:
     tasks:
