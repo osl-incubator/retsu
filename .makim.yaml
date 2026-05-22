@@ -60,14 +60,18 @@ groups:
             --cov-fail-under=90
 
       setup:
-        help: Run the setup for the unit tests
+        help: Start services needed by the unit tests
         backend: bash
         run: |
           set -ex
-          sugar build
+          sugar pull --services valkey
           sugar ext restart --options -d
           sleep 5
-          celery -A tests.celery_tasks worker --loglevel=debug &
+
+      teardown:
+        help: Stop services needed by the unit tests
+        run: |
+          sugar ext stop
 
       ci:
         help: run the sames tests executed on CI

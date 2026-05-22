@@ -1,11 +1,15 @@
-version: '3.9'
-
 services:
   valkey:
     image: valkey/valkey:7.2.5-alpine
     hostname: valkey
+    command: ["valkey-server", "--save", "", "--appendonly", "no"]
     ports:
-      - 6379:6379
+      - "${RETSU_REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 2s
+      timeout: 1s
+      retries: 30
 
   # celery:
   #   hostname: celery
