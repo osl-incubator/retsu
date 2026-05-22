@@ -65,9 +65,9 @@ class TestSingleProcess:
 
         for task_id, expected in results.items():
             result = process.result.get(task_id, timeout=2)
-            assert (
-                result == expected
-            ), f"Expected Result: {expected}, Actual Result: {result}"
+            assert result == expected, (
+                f"Expected Result: {expected}, Actual Result: {result}"
+            )
 
     def test_serial_timestamp(self, task_timestamp: Process) -> None:
         """Run simple test for a serial process."""

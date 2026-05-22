@@ -10,7 +10,15 @@ import time
 
 from contextlib import contextmanager
 from datetime import datetime, timezone
-from typing import Any, Callable, Dict, Iterator, Mapping, Optional
+from typing import (
+    Any,
+    Callable,
+    ContextManager,
+    Dict,
+    Iterator,
+    Mapping,
+    Optional,
+)
 from uuid import uuid4
 
 from retsu.config import get_backend, get_config
@@ -19,8 +27,14 @@ from retsu.exceptions import (
     ResourceUnavailable,
 )
 from retsu.leases import Lease
-from retsu.resources import ResourceRequest, ResourceSpec, ResourceValue
-from retsu.state import JobRecord, JobStatus
+from retsu.resources import (
+    CleanupResult,
+    ResourceRequest,
+    ResourceSpec,
+    ResourceValue,
+    UsageSnapshot,
+)
+from retsu.state import JobRecord, JobStatus, LeaseRecord
 
 
 def current_owner_id() -> str:
@@ -38,17 +52,17 @@ def define_concurrency(name: str, capacity: float) -> None:
     get_backend().define_concurrency(name, capacity)
 
 
-def get_usage():
+def get_usage() -> UsageSnapshot:
     """Return backend usage snapshot."""
     return get_backend().get_usage()
 
 
-def list_leases():
+def list_leases() -> list[LeaseRecord]:
     """List active leases."""
     return get_backend().list_leases()
 
 
-def cleanup_expired_leases():
+def cleanup_expired_leases() -> CleanupResult:
     """Clean expired leases."""
     return get_backend().cleanup_expired_leases()
 
@@ -137,7 +151,7 @@ def limit(
     ttl_seconds: Optional[int] = None,
     acquire_timeout_seconds: Optional[float] = None,
     wait_strategy: Optional[str] = None,
-):
+) -> ContextManager[Lease]:
     """Acquire one named concurrency limit for a critical section."""
     return acquire(
         concurrency={name: slots},

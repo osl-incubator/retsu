@@ -19,9 +19,7 @@ class LocalExecutor:
         """Initialize the executor."""
         self.backend = backend
 
-    def dispatch(
-        self, job: JobRecord, lease_id: str, owner_id: str
-    ) -> None:
+    def dispatch(self, job: JobRecord, lease_id: str, owner_id: str) -> None:
         """Dispatch a job in a local thread."""
         thread = threading.Thread(
             target=self._run,
@@ -49,4 +47,3 @@ class LocalExecutor:
             )
         finally:
             self.backend.release(lease_id, owner_id)
-

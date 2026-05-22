@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from typing import Iterator, Mapping, Optional
+from typing import Any, Iterator, Mapping, Optional
 
 from retsu.exceptions import ResourceUnavailable
 from retsu.resources import ResourceValue
@@ -12,7 +12,7 @@ from retsu.task import acquire
 
 @contextmanager
 def celery_guard(
-    task,
+    task: Any,
     resources: Optional[Mapping[str, ResourceValue]] = None,
     concurrency: Optional[Mapping[str, ResourceValue]] = None,
     ttl_seconds: Optional[int] = None,
@@ -33,4 +33,3 @@ def celery_guard(
         if wait_strategy == "retry":
             raise task.retry(countdown=exc.retry_after_seconds or 1) from exc
         raise
-

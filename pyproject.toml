@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [project]
 name = "retsu"
 version = "0.3.0"
-description = "Retsu aims to wrap-up Celery in way to facilitate to create parallel and serial tasks"
+description = "A lightweight resource and concurrency control layer for Python background jobs"
 readme = "README.md"
 authors = [
   {name = "Ivan Ogasawara", email = "ivan.ogasawara@gmail.com"},
@@ -14,15 +14,20 @@ license = "BSD-3-Clause"
 requires-python = ">=3.10,<4"
 dependencies = [
   "atpublic>=4.0",
-  "celery>=5",
   "redis>=5",
   "typing-extensions>=4.12.0",
   "asyncio>=3.4.3",
 ]
 
 [project.optional-dependencies]
+celery = [
+  "celery>=5",
+]
 django = [
   "django>=3",
+]
+ray = [
+  "ray>=2",
 ]
 
 [project.scripts]
@@ -43,6 +48,7 @@ include = ["src/retsu/py.typed"]
 pytest = ">=7.3.2"
 pytest-cov = ">=4.1.0"
 coverage = ">=7.2.7"
+celery = ">=5"
 pre-commit = ">=3.3.2"
 ruff = ">=0.2.0"
 mypy = ">=1.5.0"
@@ -121,7 +127,7 @@ convention = "numpy"
 lines-between-types = 1
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.10"
 check_untyped_defs = true
 strict = true
 ignore_missing_imports = true

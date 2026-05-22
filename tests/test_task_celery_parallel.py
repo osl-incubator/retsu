@@ -72,9 +72,9 @@ class TestMultiCeleryProcess:
         for task_id, expected in results.items():
             result = process.result.get(task_id, timeout=10)[0]
 
-            assert (
-                result == expected
-            ), f"Expected Result: {expected}, Actual Result: {result}"
+            assert result == expected, (
+                f"Expected Result: {expected}, Actual Result: {result}"
+            )
 
     def test_multi_timestamp(self, task_timestamp: Process) -> None:
         """Run simple test for a multi process."""

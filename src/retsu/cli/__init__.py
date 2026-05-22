@@ -1,2 +1,1 @@
 """Retsu CLI package."""
-

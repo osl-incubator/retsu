@@ -138,4 +138,3 @@ class CleanupResult:
     """Result returned by lease cleanup."""
 
     expired_lease_ids: list[str]
-

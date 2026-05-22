@@ -7,6 +7,7 @@ import threading
 import time
 
 from types import SimpleNamespace
+from typing import Any, Callable
 
 import pytest
 import retsu
@@ -230,22 +231,22 @@ def test_scheduler_ray_executor_runs_when_capacity_available(
     class FakeObjectRef:
         """Fake Ray object reference."""
 
-        def __init__(self, value):
+        def __init__(self, value: Any) -> None:
             self.value = value
 
     class FakeRemoteFunction:
         """Fake Ray remote function."""
 
-        def __init__(self, func):
+        def __init__(self, func: Callable[..., Any]) -> None:
             self.func = func
 
-        def remote(self, *args, **kwargs):
+        def remote(self, *args: Any, **kwargs: Any) -> FakeObjectRef:
             return FakeObjectRef(self.func(*args, **kwargs))
 
-    def remote(func):
+    def remote(func: Callable[..., Any]) -> FakeRemoteFunction:
         return FakeRemoteFunction(func)
 
-    def get(object_ref):
+    def get(object_ref: FakeObjectRef) -> Any:
         return object_ref.value
 
     monkeypatch.setitem(

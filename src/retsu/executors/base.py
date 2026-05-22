@@ -12,8 +12,5 @@ class Executor(Protocol):
 
     name: str
 
-    def dispatch(
-        self, job: JobRecord, lease_id: str, owner_id: str
-    ) -> None:
+    def dispatch(self, job: JobRecord, lease_id: str, owner_id: str) -> None:
         """Dispatch a leased job."""
-

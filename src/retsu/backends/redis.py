@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 from uuid import uuid4
 
 import redis
@@ -189,6 +189,7 @@ class RedisBackend:
     ) -> None:
         """Initialize the backend."""
         self.namespace = namespace
+        self.client: Any
         if client is not None:
             self.client = client
         elif redis_url:
@@ -294,7 +295,7 @@ class RedisBackend:
             json.dumps(request.resources),
             json.dumps(request.concurrency),
         )
-        values = list(result)  # type: ignore[arg-type]
+        values = list(cast(List[Any], result))
         acquired = bool(int(values[0]))
         reason = self._decode(values[1])
         blocked_by = self._decode(values[2])
@@ -322,9 +323,7 @@ class RedisBackend:
             owner_id,
         )
 
-    def renew(
-        self, lease_id: str, owner_id: str, ttl_seconds: int
-    ) -> None:
+    def renew(self, lease_id: str, owner_id: str, ttl_seconds: int) -> None:
         """Renew an active lease."""
         self.client.eval(
             RENEW_SCRIPT,
@@ -366,8 +365,11 @@ class RedisBackend:
     def list_leases(self) -> List[LeaseRecord]:
         """List active leases."""
         self.cleanup_expired_leases()
-        lease_ids = self.client.zrange(self._leases_key, 0, -1)
-        records = []
+        lease_ids = cast(
+            List[bytes],
+            self.client.zrange(self._leases_key, 0, -1),
+        )
+        records: List[LeaseRecord] = []
         for raw_id in lease_ids:
             lease = self.get_lease(self._decode(raw_id))
             if lease is not None:
@@ -376,7 +378,10 @@ class RedisBackend:
 
     def get_lease(self, lease_id: str) -> Optional[LeaseRecord]:
         """Get one active lease."""
-        data = self.client.hgetall(self._lease_key(lease_id))
+        data = cast(
+            Dict[bytes, bytes],
+            self.client.hgetall(self._lease_key(lease_id)),
+        )
         if not data:
             return None
         return self._decode_lease(data)
@@ -384,7 +389,10 @@ class RedisBackend:
     def cleanup_expired_leases(self) -> CleanupResult:
         """Release expired leases."""
         now = datetime.now(timezone.utc).timestamp()
-        expired_raw = self.client.zrangebyscore(self._leases_key, "-inf", now)
+        expired_raw = cast(
+            List[bytes],
+            self.client.zrangebyscore(self._leases_key, "-inf", now),
+        )
         expired = [self._decode(lease_id) for lease_id in expired_raw]
         for lease_id in expired:
             self.release(lease_id, owner_id="")
@@ -428,16 +436,20 @@ class RedisBackend:
 
     def get_job(self, job_id: str) -> JobRecord:
         """Load one job."""
-        data = self.client.hgetall(self._job_key(job_id))
+        data = cast(
+            Dict[bytes, bytes],
+            self.client.hgetall(self._job_key(job_id)),
+        )
         if not data:
             raise JobNotFound(job_id)
         return self._decode_job(data)
 
     def list_queued_jobs(self, limit: int = 100) -> List[JobRecord]:
         """List queued and waiting jobs."""
-        jobs = []
+        jobs: List[JobRecord] = []
         for key in self.client.scan_iter(self._key("job:*")):
-            job = self._decode_job(self.client.hgetall(key))
+            data = cast(Dict[bytes, bytes], self.client.hgetall(key))
+            job = self._decode_job(data)
             if job.status in (
                 JobStatus.QUEUED,
                 JobStatus.WAITING_FOR_RESOURCES,
@@ -448,7 +460,7 @@ class RedisBackend:
 
     def flush_namespace(self) -> None:
         """Delete all keys in this backend namespace."""
-        keys = list(self.client.scan_iter(self._key("*")))
+        keys = list(cast(List[bytes], self.client.scan_iter(self._key("*"))))
         if keys:
             self.client.delete(*keys)
 
@@ -461,7 +473,10 @@ class RedisBackend:
     def _hgetall_float(self, key: str) -> Dict[str, float]:
         return {
             self._decode(name): float(value)
-            for name, value in self.client.hgetall(key).items()
+            for name, value in cast(
+                Dict[bytes, bytes],
+                self.client.hgetall(key),
+            ).items()
         }
 
     def _decode_lease(self, data: Dict[bytes, bytes]) -> LeaseRecord:
@@ -471,9 +486,7 @@ class RedisBackend:
             job_id=self._decode(decoded["job_id"]),
             owner_id=self._decode(decoded["owner_id"]),
             resources=json.loads(self._decode(decoded["resources_json"])),
-            concurrency=json.loads(
-                self._decode(decoded["concurrency_json"])
-            ),
+            concurrency=json.loads(self._decode(decoded["concurrency_json"])),
             created_at=self._datetime_from_timestamp(decoded["created_at"]),
             renewed_at=self._datetime_from_timestamp(decoded["renewed_at"]),
             expires_at=self._datetime_from_timestamp(decoded["expires_at"]),

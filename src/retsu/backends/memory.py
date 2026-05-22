@@ -143,9 +143,7 @@ class MemoryBackend:
                 return
             self._subtract_lease(lease)
 
-    def renew(
-        self, lease_id: str, owner_id: str, ttl_seconds: int
-    ) -> None:
+    def renew(self, lease_id: str, owner_id: str, ttl_seconds: int) -> None:
         """Renew an active lease."""
         with self._lock:
             lease = self._leases.get(lease_id)

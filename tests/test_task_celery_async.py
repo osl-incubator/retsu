@@ -68,9 +68,9 @@ class TestMultiCeleryAsyncProcess:
 
             for task_id, expected in results.items():
                 result = await process.result.get(task_id, timeout=10)
-                assert (
-                    result[0] == expected
-                ), f"Expected Result: {expected}, Actual Result: {result}"
+                assert result[0] == expected, (
+                    f"Expected Result: {expected}, Actual Result: {result}"
+                )
 
     async def test_multi_async_timestamp(
         self, task_timestamp: AsyncProcess

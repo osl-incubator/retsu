@@ -53,4 +53,3 @@ def ray_task(
         return ray.remote(guarded)
 
     return decorator
-

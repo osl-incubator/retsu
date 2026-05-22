@@ -51,4 +51,3 @@ class Lease:
         finally:
             stop.set()
             thread.join(timeout=max(interval_seconds, 0.1))
-

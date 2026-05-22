@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 
 from retsu.config import configure
+from retsu.resources import UsageItem
 from retsu.task import (
     cleanup_expired_leases,
     define_concurrency,
@@ -68,15 +69,12 @@ def main(argv: list[str] | None = None) -> int:
     return 1
 
 
-def _print_usage(title: str, items) -> None:
+def _print_usage(title: str, items: dict[str, UsageItem]) -> None:
     print(title)
     print("name\tused\tcapacity\tavailable")
     for name, item in items.items():
-        print(
-            f"{name}\t{item.used:g}\t{item.capacity:g}\t{item.available:g}"
-        )
+        print(f"{name}\t{item.used:g}\t{item.capacity:g}\t{item.available:g}")
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

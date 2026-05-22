@@ -6,7 +6,7 @@ import pickle
 import threading
 
 from importlib import import_module
-from typing import Any
+from typing import Any, cast
 
 from retsu.backends.base import Backend
 from retsu.state import JobRecord, JobStatus
@@ -23,16 +23,15 @@ class RayExecutor:
         self.backend = backend
         self.ray = ray_module or import_module("ray")
 
-    def dispatch(
-        self, job: JobRecord, lease_id: str, owner_id: str
-    ) -> None:
+    def dispatch(self, job: JobRecord, lease_id: str, owner_id: str) -> None:
         """Dispatch a job to Ray and track completion in a local thread."""
         self.backend.update_job_status(job.id, JobStatus.RUNNING)
         func = _LOCAL_FUNCTIONS[job.id]
-        remote_target = (
+        remote_target = cast(
+            Any,
             func
             if callable(getattr(func, "remote", None))
-            else self.ray.remote(func)
+            else self.ray.remote(func),
         )
         object_ref = remote_target.remote(*job.args, **job.kwargs)
         thread = threading.Thread(
@@ -65,4 +64,3 @@ class RayExecutor:
             )
         finally:
             self.backend.release(lease_id, owner_id)
-

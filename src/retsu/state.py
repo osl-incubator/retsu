@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, cast
 
 
 class JobStatus(str, Enum):
@@ -72,7 +72,7 @@ class JobRecord:
 
         if self.args_blob is None:
             return ()
-        return pickle.loads(self.args_blob)
+        return cast(tuple[Any, ...], pickle.loads(self.args_blob))
 
     @property
     def kwargs(self) -> Dict[str, Any]:
@@ -81,5 +81,4 @@ class JobRecord:
 
         if self.kwargs_blob is None:
             return {}
-        return pickle.loads(self.kwargs_blob)
-
+        return cast(Dict[str, Any], pickle.loads(self.kwargs_blob))
