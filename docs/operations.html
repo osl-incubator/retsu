@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>index – Retsu</title>
+<title>operations – Retsu</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -68,7 +68,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../docs/quickstart.html" rel="next">
+<link href="../docs/api/references.html" rel="next">
+<link href="../docs/integrations.html" rel="prev">
 <link href="../docs/images/favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -345,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../docs/index.html">Home</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../docs/operations.html">Operations</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -359,7 +360,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../docs/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../docs/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Home</span></a>
   </div>
 </li>
@@ -401,7 +402,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../docs/operations.html" class="sidebar-item-text sidebar-link">
+  <a href="../docs/operations.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Operations</span></a>
   </div>
 </li>
@@ -450,14 +451,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#retsu" id="toc-retsu" class="nav-link active" data-scroll-target="#retsu">Retsu</a>
+  <li><a href="#operations" id="toc-operations" class="nav-link active" data-scroll-target="#operations">Operations</a>
   <ul class="collapse">
-  <li><a href="#why-use-it" id="toc-why-use-it" class="nav-link" data-scroll-target="#why-use-it">Why use it?</a></li>
-  <li><a href="#what-retsu-provides" id="toc-what-retsu-provides" class="nav-link" data-scroll-target="#what-retsu-provides">What Retsu provides</a></li>
-  <li><a href="#the-mental-model" id="toc-the-mental-model" class="nav-link" data-scroll-target="#the-mental-model">The mental model</a></li>
-  <li><a href="#choose-a-workflow" id="toc-choose-a-workflow" class="nav-link" data-scroll-target="#choose-a-workflow">Choose a workflow</a></li>
-  <li><a href="#when-retsu-is-a-good-fit" id="toc-when-retsu-is-a-good-fit" class="nav-link" data-scroll-target="#when-retsu-is-a-good-fit">When Retsu is a good fit</a></li>
-  <li><a href="#start-here" id="toc-start-here" class="nav-link" data-scroll-target="#start-here">Start here</a></li>
+  <li><a href="#backend-selection" id="toc-backend-selection" class="nav-link" data-scroll-target="#backend-selection">Backend selection</a></li>
+  <li><a href="#redisvalkey-configuration" id="toc-redisvalkey-configuration" class="nav-link" data-scroll-target="#redisvalkey-configuration">Redis/Valkey configuration</a></li>
+  <li><a href="#capacity-bootstrap" id="toc-capacity-bootstrap" class="nav-link" data-scroll-target="#capacity-bootstrap">Capacity bootstrap</a></li>
+  <li><a href="#cli-operations" id="toc-cli-operations" class="nav-link" data-scroll-target="#cli-operations">CLI operations</a></li>
+  <li><a href="#observability" id="toc-observability" class="nav-link" data-scroll-target="#observability">Observability</a></li>
+  <li><a href="#lease-ttl-sizing" id="toc-lease-ttl-sizing" class="nav-link" data-scroll-target="#lease-ttl-sizing">Lease TTL sizing</a></li>
+  <li><a href="#redis-keys" id="toc-redis-keys" class="nav-link" data-scroll-target="#redis-keys">Redis keys</a></li>
+  <li><a href="#security-and-serialization" id="toc-security-and-serialization" class="nav-link" data-scroll-target="#security-and-serialization">Security and serialization</a></li>
+  <li><a href="#troubleshooting" id="toc-troubleshooting" class="nav-link" data-scroll-target="#troubleshooting">Troubleshooting</a>
+  <ul class="collapse">
+  <li><a href="#resourcedefinitionmissing" id="toc-resourcedefinitionmissing" class="nav-link" data-scroll-target="#resourcedefinitionmissing"><code>ResourceDefinitionMissing</code></a></li>
+  <li><a href="#capacity-never-becomes-available" id="toc-capacity-never-becomes-available" class="nav-link" data-scroll-target="#capacity-never-becomes-available">Capacity never becomes available</a></li>
+  <li><a href="#blocking-calls-time-out" id="toc-blocking-calls-time-out" class="nav-link" data-scroll-target="#blocking-calls-time-out">Blocking calls time out</a></li>
+  <li><a href="#memory-backend-behaves-differently-in-production" id="toc-memory-backend-behaves-differently-in-production" class="nav-link" data-scroll-target="#memory-backend-behaves-differently-in-production">Memory backend behaves differently in production</a></li>
+  </ul></li>
+  <li><a href="#production-checklist" id="toc-production-checklist" class="nav-link" data-scroll-target="#production-checklist">Production checklist</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -469,121 +480,168 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/logo.png" class="img-fluid figure-img"></p>
-<figcaption>Retsu logo</figcaption>
-</figure>
-</div>
-<section id="retsu" class="level1">
-<h1>Retsu</h1>
-<p>Retsu is a resource and concurrency control layer for Python background jobs. It sits beside Celery, Ray, local worker threads, or your own scheduler and answers one operational question before work starts:</p>
-<blockquote class="blockquote">
-<p>Is there enough configured capacity available to run this job safely right now?</p>
-</blockquote>
-<p>If the answer is yes, Retsu creates a lease and accounts for the capacity. If not, it can block, fail fast, or let an integration retry later. Leases are released explicitly when work exits and are also protected by time-to-live based cleanup if a worker disappears.</p>
-<section id="why-use-it" class="level2">
-<h2 class="anchored" data-anchor-id="why-use-it">Why use it?</h2>
-<p>Queues and executors decide <em>where</em> work runs. They usually do not understand all of the external limits your application depends on:</p>
-<ul>
-<li>one SaaS API allows only five concurrent exports;</li>
-<li>a tenant should never run more than one expensive rebuild at a time;</li>
-<li>a worker host has enough CPU threads but not enough GPU memory;</li>
-<li>a licensed solver has a fixed number of seats;</li>
-<li>a batch job needs to reserve memory before it starts, not after it crashes.</li>
-</ul>
-<p>Retsu turns those limits into named capacities and applies them consistently across guarded functions and admission-mode scheduling.</p>
+<section id="operations" class="level1">
+<h1>Operations</h1>
+<p>This guide covers the practical details of running Retsu with Redis/Valkey, observing capacity, sizing leases, and troubleshooting common failures.</p>
+<section id="backend-selection" class="level2">
+<h2 class="anchored" data-anchor-id="backend-selection">Backend selection</h2>
+<p>Retsu defaults to the Redis backend:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>retsu.configure(backend<span class="op">=</span><span class="st">"redis"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Use memory only when process-local state is correct:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>retsu.configure(backend<span class="op">=</span><span class="st">"memory"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The memory backend is useful for tests and notebooks, but it does not coordinate between processes.</p>
 </section>
-<section id="what-retsu-provides" class="level2">
-<h2 class="anchored" data-anchor-id="what-retsu-provides">What Retsu provides</h2>
+<section id="redisvalkey-configuration" class="level2">
+<h2 class="anchored" data-anchor-id="redisvalkey-configuration">Redis/Valkey configuration</h2>
+<p>The most explicit configuration is:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>retsu.configure(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    backend<span class="op">=</span><span class="st">"redis"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    redis_url<span class="op">=</span><span class="st">"redis://localhost:6379/0"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    namespace<span class="op">=</span><span class="st">"production"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If you rely on environment variables and do not call <code>configure()</code> yourself, Retsu reads these values during import:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_REDIS_URL</span><span class="op">=</span>redis://localhost:6379/0</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_NAMESPACE</span><span class="op">=</span>production</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If <code>RETSU_REDIS_URL</code> is absent, the Redis backend uses the queue helper variables:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_REDIS_HOST</span><span class="op">=</span>localhost</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_REDIS_PORT</span><span class="op">=</span>6379</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_REDIS_DB</span><span class="op">=</span>0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Use a distinct <code>RETSU_NAMESPACE</code> per environment, test run, or tenant boundary that needs isolated accounting.</p>
+</section>
+<section id="capacity-bootstrap" class="level2">
+<h2 class="anchored" data-anchor-id="capacity-bootstrap">Capacity bootstrap</h2>
+<p>Define capacities before workers start executing guarded code:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> configure_retsu() <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    retsu.configure(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        backend<span class="op">=</span><span class="st">"redis"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        redis_url<span class="op">=</span>os.environ[<span class="st">"RETSU_REDIS_URL"</span>],</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        namespace<span class="op">=</span>os.getenv(<span class="st">"RETSU_NAMESPACE"</span>, <span class="st">"production"</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    retsu.define_resource(<span class="st">"memory_mb"</span>, <span class="dv">64_000</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    retsu.define_resource(<span class="st">"gpu"</span>, <span class="dv">4</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    retsu.define_concurrency(<span class="st">"billing-api"</span>, <span class="dv">5</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    retsu.define_concurrency(<span class="st">"tenant:acme"</span>, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Capacity definitions are idempotent in normal startup flows. Redefining a capacity changes the stored capacity without resetting current usage.</p>
+</section>
+<section id="cli-operations" class="level2">
+<h2 class="anchored" data-anchor-id="cli-operations">CLI operations</h2>
+<p>The <code>retsu</code> command uses the same backend configuration flags as the Python API:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> <span class="at">--redis-url</span> redis://localhost:6379/0 <span class="at">--namespace</span> production usage</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Available commands:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> resource memory_mb 64000</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> concurrency billing-api 5</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> usage</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> leases</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> cleanup</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Examples with explicit Redis flags:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> <span class="at">--redis-url</span> redis://localhost:6379/0 resource gpu 4</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> <span class="at">--redis-url</span> redis://localhost:6379/0 concurrency billing-api 5</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> <span class="at">--redis-url</span> redis://localhost:6379/0 usage</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="observability" class="level2">
+<h2 class="anchored" data-anchor-id="observability">Observability</h2>
+<p>Use <code>get_usage()</code> for metrics and dashboards:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>usage <span class="op">=</span> retsu.get_usage()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, item <span class="kw">in</span> usage.resources.items():</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    emit_metric(<span class="ss">f"retsu.resource.</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">.used"</span>, item.used)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    emit_metric(<span class="ss">f"retsu.resource.</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">.available"</span>, item.available)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Use <code>list_leases()</code> for debugging active reservations:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> lease <span class="kw">in</span> retsu.list_leases():</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(lease.<span class="bu">id</span>, lease.job_id, lease.owner_id, lease.expires_at)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>get_usage()</code> and <code>list_leases()</code> clean expired leases before returning data, so snapshots should not include expired reservations.</p>
+</section>
+<section id="lease-ttl-sizing" class="level2">
+<h2 class="anchored" data-anchor-id="lease-ttl-sizing">Lease TTL sizing</h2>
+<p>Defaults:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Area</th>
-<th>What you get</th>
+<th>Setting</th>
+<th>Default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Resource definitions</td>
-<td>Named quantitative capacity such as <code>memory_mb</code>, <code>gpu</code>, or <code>license_seats</code>.</td>
+<td><code>default_ttl_seconds</code></td>
+<td><code>300</code></td>
 </tr>
 <tr class="even">
-<td>Concurrency definitions</td>
-<td>Named slot limits such as <code>billing-api</code>, <code>tenant:42</code>, or <code>reports</code>.</td>
+<td><code>default_acquire_timeout_seconds</code></td>
+<td><code>60</code></td>
 </tr>
 <tr class="odd">
-<td>Guard mode</td>
-<td>Decorators and context managers that acquire a lease before entering user code.</td>
+<td><code>default_heartbeat_interval_seconds</code></td>
+<td><code>30</code></td>
 </tr>
 <tr class="even">
-<td>Admission mode</td>
-<td><code>submit()</code>, <code>Scheduler</code>, executors, and <code>JobHandle</code> for resource-aware dispatch.</td>
-</tr>
-<tr class="odd">
-<td>Backends</td>
-<td>Redis/Valkey for shared atomic accounting; memory for tests and local tools.</td>
-</tr>
-<tr class="even">
-<td>Integrations</td>
-<td>Celery retry-friendly guards and Ray guard/task helpers.</td>
-</tr>
-<tr class="odd">
-<td>Operations</td>
-<td>Usage snapshots, active lease listing, cleanup of expired leases, and a small CLI.</td>
+<td><code>default_wait_strategy</code></td>
+<td><code>block</code></td>
 </tr>
 </tbody>
 </table>
+<p>Guidance:</p>
+<ul>
+<li>Make the heartbeat interval comfortably smaller than the TTL.</li>
+<li>Make the TTL long enough to tolerate short pauses, GC, or temporary Redis latency.</li>
+<li>Make the acquire timeout match caller expectations. A web request may need a short timeout; a batch worker may tolerate a long one.</li>
+<li>Use <code>cleanup_expired_leases()</code> or <code>retsu cleanup</code> as a safe maintenance action if you suspect a worker died while holding leases.</li>
+</ul>
 </section>
-<section id="the-mental-model" class="level2">
-<h2 class="anchored" data-anchor-id="the-mental-model">The mental model</h2>
-<pre class="text"><code>Define capacity  -&gt;  Evaluate request  -&gt;  Acquire lease  -&gt;  Run work
-       ^                    |                    |               |
-       |                    |                    v               v
-   resources and       static values or      usage increments  release in
-   concurrency         callables from        atomically        finally path
-                       function args</code></pre>
-<p>A successful acquire creates exactly one lease. Usage is incremented once for that lease and decremented once when the lease is released or expires. Redis and Valkey accounting is implemented with Lua scripts so capacity checks and usage updates happen atomically.</p>
+<section id="redis-keys" class="level2">
+<h2 class="anchored" data-anchor-id="redis-keys">Redis keys</h2>
+<p>Redis keys are scoped by namespace:</p>
+<pre class="text"><code>retsu:{namespace}:capacity:resources
+retsu:{namespace}:capacity:concurrency
+retsu:{namespace}:usage:resources
+retsu:{namespace}:usage:concurrency
+retsu:{namespace}:leases
+retsu:{namespace}:lease:{lease_id}
+retsu:{namespace}:job:{job_id}</code></pre>
+<p>Avoid deleting broad Redis patterns manually. For tests and controlled tools, use backend namespace cleanup helpers rather than deleting unrelated keys.</p>
 </section>
-<section id="choose-a-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="choose-a-workflow">Choose a workflow</h2>
-<div class="grid">
-<section id="guard-mode" class="level3 g-col-12 g-col-md-6">
-<h3 class="anchored" data-anchor-id="guard-mode">Guard mode</h3>
-<p>Use when you already have an execution system and only need to protect a function or critical section.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(concurrency<span class="op">=</span>{<span class="st">"vendor-api"</span>: <span class="dv">1</span>})</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_customer(customer_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    push_to_vendor(customer_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><a href="../docs/guard-mode.html">Learn guard mode</a></p>
+<section id="security-and-serialization" class="level2">
+<h2 class="anchored" data-anchor-id="security-and-serialization">Security and serialization</h2>
+<p>Admission-mode args, kwargs, and results are serialized with <code>pickle</code>. Treat those blobs as trusted-process data. Do not expose admission job storage as a way for untrusted users to submit arbitrary payloads.</p>
+<p>Redis should be protected like other application infrastructure: enable network controls, authentication where appropriate, and environment-specific namespaces.</p>
 </section>
-<section id="admission-mode" class="level3 g-col-12 g-col-md-6">
-<h3 class="anchored" data-anchor-id="admission-mode">Admission mode</h3>
-<p>Use when jobs should be stored first, admitted only after capacity is acquired, and then dispatched by a scheduler.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>handle <span class="op">=</span> retsu.submit(render, args<span class="op">=</span>(<span class="st">"scene-42"</span>,), resources<span class="op">=</span>{<span class="st">"gpu"</span>: <span class="dv">1</span>})</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>retsu.Scheduler().run_once()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> handle.result(timeout<span class="op">=</span><span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><a href="../docs/admission-mode.html">Learn admission mode</a></p>
+<section id="troubleshooting" class="level2">
+<h2 class="anchored" data-anchor-id="troubleshooting">Troubleshooting</h2>
+<section id="resourcedefinitionmissing" class="level3">
+<h3 class="anchored" data-anchor-id="resourcedefinitionmissing"><code>ResourceDefinitionMissing</code></h3>
+<p>The job requested a resource or concurrency name that was not defined in the current backend namespace.</p>
+<p>Check:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> usage</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then define the missing capacity during startup or with the CLI.</p>
 </section>
-</div>
+<section id="capacity-never-becomes-available" class="level3">
+<h3 class="anchored" data-anchor-id="capacity-never-becomes-available">Capacity never becomes available</h3>
+<p>Check active leases:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> leases</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> cleanup</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">retsu</span> usage</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If usage drops after cleanup, a worker likely disappeared and the lease expired. Consider whether the TTL is too long for your failure-recovery expectations.</p>
 </section>
-<section id="when-retsu-is-a-good-fit" class="level2">
-<h2 class="anchored" data-anchor-id="when-retsu-is-a-good-fit">When Retsu is a good fit</h2>
-<p>Retsu is a good fit when capacity is an application-level concern and the resource cannot be expressed cleanly as a worker-pool size. Examples include external API quotas, tenant locks, GPU fractions, memory reservations, and licensed software seats.</p>
-<p>Retsu is not a replacement for a durable task queue, a general distributed lock service, or a full autoscaler. It complements those tools by making admission resource-aware.</p>
+<section id="blocking-calls-time-out" class="level3">
+<h3 class="anchored" data-anchor-id="blocking-calls-time-out">Blocking calls time out</h3>
+<p>A <code>ResourceAcquireTimeout</code> means the <code>block</code> strategy waited longer than <code>acquire_timeout_seconds</code>. Either increase capacity, reduce request size, increase timeout, or switch to <code>fail</code>/<code>retry</code> and handle backpressure at the caller.</p>
 </section>
-<section id="start-here" class="level2">
-<h2 class="anchored" data-anchor-id="start-here">Start here</h2>
-<ol type="1">
-<li>Follow the <a href="../docs/quickstart.html">quickstart</a> for a copy-paste local example.</li>
-<li>Read <a href="../docs/concepts.html">concepts</a> to understand resources, leases, and wait policies.</li>
-<li>Use <a href="../docs/guard-mode.html">guard mode</a> for protected functions and critical sections.</li>
-<li>Use <a href="../docs/admission-mode.html">admission mode</a> when work should be scheduled after capacity is acquired.</li>
-<li>Review <a href="../docs/operations.html">operations</a> before using Redis/Valkey in production.</li>
-</ol>
+<section id="memory-backend-behaves-differently-in-production" class="level3">
+<h3 class="anchored" data-anchor-id="memory-backend-behaves-differently-in-production">Memory backend behaves differently in production</h3>
+<p>The memory backend coordinates only inside one process. Use Redis/Valkey for multi-process workers, web applications with multiple processes, Celery, Ray, or multiple hosts.</p>
+</section>
+</section>
+<section id="production-checklist" class="level2">
+<h2 class="anchored" data-anchor-id="production-checklist">Production checklist</h2>
+<ul class="task-list">
+<li><label><input type="checkbox">Set a deliberate Redis/Valkey namespace.</label></li>
+<li><label><input type="checkbox">Define every resource and concurrency capacity during startup.</label></li>
+<li><label><input type="checkbox">Use Redis/Valkey, not memory, for multi-process coordination.</label></li>
+<li><label><input type="checkbox">Size TTL and heartbeat values for your workload.</label></li>
+<li><label><input type="checkbox">Export usage metrics for important capacities.</label></li>
+<li><label><input type="checkbox">Alert on unexpected long-lived leases or sustained zero availability.</label></li>
+<li><label><input type="checkbox">Keep admission-mode payloads restricted to trusted producers.</label></li>
+<li><label><input type="checkbox">Test failure paths that raise inside guarded code and executor code.</label></li>
+</ul>
 
 
 </section>
@@ -1010,10 +1068,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../docs/integrations.html" class="pagination-link" aria-label="Integrations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Integrations</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../docs/quickstart.html" class="pagination-link" aria-label="Quickstart">
-        <span class="nav-page-text">Quickstart</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../docs/api/references.html" class="pagination-link" aria-label="Reference">
+        <span class="nav-page-text">Reference</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

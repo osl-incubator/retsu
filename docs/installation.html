@@ -68,8 +68,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../docs/api/references.html" rel="next">
-<link href="../docs/index.html" rel="prev">
+<link href="../docs/concepts.html" rel="next">
+<link href="../docs/quickstart.html" rel="prev">
 <link href="../docs/images/favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -304,24 +304,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../docs/installation.html"> 
-<span class="menu-text">Installation</span></a>
+    <a class="nav-link" href="../docs/quickstart.html"> 
+<span class="menu-text">Quickstart</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../docs/concepts.html"> 
+<span class="menu-text">Concepts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../docs/guard-mode.html"> 
+<span class="menu-text">Guard Mode</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../docs/admission-mode.html"> 
+<span class="menu-text">Admission Mode</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../docs/integrations.html"> 
+<span class="menu-text">Integrations</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../docs/api/references.html"> 
 <span class="menu-text">API</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../docs/example.html"> 
-<span class="menu-text">Example</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../docs/changelog.html"> 
-<span class="menu-text">Changelog</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../docs/contributing.html"> 
-<span class="menu-text">Contributing</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -362,8 +366,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../docs/quickstart.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quickstart</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../docs/installation.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Installation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../docs/concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Concepts</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../docs/guard-mode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Guard Mode</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../docs/admission-mode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Admission Mode</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../docs/integrations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Integrations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../docs/operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Operations</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -386,7 +426,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../docs/example.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Example</span></a>
+ <span class="menu-text">Notebook Tour</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -413,8 +453,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a>
   <ul class="collapse">
-  <li><a href="#stable-release" id="toc-stable-release" class="nav-link" data-scroll-target="#stable-release">Stable release</a></li>
-  <li><a href="#from-sources" id="toc-from-sources" class="nav-link" data-scroll-target="#from-sources">From sources</a></li>
+  <li><a href="#package-install" id="toc-package-install" class="nav-link" data-scroll-target="#package-install">Package install</a></li>
+  <li><a href="#optional-integrations" id="toc-optional-integrations" class="nav-link" data-scroll-target="#optional-integrations">Optional integrations</a></li>
+  <li><a href="#redis-or-valkey" id="toc-redis-or-valkey" class="nav-link" data-scroll-target="#redis-or-valkey">Redis or Valkey</a></li>
+  <li><a href="#local-only-install-without-redis-service" id="toc-local-only-install-without-redis-service" class="nav-link" data-scroll-target="#local-only-install-without-redis-service">Local-only install without Redis service</a></li>
+  <li><a href="#install-from-source" id="toc-install-from-source" class="nav-link" data-scroll-target="#install-from-source">Install from source</a></li>
+  <li><a href="#run-checks-from-a-checkout" id="toc-run-checks-from-a-checkout" class="nav-link" data-scroll-target="#run-checks-from-a-checkout">Run checks from a checkout</a></li>
+  <li><a href="#common-installation-issues" id="toc-common-installation-issues" class="nav-link" data-scroll-target="#common-installation-issues">Common installation issues</a>
+  <ul class="collapse">
+  <li><a href="#redis-connection-refused" id="toc-redis-connection-refused" class="nav-link" data-scroll-target="#redis-connection-refused">Redis connection refused</a></li>
+  <li><a href="#optional-integration-import-errors" id="toc-optional-integration-import-errors" class="nav-link" data-scroll-target="#optional-integration-import-errors">Optional integration import errors</a></li>
+  <li><a href="#different-environments-share-usage-unexpectedly" id="toc-different-environments-share-usage-unexpectedly" class="nav-link" data-scroll-target="#different-environments-share-usage-unexpectedly">Different environments share usage unexpectedly</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -428,24 +478,94 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="installation" class="level1">
 <h1>Installation</h1>
-<section id="stable-release" class="level2">
-<h2 class="anchored" data-anchor-id="stable-release">Stable release</h2>
-<p>To install Retsu, run this command in your terminal:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> pip install retsu</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This is the preferred method to install Retsu, as it will always install the most recent stable release.</p>
-<p>If you don’t have <a href="https://pip.pypa.io">pip</a> installed, this <a href="http://docs.python-guide.org/en/latest/starting/installation/">Python installation guide</a> can guide you through the process.</p>
+<p>Retsu supports Python <code>&gt;=3.10,&lt;4</code> and uses Redis/Valkey as its default shared backend. The memory backend is included for local development, notebooks, and service-free tests.</p>
+<section id="package-install" class="level2">
+<h2 class="anchored" data-anchor-id="package-install">Package install</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install retsu</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Verify the package imports:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-c</span> <span class="st">"import retsu; print(retsu.__version__)"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="from-sources" class="level2">
-<h2 class="anchored" data-anchor-id="from-sources">From sources</h2>
-<p>The sources for Retsu can be downloaded from the <a href="https://github.com/xmnlab/retsu.git">Github repo</a>.</p>
-<p>You can either clone the public repository:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git clone https://github.com/xmnlab/retsu.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Or download the <a href="https://github.com/xmnlab/retsu.git/tarball/main">tarball</a>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> curl <span class="at">-OJL</span> https://github.com/xmnlab/retsu.git/tarball/main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Once you have a copy of the source, you can install it with:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> poetry install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="optional-integrations" class="level2">
+<h2 class="anchored" data-anchor-id="optional-integrations">Optional integrations</h2>
+<p>Install only the framework integrations you use:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="st">"retsu[celery]"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="st">"retsu[ray]"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="st">"retsu[django]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can combine extras:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="st">"retsu[celery,ray]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="redis-or-valkey" class="level2">
+<h2 class="anchored" data-anchor-id="redis-or-valkey">Redis or Valkey</h2>
+<p>For production-style multi-process coordination, run Redis or Valkey and point Retsu at it:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> retsu</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>retsu.configure(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    backend<span class="op">=</span><span class="st">"redis"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    redis_url<span class="op">=</span><span class="st">"redis://localhost:6379/0"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    namespace<span class="op">=</span><span class="st">"my-app"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can also configure the default Redis backend with environment variables before your application imports Retsu:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_REDIS_URL</span><span class="op">=</span>redis://localhost:6379/0</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_NAMESPACE</span><span class="op">=</span>my-app</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If <code>RETSU_REDIS_URL</code> is not set, Retsu falls back to host/port/db variables:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_REDIS_HOST</span><span class="op">=</span>localhost</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_REDIS_PORT</span><span class="op">=</span>6379</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_REDIS_DB</span><span class="op">=</span>0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="local-only-install-without-redis-service" class="level2">
+<h2 class="anchored" data-anchor-id="local-only-install-without-redis-service">Local-only install without Redis service</h2>
+<p>No Redis service is required for the memory backend:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> retsu</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>retsu.configure(backend<span class="op">=</span><span class="st">"memory"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>retsu.define_concurrency(<span class="st">"local-demo"</span>, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Use this backend for unit tests and examples that do not need cross-process coordination.</p>
+</section>
+<section id="install-from-source" class="level2">
+<h2 class="anchored" data-anchor-id="install-from-source">Install from source</h2>
+<p>Clone the repository and install development dependencies:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/osl-incubator/retsu.git</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> retsu</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> env create <span class="at">--file</span> conda/dev.yaml</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate retsu</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If you use Conda instead of Mamba:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">--file</span> conda/dev.yaml</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate retsu</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> install</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="run-checks-from-a-checkout" class="level2">
+<h2 class="anchored" data-anchor-id="run-checks-from-a-checkout">Run checks from a checkout</h2>
+<p>Fast tests that do not require services:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> <span class="at">-q</span> <span class="at">-m</span> no_services</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Full unit suite with Redis/Valkey managed by the project automation:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">makim</span> tests.unit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Linting, typing, and pre-commit checks:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ruff</span> format src tests</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ruff</span> check src tests</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ex">mypy</span> .</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pre-commit</span> run <span class="at">--all-files</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Documentation build:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">makim</span> docs.build</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="common-installation-issues" class="level2">
+<h2 class="anchored" data-anchor-id="common-installation-issues">Common installation issues</h2>
+<section id="redis-connection-refused" class="level3">
+<h3 class="anchored" data-anchor-id="redis-connection-refused">Redis connection refused</h3>
+<p>Either start Redis/Valkey, set the correct <code>RETSU_REDIS_URL</code>, or use <code>retsu.configure(backend="memory")</code> for local examples.</p>
+</section>
+<section id="optional-integration-import-errors" class="level3">
+<h3 class="anchored" data-anchor-id="optional-integration-import-errors">Optional integration import errors</h3>
+<p>Install the matching extra. For example, <code>retsu.ray_task()</code> requires Ray:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="st">"retsu[ray]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="different-environments-share-usage-unexpectedly" class="level3">
+<h3 class="anchored" data-anchor-id="different-environments-share-usage-unexpectedly">Different environments share usage unexpectedly</h3>
+<p>Set a unique <code>RETSU_NAMESPACE</code> per environment:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">RETSU_NAMESPACE</span><span class="op">=</span>staging</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
+</section>
 </section>
 </section>
 
@@ -870,13 +990,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../docs/index.html" class="pagination-link" aria-label="Home">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Home</span>
+      <a href="../docs/quickstart.html" class="pagination-link" aria-label="Quickstart">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Quickstart</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../docs/api/references.html" class="pagination-link" aria-label="Reference">
-        <span class="nav-page-text">Reference</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../docs/concepts.html" class="pagination-link" aria-label="Concepts">
+        <span class="nav-page-text">Concepts</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

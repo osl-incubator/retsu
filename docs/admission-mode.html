@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>index – Retsu</title>
+<title>admission-mode – Retsu</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -68,7 +68,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../docs/quickstart.html" rel="next">
+<link href="../docs/integrations.html" rel="next">
+<link href="../docs/guard-mode.html" rel="prev">
 <link href="../docs/images/favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -345,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../docs/index.html">Home</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../docs/admission-mode.html">Admission Mode</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -359,7 +360,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../docs/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../docs/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Home</span></a>
   </div>
 </li>
@@ -389,7 +390,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../docs/admission-mode.html" class="sidebar-item-text sidebar-link">
+  <a href="../docs/admission-mode.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Admission Mode</span></a>
   </div>
 </li>
@@ -450,14 +451,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#retsu" id="toc-retsu" class="nav-link active" data-scroll-target="#retsu">Retsu</a>
+  <li><a href="#admission-mode" id="toc-admission-mode" class="nav-link active" data-scroll-target="#admission-mode">Admission mode</a>
   <ul class="collapse">
-  <li><a href="#why-use-it" id="toc-why-use-it" class="nav-link" data-scroll-target="#why-use-it">Why use it?</a></li>
-  <li><a href="#what-retsu-provides" id="toc-what-retsu-provides" class="nav-link" data-scroll-target="#what-retsu-provides">What Retsu provides</a></li>
-  <li><a href="#the-mental-model" id="toc-the-mental-model" class="nav-link" data-scroll-target="#the-mental-model">The mental model</a></li>
-  <li><a href="#choose-a-workflow" id="toc-choose-a-workflow" class="nav-link" data-scroll-target="#choose-a-workflow">Choose a workflow</a></li>
-  <li><a href="#when-retsu-is-a-good-fit" id="toc-when-retsu-is-a-good-fit" class="nav-link" data-scroll-target="#when-retsu-is-a-good-fit">When Retsu is a good fit</a></li>
-  <li><a href="#start-here" id="toc-start-here" class="nav-link" data-scroll-target="#start-here">Start here</a></li>
+  <li><a href="#minimal-local-example" id="toc-minimal-local-example" class="nav-link" data-scroll-target="#minimal-local-example">Minimal local example</a></li>
+  <li><a href="#components" id="toc-components" class="nav-link" data-scroll-target="#components">Components</a>
+  <ul class="collapse">
+  <li><a href="#submit" id="toc-submit" class="nav-link" data-scroll-target="#submit"><code>submit()</code></a></li>
+  <li><a href="#scheduler" id="toc-scheduler" class="nav-link" data-scroll-target="#scheduler"><code>Scheduler</code></a></li>
+  <li><a href="#executors" id="toc-executors" class="nav-link" data-scroll-target="#executors">Executors</a></li>
+  <li><a href="#jobhandle" id="toc-jobhandle" class="nav-link" data-scroll-target="#jobhandle"><code>JobHandle</code></a></li>
+  </ul></li>
+  <li><a href="#job-statuses" id="toc-job-statuses" class="nav-link" data-scroll-target="#job-statuses">Job statuses</a></li>
+  <li><a href="#priorities-and-fairness" id="toc-priorities-and-fairness" class="nav-link" data-scroll-target="#priorities-and-fairness">Priorities and fairness</a></li>
+  <li><a href="#ray-dispatch" id="toc-ray-dispatch" class="nav-link" data-scroll-target="#ray-dispatch">Ray dispatch</a></li>
+  <li><a href="#reliability-notes" id="toc-reliability-notes" class="nav-link" data-scroll-target="#reliability-notes">Reliability notes</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -469,33 +476,134 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/logo.png" class="img-fluid figure-img"></p>
-<figcaption>Retsu logo</figcaption>
-</figure>
-</div>
-<section id="retsu" class="level1">
-<h1>Retsu</h1>
-<p>Retsu is a resource and concurrency control layer for Python background jobs. It sits beside Celery, Ray, local worker threads, or your own scheduler and answers one operational question before work starts:</p>
-<blockquote class="blockquote">
-<p>Is there enough configured capacity available to run this job safely right now?</p>
-</blockquote>
-<p>If the answer is yes, Retsu creates a lease and accounts for the capacity. If not, it can block, fail fast, or let an integration retry later. Leases are released explicitly when work exits and are also protected by time-to-live based cleanup if a worker disappears.</p>
-<section id="why-use-it" class="level2">
-<h2 class="anchored" data-anchor-id="why-use-it">Why use it?</h2>
-<p>Queues and executors decide <em>where</em> work runs. They usually do not understand all of the external limits your application depends on:</p>
+<section id="admission-mode" class="level1">
+<h1>Admission mode</h1>
+<p>Admission mode is Retsu’s resource-aware dispatch path. Instead of immediately running a guarded function, you submit a job, let a scheduler acquire capacity, and dispatch the job only after the lease exists.</p>
+<p>Use admission mode when:</p>
 <ul>
-<li>one SaaS API allows only five concurrent exports;</li>
-<li>a tenant should never run more than one expensive rebuild at a time;</li>
-<li>a worker host has enough CPU threads but not enough GPU memory;</li>
-<li>a licensed solver has a fixed number of seats;</li>
-<li>a batch job needs to reserve memory before it starts, not after it crashes.</li>
+<li>jobs should wait in Retsu state until capacity is available;</li>
+<li>a scheduler should decide when to dispatch queued work;</li>
+<li>callers need a <code>JobHandle</code> for status, metadata, cancellation, and result access;</li>
+<li>you want the same resource accounting for local threads or Ray dispatch.</li>
 </ul>
-<p>Retsu turns those limits into named capacities and applies them consistently across guarded functions and admission-mode scheduling.</p>
+<section id="minimal-local-example" class="level2">
+<h2 class="anchored" data-anchor-id="minimal-local-example">Minimal local example</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> retsu</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>retsu.configure(backend<span class="op">=</span><span class="st">"memory"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>retsu.define_resource(<span class="st">"cpu"</span>, <span class="dv">2</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>retsu.define_concurrency(<span class="st">"reports"</span>, <span class="dv">1</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_report(name: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"built </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>handle <span class="op">=</span> retsu.submit(</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    build_report,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(<span class="st">"weekly"</span>,),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span>{<span class="st">"cpu"</span>: <span class="dv">1</span>},</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    concurrency<span class="op">=</span>{<span class="st">"reports"</span>: <span class="dv">1</span>},</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>scheduler <span class="op">=</span> retsu.Scheduler()</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>scheduler.run_once()</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(handle.result(timeout<span class="op">=</span><span class="dv">5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The default local executor runs admitted jobs in daemon threads.</p>
 </section>
-<section id="what-retsu-provides" class="level2">
-<h2 class="anchored" data-anchor-id="what-retsu-provides">What Retsu provides</h2>
+<section id="components" class="level2">
+<h2 class="anchored" data-anchor-id="components">Components</h2>
+<section id="submit" class="level3">
+<h3 class="anchored" data-anchor-id="submit"><code>submit()</code></h3>
+<p><code>submit()</code> evaluates the resource request immediately, serializes args and kwargs, stores a <code>JobRecord</code>, and returns a <code>JobHandle</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>handle <span class="op">=</span> retsu.submit(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    func,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(<span class="st">"customer-42"</span>,),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    kwargs<span class="op">=</span>{<span class="st">"force"</span>: <span class="va">True</span>},</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span>{<span class="st">"memory_mb"</span>: <span class="dv">256</span>},</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    concurrency<span class="op">=</span>{<span class="st">"customer-sync"</span>: <span class="dv">1</span>},</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    executor<span class="op">=</span><span class="st">"local"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    priority<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The local executor also stores the submitted Python callable in a process-local function registry. That means local admission execution is currently best suited for scheduler loops running in the same process as submission, or for tests and single-process services.</p>
+</section>
+<section id="scheduler" class="level3">
+<h3 class="anchored" data-anchor-id="scheduler"><code>Scheduler</code></h3>
+<p>The scheduler performs one admission pass with <code>run_once()</code>:</p>
+<ol type="1">
+<li>cleanup expired leases;</li>
+<li>load queued and waiting jobs;</li>
+<li>try to acquire each job’s requested capacity;</li>
+<li>mark unavailable jobs as <code>waiting_for_resources</code>;</li>
+<li>mark admitted jobs as <code>leased</code> and <code>dispatched</code>;</li>
+<li>call the configured executor.</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>scheduler <span class="op">=</span> retsu.Scheduler()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>scheduler.run_once(limit<span class="op">=</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A service can call <code>run_once()</code> in a loop:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> signal</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>stop <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> request_stop(<span class="op">*</span>_: <span class="bu">object</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> stop</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    stop <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>signal.signal(signal.SIGTERM, request_stop)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>scheduler <span class="op">=</span> retsu.Scheduler()</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="kw">not</span> stop:</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    scheduler.run_once(limit<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="executors" class="level3">
+<h3 class="anchored" data-anchor-id="executors">Executors</h3>
+<p>Retsu includes two executor implementations:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Executor</th>
+<th>Name</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>LocalExecutor</code></td>
+<td><code>local</code></td>
+<td>Runs jobs in local daemon threads and releases the lease after success or failure.</td>
+</tr>
+<tr class="even">
+<td><code>RayExecutor</code></td>
+<td><code>ray</code></td>
+<td>Dispatches jobs to Ray and tracks completion in a local daemon thread.</td>
+</tr>
+</tbody>
+</table>
+<p><code>Scheduler()</code> registers the local executor by default. If a job asks for <code>executor="ray"</code>, the scheduler creates a <code>RayExecutor</code> on demand.</p>
+</section>
+<section id="jobhandle" class="level3">
+<h3 class="anchored" data-anchor-id="jobhandle"><code>JobHandle</code></h3>
+<p>The handle returned by <code>submit()</code> exposes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>handle.status()       <span class="co"># current JobStatus</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>handle.result(<span class="dv">10</span>)     <span class="co"># wait up to 10 seconds, then return or raise</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>handle.metadata()     <span class="co"># serializable job metadata</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>handle.cancel()       <span class="co"># mark the job cancelled</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>result()</code> returns the unpickled result for succeeded jobs. It raises <code>RuntimeError</code> for failed or cancelled jobs and <code>TimeoutError</code> if the timeout expires before a terminal state.</p>
+</section>
+</section>
+<section id="job-statuses" class="level2">
+<h2 class="anchored" data-anchor-id="job-statuses">Job statuses</h2>
+<p>Common statuses are:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -503,87 +611,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </colgroup>
 <thead>
 <tr class="header">
-<th>Area</th>
-<th>What you get</th>
+<th>Status</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Resource definitions</td>
-<td>Named quantitative capacity such as <code>memory_mb</code>, <code>gpu</code>, or <code>license_seats</code>.</td>
+<td><code>queued</code></td>
+<td>The job has been submitted and is eligible for scheduling.</td>
 </tr>
 <tr class="even">
-<td>Concurrency definitions</td>
-<td>Named slot limits such as <code>billing-api</code>, <code>tenant:42</code>, or <code>reports</code>.</td>
+<td><code>waiting_for_resources</code></td>
+<td>A scheduler pass could not acquire capacity.</td>
 </tr>
 <tr class="odd">
-<td>Guard mode</td>
-<td>Decorators and context managers that acquire a lease before entering user code.</td>
+<td><code>leased</code></td>
+<td>Capacity was acquired.</td>
 </tr>
 <tr class="even">
-<td>Admission mode</td>
-<td><code>submit()</code>, <code>Scheduler</code>, executors, and <code>JobHandle</code> for resource-aware dispatch.</td>
+<td><code>dispatched</code></td>
+<td>The executor was called.</td>
 </tr>
 <tr class="odd">
-<td>Backends</td>
-<td>Redis/Valkey for shared atomic accounting; memory for tests and local tools.</td>
+<td><code>running</code></td>
+<td>The executor started executing the callable.</td>
 </tr>
 <tr class="even">
-<td>Integrations</td>
-<td>Celery retry-friendly guards and Ray guard/task helpers.</td>
+<td><code>succeeded</code></td>
+<td>The callable returned successfully.</td>
 </tr>
 <tr class="odd">
-<td>Operations</td>
-<td>Usage snapshots, active lease listing, cleanup of expired leases, and a small CLI.</td>
+<td><code>failed</code></td>
+<td>Dispatch or execution raised an exception.</td>
+</tr>
+<tr class="even">
+<td><code>cancelled</code></td>
+<td>The job was marked cancelled.</td>
 </tr>
 </tbody>
 </table>
+<p>Timestamps such as <code>leased_at</code>, <code>started_at</code>, and <code>finished_at</code> are updated as jobs move through these states.</p>
 </section>
-<section id="the-mental-model" class="level2">
-<h2 class="anchored" data-anchor-id="the-mental-model">The mental model</h2>
-<pre class="text"><code>Define capacity  -&gt;  Evaluate request  -&gt;  Acquire lease  -&gt;  Run work
-       ^                    |                    |               |
-       |                    |                    v               v
-   resources and       static values or      usage increments  release in
-   concurrency         callables from        atomically        finally path
-                       function args</code></pre>
-<p>A successful acquire creates exactly one lease. Usage is incremented once for that lease and decremented once when the lease is released or expires. Redis and Valkey accounting is implemented with Lua scripts so capacity checks and usage updates happen atomically.</p>
+<section id="priorities-and-fairness" class="level2">
+<h2 class="anchored" data-anchor-id="priorities-and-fairness">Priorities and fairness</h2>
+<p>Queued jobs are sorted by descending <code>priority</code>, then by creation time. A higher priority value is considered first during each scheduler pass.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>high <span class="op">=</span> retsu.submit(expensive_job, priority<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>normal <span class="op">=</span> retsu.submit(expensive_job, priority<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Retsu does not currently implement aging, weighted fairness, or per-queue scheduler filters. If you use the <code>queue</code> field, treat it as metadata unless you provide custom scheduler logic.</p>
 </section>
-<section id="choose-a-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="choose-a-workflow">Choose a workflow</h2>
-<div class="grid">
-<section id="guard-mode" class="level3 g-col-12 g-col-md-6">
-<h3 class="anchored" data-anchor-id="guard-mode">Guard mode</h3>
-<p>Use when you already have an execution system and only need to protect a function or critical section.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(concurrency<span class="op">=</span>{<span class="st">"vendor-api"</span>: <span class="dv">1</span>})</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_customer(customer_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    push_to_vendor(customer_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><a href="../docs/guard-mode.html">Learn guard mode</a></p>
+<section id="ray-dispatch" class="level2">
+<h2 class="anchored" data-anchor-id="ray-dispatch">Ray dispatch</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>handle <span class="op">=</span> retsu.submit(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    train_model,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(<span class="st">"model-a"</span>,),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span>{<span class="st">"gpu"</span>: <span class="dv">1</span>},</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    executor<span class="op">=</span><span class="st">"ray"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>retsu.Scheduler().run_once()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Ray still controls Ray cluster placement. Retsu controls the application-level capacity definitions you declare in its backend.</p>
 </section>
-<section id="admission-mode" class="level3 g-col-12 g-col-md-6">
-<h3 class="anchored" data-anchor-id="admission-mode">Admission mode</h3>
-<p>Use when jobs should be stored first, admitted only after capacity is acquired, and then dispatched by a scheduler.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>handle <span class="op">=</span> retsu.submit(render, args<span class="op">=</span>(<span class="st">"scene-42"</span>,), resources<span class="op">=</span>{<span class="st">"gpu"</span>: <span class="dv">1</span>})</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>retsu.Scheduler().run_once()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> handle.result(timeout<span class="op">=</span><span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><a href="../docs/admission-mode.html">Learn admission mode</a></p>
-</section>
-</div>
-</section>
-<section id="when-retsu-is-a-good-fit" class="level2">
-<h2 class="anchored" data-anchor-id="when-retsu-is-a-good-fit">When Retsu is a good fit</h2>
-<p>Retsu is a good fit when capacity is an application-level concern and the resource cannot be expressed cleanly as a worker-pool size. Examples include external API quotas, tenant locks, GPU fractions, memory reservations, and licensed software seats.</p>
-<p>Retsu is not a replacement for a durable task queue, a general distributed lock service, or a full autoscaler. It complements those tools by making admission resource-aware.</p>
-</section>
-<section id="start-here" class="level2">
-<h2 class="anchored" data-anchor-id="start-here">Start here</h2>
-<ol type="1">
-<li>Follow the <a href="../docs/quickstart.html">quickstart</a> for a copy-paste local example.</li>
-<li>Read <a href="../docs/concepts.html">concepts</a> to understand resources, leases, and wait policies.</li>
-<li>Use <a href="../docs/guard-mode.html">guard mode</a> for protected functions and critical sections.</li>
-<li>Use <a href="../docs/admission-mode.html">admission mode</a> when work should be scheduled after capacity is acquired.</li>
-<li>Review <a href="../docs/operations.html">operations</a> before using Redis/Valkey in production.</li>
-</ol>
+<section id="reliability-notes" class="level2">
+<h2 class="anchored" data-anchor-id="reliability-notes">Reliability notes</h2>
+<ul>
+<li>Dispatch failures release the acquired lease and mark the job failed.</li>
+<li>Executors release leases after success and after exceptions.</li>
+<li>Admission payloads and results use <code>pickle</code>; treat them as trusted-process data, not untrusted user input.</li>
+<li>Local admission mode is intentionally lightweight. For durable, multi-worker task distribution, pair Retsu guard mode with Celery/Ray or build a custom executor around the backend protocol.</li>
+</ul>
 
 
 </section>
@@ -1010,10 +1105,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../docs/guard-mode.html" class="pagination-link" aria-label="Guard Mode">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Guard Mode</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../docs/quickstart.html" class="pagination-link" aria-label="Quickstart">
-        <span class="nav-page-text">Quickstart</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../docs/integrations.html" class="pagination-link" aria-label="Integrations">
+        <span class="nav-page-text">Integrations</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

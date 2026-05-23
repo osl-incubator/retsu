@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Retsu</title>
+<title>Retsu notebook tour – Retsu</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -304,24 +304,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../docs/installation.html"> 
-<span class="menu-text">Installation</span></a>
+    <a class="nav-link" href="../docs/quickstart.html"> 
+<span class="menu-text">Quickstart</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../docs/concepts.html"> 
+<span class="menu-text">Concepts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../docs/guard-mode.html"> 
+<span class="menu-text">Guard Mode</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../docs/admission-mode.html"> 
+<span class="menu-text">Admission Mode</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../docs/integrations.html"> 
+<span class="menu-text">Integrations</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../docs/api/references.html"> 
 <span class="menu-text">API</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../docs/example.html"> 
-<span class="menu-text">Example</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../docs/changelog.html"> 
-<span class="menu-text">Changelog</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../docs/contributing.html"> 
-<span class="menu-text">Contributing</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -342,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../docs/example.html">Example</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../docs/example.html">Notebook Tour</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -362,8 +366,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../docs/quickstart.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quickstart</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../docs/installation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Installation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../docs/concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Concepts</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../docs/guard-mode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Guard Mode</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../docs/admission-mode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Admission Mode</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../docs/integrations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Integrations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../docs/operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Operations</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -386,7 +426,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../docs/example.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Example</span></a>
+ <span class="menu-text">Notebook Tour</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -411,7 +451,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting Started</a></li>
+  <li><a href="#configure-local-capacity" id="toc-configure-local-capacity" class="nav-link active" data-scroll-target="#configure-local-capacity">Configure local capacity</a></li>
+  <li><a href="#guard-a-function" id="toc-guard-a-function" class="nav-link" data-scroll-target="#guard-a-function">Guard a function</a></li>
+  <li><a href="#inspect-usage" id="toc-inspect-usage" class="nav-link" data-scroll-target="#inspect-usage">Inspect usage</a></li>
+  <li><a href="#admission-mode" id="toc-admission-mode" class="nav-link" data-scroll-target="#admission-mode">Admission mode</a></li>
   </ul>
 </nav>
     </div>
@@ -421,7 +464,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Retsu</h1>
+<h1 class="title">Retsu notebook tour</h1>
 </div>
 
 
@@ -438,14 +481,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Retsu is Python library that aims to do …</p>
-<section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
-<p>First, check our documentation about the <a href="../installation">installation</a>.</p>
-<p>Now, let’s import our library:</p>
+<p>This notebook mirrors the service-free quickstart. It uses the memory backend so the examples do not require Redis or Valkey.</p>
 <div id="cell-2" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> retsu</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> retsu</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<section id="configure-local-capacity" class="level2">
+<h2 class="anchored" data-anchor-id="configure-local-capacity">Configure local capacity</h2>
+<p>Define one quantitative resource and one concurrency limit.</p>
+<div id="cell-4" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>retsu.configure(backend<span class="op">=</span><span class="st">"memory"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>retsu.define_resource(<span class="st">"memory_mb"</span>, <span class="dv">512</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>retsu.define_concurrency(<span class="st">"image-transform"</span>, <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="guard-a-function" class="level2">
+<h2 class="anchored" data-anchor-id="guard-a-function">Guard a function</h2>
+<p>The resource request can be dynamic. Here the memory request is read from the image object passed to the function.</p>
+<div id="cell-6" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Image:</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">id</span>: <span class="bu">str</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    size_mb: <span class="bu">int</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span>{<span class="st">"memory_mb"</span>: <span class="kw">lambda</span> image: image.size_mb},</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    concurrency<span class="op">=</span>{<span class="st">"image-transform"</span>: <span class="dv">1</span>},</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> transform(image: Image) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"transformed </span><span class="sc">{</span>image<span class="sc">.</span><span class="bu">id</span><span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>transform(Image(<span class="bu">id</span><span class="op">=</span><span class="st">"hero"</span>, size_mb<span class="op">=</span><span class="dv">128</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="inspect-usage" class="level2">
+<h2 class="anchored" data-anchor-id="inspect-usage">Inspect usage</h2>
+<p>Usage returns to zero after the guarded function exits because the lease is released in a <code>finally</code> path.</p>
+<div id="cell-8" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>usage <span class="op">=</span> retsu.get_usage()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>usage.resources[<span class="st">"memory_mb"</span>].used, usage.concurrency[<span class="st">"image-transform"</span>].used</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="admission-mode" class="level2">
+<h2 class="anchored" data-anchor-id="admission-mode">Admission mode</h2>
+<p>Submit a job, let a scheduler acquire capacity, and read the result from a handle.</p>
+<div id="cell-10" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> double(value: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value <span class="op">*</span> <span class="dv">2</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>handle <span class="op">=</span> retsu.submit(double, args<span class="op">=</span>(<span class="dv">21</span>,), resources<span class="op">=</span>{<span class="st">"memory_mb"</span>: <span class="dv">1</span>})</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>retsu.Scheduler().run_once()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>handle.result(timeout<span class="op">=</span><span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Next: read the <a href="../docs/concepts.html">concepts</a>, <a href="../docs/guard-mode.html">guard mode</a>, and <a href="../docs/admission-mode.html">admission mode</a> guides.</p>
 
 
 </section>

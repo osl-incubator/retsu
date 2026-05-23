@@ -2,56 +2,291 @@
   {
     "objectID": "docs/example.html",
     "href": "docs/example.html",
+    "title": "Retsu notebook tour",
+    "section": "",
+    "text": "This notebook mirrors the service-free quickstart. It uses the memory backend so the examples do not require Redis or Valkey.\nfrom dataclasses import dataclass\n\nimport retsu",
+    "crumbs": [
+      "Home",
+      "Notebook Tour"
+    ]
+  },
+  {
+    "objectID": "docs/example.html#configure-local-capacity",
+    "href": "docs/example.html#configure-local-capacity",
+    "title": "Retsu notebook tour",
+    "section": "Configure local capacity",
+    "text": "Configure local capacity\nDefine one quantitative resource and one concurrency limit.\n\nretsu.configure(backend=\"memory\")\nretsu.define_resource(\"memory_mb\", 512)\nretsu.define_concurrency(\"image-transform\", 2)",
+    "crumbs": [
+      "Home",
+      "Notebook Tour"
+    ]
+  },
+  {
+    "objectID": "docs/example.html#guard-a-function",
+    "href": "docs/example.html#guard-a-function",
+    "title": "Retsu notebook tour",
+    "section": "Guard a function",
+    "text": "Guard a function\nThe resource request can be dynamic. Here the memory request is read from the image object passed to the function.\n\n@dataclass\nclass Image:\n    id: str\n    size_mb: int\n\n\n@retsu.guard(\n    resources={\"memory_mb\": lambda image: image.size_mb},\n    concurrency={\"image-transform\": 1},\n)\ndef transform(image: Image) -&gt; str:\n    return f\"transformed {image.id}\"\n\n\ntransform(Image(id=\"hero\", size_mb=128))",
+    "crumbs": [
+      "Home",
+      "Notebook Tour"
+    ]
+  },
+  {
+    "objectID": "docs/example.html#inspect-usage",
+    "href": "docs/example.html#inspect-usage",
+    "title": "Retsu notebook tour",
+    "section": "Inspect usage",
+    "text": "Inspect usage\nUsage returns to zero after the guarded function exits because the lease is released in a finally path.\n\nusage = retsu.get_usage()\nusage.resources[\"memory_mb\"].used, usage.concurrency[\"image-transform\"].used",
+    "crumbs": [
+      "Home",
+      "Notebook Tour"
+    ]
+  },
+  {
+    "objectID": "docs/example.html#admission-mode",
+    "href": "docs/example.html#admission-mode",
+    "title": "Retsu notebook tour",
+    "section": "Admission mode",
+    "text": "Admission mode\nSubmit a job, let a scheduler acquire capacity, and read the result from a handle.\n\ndef double(value: int) -&gt; int:\n    return value * 2\n\n\nhandle = retsu.submit(double, args=(21,), resources={\"memory_mb\": 1})\nretsu.Scheduler().run_once()\nhandle.result(timeout=5)\n\nNext: read the concepts, guard mode, and admission mode guides.",
+    "crumbs": [
+      "Home",
+      "Notebook Tour"
+    ]
+  },
+  {
+    "objectID": "docs/quickstart.html",
+    "href": "docs/quickstart.html",
+    "title": "Quickstart",
+    "section": "",
+    "text": "This page gets you from a new environment to resource-aware execution in a few minutes. The examples use the memory backend first so you can run them without Redis or Valkey.\n\n\npip install retsu\nFor development from a checkout:\nmamba env create --file conda/dev.yaml\nconda activate retsu\npoetry install\n\n\n\nCreate a file named quickstart.py:\nfrom dataclasses import dataclass\n\nimport retsu\n\n\n@dataclass\nclass Image:\n    id: str\n    size_mb: int\n\n\nretsu.configure(backend=\"memory\")\nretsu.define_resource(\"memory_mb\", 512)\nretsu.define_concurrency(\"image-transform\", 2)\n\n\n@retsu.guard(\n    resources={\"memory_mb\": lambda image: image.size_mb},\n    concurrency={\"image-transform\": 1},\n)\ndef transform(image: Image) -&gt; str:\n    return f\"transformed {image.id}\"\n\n\nprint(transform(Image(id=\"hero\", size_mb=128)))\nprint(retsu.get_usage().resources[\"memory_mb\"].used)\nRun it:\npython quickstart.py\nThe final usage value is 0 because the lease is released after transform() returns.\n\n\n\n\nconfigure(backend=\"memory\") selected a local, thread-safe backend.\ndefine_resource() and define_concurrency() registered capacity.\nThe guard() decorator built a request from the function arguments.\nRetsu acquired a lease before calling transform().\nA heartbeat renewed the lease while the function was running.\nThe lease was released in a finally path.\n\n\n\n\nimport retsu\n\nretsu.configure(backend=\"memory\")\nretsu.define_concurrency(\"api\", 1)\n\nheld = retsu.acquire_with_policy(\n    job_id=\"manual\",\n    owner_id=\"quickstart\",\n    request=retsu.ResourceRequest(resources={}, concurrency={\"api\": 1}),\n)\n\ntry:\n    with retsu.limit(\"api\", wait_strategy=\"fail\"):\n        print(\"will not run\")\nexcept retsu.ResourceUnavailable as exc:\n    print(f\"blocked by {exc.blocked_by}\")\nfinally:\n    held.release()\nwait_strategy=\"fail\" raises ResourceUnavailable immediately instead of waiting for the held lease to release.\n\n\n\nUse Redis/Valkey when multiple processes need shared accounting:\nimport retsu\n\nretsu.configure(\n    backend=\"redis\",\n    redis_url=\"redis://localhost:6379/0\",\n    namespace=\"quickstart\",\n)\nretsu.define_resource(\"memory_mb\", 4096)\nretsu.define_concurrency(\"image-transform\", 4)\nCapacity definitions live in the selected backend namespace. Define them during application startup or through the CLI before workers begin accepting work.\n\n\n\nAdmission mode stores a job first, then dispatches it only after the scheduler gets a lease:\nimport retsu\n\nretsu.configure(backend=\"memory\")\nretsu.define_resource(\"cpu\", 2)\nretsu.define_concurrency(\"reports\", 1)\n\n\ndef build_report(name: str) -&gt; str:\n    return f\"built {name}\"\n\n\nhandle = retsu.submit(\n    build_report,\n    args=(\"weekly\",),\n    resources={\"cpu\": 1},\n    concurrency={\"reports\": 1},\n)\n\nscheduler = retsu.Scheduler()\nscheduler.run_once()\n\nprint(handle.status())\nprint(handle.result(timeout=5))\nprint(handle.metadata())\nFor a long-running service, call run_once() from your own loop or scheduler process:\nimport time\n\nscheduler = retsu.Scheduler()\n\nwhile True:\n    scheduler.run_once(limit=100)\n    time.sleep(0.5)\n\n\n\n\nRead concepts for the resource and lease model.\nUse guard mode if your work is already dispatched elsewhere.\nUse admission mode for resource-aware job dispatch.\nReview operations before sharing Redis/Valkey state in production.",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "docs/quickstart.html#install",
+    "href": "docs/quickstart.html#install",
+    "title": "Quickstart",
+    "section": "",
+    "text": "pip install retsu\nFor development from a checkout:\nmamba env create --file conda/dev.yaml\nconda activate retsu\npoetry install",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "docs/quickstart.html#local-guard-example",
+    "href": "docs/quickstart.html#local-guard-example",
+    "title": "Quickstart",
+    "section": "",
+    "text": "Create a file named quickstart.py:\nfrom dataclasses import dataclass\n\nimport retsu\n\n\n@dataclass\nclass Image:\n    id: str\n    size_mb: int\n\n\nretsu.configure(backend=\"memory\")\nretsu.define_resource(\"memory_mb\", 512)\nretsu.define_concurrency(\"image-transform\", 2)\n\n\n@retsu.guard(\n    resources={\"memory_mb\": lambda image: image.size_mb},\n    concurrency={\"image-transform\": 1},\n)\ndef transform(image: Image) -&gt; str:\n    return f\"transformed {image.id}\"\n\n\nprint(transform(Image(id=\"hero\", size_mb=128)))\nprint(retsu.get_usage().resources[\"memory_mb\"].used)\nRun it:\npython quickstart.py\nThe final usage value is 0 because the lease is released after transform() returns.",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "docs/quickstart.html#what-happened",
+    "href": "docs/quickstart.html#what-happened",
+    "title": "Quickstart",
+    "section": "",
+    "text": "configure(backend=\"memory\") selected a local, thread-safe backend.\ndefine_resource() and define_concurrency() registered capacity.\nThe guard() decorator built a request from the function arguments.\nRetsu acquired a lease before calling transform().\nA heartbeat renewed the lease while the function was running.\nThe lease was released in a finally path.",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "docs/quickstart.html#try-an-unavailable-capacity",
+    "href": "docs/quickstart.html#try-an-unavailable-capacity",
+    "title": "Quickstart",
+    "section": "",
+    "text": "import retsu\n\nretsu.configure(backend=\"memory\")\nretsu.define_concurrency(\"api\", 1)\n\nheld = retsu.acquire_with_policy(\n    job_id=\"manual\",\n    owner_id=\"quickstart\",\n    request=retsu.ResourceRequest(resources={}, concurrency={\"api\": 1}),\n)\n\ntry:\n    with retsu.limit(\"api\", wait_strategy=\"fail\"):\n        print(\"will not run\")\nexcept retsu.ResourceUnavailable as exc:\n    print(f\"blocked by {exc.blocked_by}\")\nfinally:\n    held.release()\nwait_strategy=\"fail\" raises ResourceUnavailable immediately instead of waiting for the held lease to release.",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "docs/quickstart.html#move-to-redis-or-valkey",
+    "href": "docs/quickstart.html#move-to-redis-or-valkey",
+    "title": "Quickstart",
+    "section": "",
+    "text": "Use Redis/Valkey when multiple processes need shared accounting:\nimport retsu\n\nretsu.configure(\n    backend=\"redis\",\n    redis_url=\"redis://localhost:6379/0\",\n    namespace=\"quickstart\",\n)\nretsu.define_resource(\"memory_mb\", 4096)\nretsu.define_concurrency(\"image-transform\", 4)\nCapacity definitions live in the selected backend namespace. Define them during application startup or through the CLI before workers begin accepting work.",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "docs/quickstart.html#admission-mode-quickstart",
+    "href": "docs/quickstart.html#admission-mode-quickstart",
+    "title": "Quickstart",
+    "section": "",
+    "text": "Admission mode stores a job first, then dispatches it only after the scheduler gets a lease:\nimport retsu\n\nretsu.configure(backend=\"memory\")\nretsu.define_resource(\"cpu\", 2)\nretsu.define_concurrency(\"reports\", 1)\n\n\ndef build_report(name: str) -&gt; str:\n    return f\"built {name}\"\n\n\nhandle = retsu.submit(\n    build_report,\n    args=(\"weekly\",),\n    resources={\"cpu\": 1},\n    concurrency={\"reports\": 1},\n)\n\nscheduler = retsu.Scheduler()\nscheduler.run_once()\n\nprint(handle.status())\nprint(handle.result(timeout=5))\nprint(handle.metadata())\nFor a long-running service, call run_once() from your own loop or scheduler process:\nimport time\n\nscheduler = retsu.Scheduler()\n\nwhile True:\n    scheduler.run_once(limit=100)\n    time.sleep(0.5)",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "docs/quickstart.html#next-steps",
+    "href": "docs/quickstart.html#next-steps",
+    "title": "Quickstart",
+    "section": "",
+    "text": "Read concepts for the resource and lease model.\nUse guard mode if your work is already dispatched elsewhere.\nUse admission mode for resource-aware job dispatch.\nReview operations before sharing Redis/Valkey state in production.",
+    "crumbs": [
+      "Home",
+      "Quickstart"
+    ]
+  },
+  {
+    "objectID": "docs/integrations.html",
+    "href": "docs/integrations.html",
+    "title": "Integrations",
+    "section": "",
+    "text": "Retsu keeps framework-specific behavior outside the core APIs. Optional integrations add convenience around Celery, Ray, and Django without making those packages mandatory for basic use.\n\n\npip install \"retsu[celery]\"\npip install \"retsu[ray]\"\npip install \"retsu[django]\"\nThe base package installs Redis support because Redis/Valkey is the default backend.\n\n\n\nUse celery_guard() inside a bound Celery task when capacity denial should use Celery’s retry mechanism:\nimport retsu\n\nfrom celery import Celery\n\napp = Celery(__name__)\n\nretsu.configure(backend=\"redis\", redis_url=\"redis://localhost:6379/0\")\nretsu.define_concurrency(\"pdf-render\", 2)\n\n\n@app.task(bind=True)\ndef render_pdf(self, document_id: str) -&gt; None:\n    with retsu.celery_guard(\n        self,\n        concurrency={\"pdf-render\": 1},\n        wait_strategy=\"retry\",\n    ):\n        render_document(document_id)\nWhen wait_strategy=\"retry\", celery_guard() catches ResourceUnavailable and raises task.retry(countdown=...). For fail or block, it preserves the core Retsu behavior.\nRecommended Celery pattern:\n\nconfigure Retsu when the worker starts;\ndefine capacities once per namespace;\nwrap the smallest section that needs the scarce capacity;\nuse Celery retry options for backoff, max retries, and dead-letter behavior.\n\n\n\n\nUse ray_guard() when a Ray task already exists and only a section needs Retsu capacity:\nimport ray\nimport retsu\n\nretsu.configure(backend=\"redis\", redis_url=\"redis://localhost:6379/0\")\nretsu.define_resource(\"gpu-memory\", 1)\n\n\n@ray.remote\ndef train_one(model_id: str) -&gt; str:\n    with retsu.ray_guard(resources={\"gpu-memory\": 1}):\n        return train(model_id)\nUse ray_task() when you want one decorator to create a Ray remote function and wrap it with Retsu guard mode:\n@retsu.ray_task(resources={\"gpu-memory\": 1}, num_gpus=1)\ndef train_one(model_id: str) -&gt; str:\n    return train(model_id)\nThe keyword arguments after the Retsu parameters are passed to ray.remote. Ray controls cluster placement; Retsu controls your named application capacity.\n\n\n\nAdmission jobs can request the Ray executor:\nhandle = retsu.submit(\n    train,\n    args=(\"model-a\",),\n    resources={\"gpu-memory\": 1},\n    executor=\"ray\",\n)\nretsu.Scheduler().run_once()\nThe scheduler acquires Retsu capacity first, then dispatches the function to Ray. A local daemon thread waits for ray.get() and releases the lease when the Ray task finishes or fails.\n\n\n\nMost Django applications should configure Retsu in application startup code and then use the public guard or admission APIs from views, tasks, or management commands.\nThe package also includes retsu.plugins.django.create_app_config() for manager-style integrations that need start() on app readiness and stop() on request_finished:\nfrom retsu.plugins.django import create_app_config\n\nRetsuAppConfig = create_app_config(manager, app_name=\"myapp\")\nThis helper expects the supplied manager object to expose start() and stop() methods. Import it only in Django projects that install the django extra.\n\n\n\n\nKeep Retsu configuration and capacity bootstrap close to worker startup.\nUse Redis/Valkey for any integration that runs in multiple processes.\nKeep framework imports out of modules that should remain lightweight.\nMatch wait strategy to the framework: retry for Celery retry flows, fail for request/response paths, and block for worker paths where waiting is acceptable.\nTreat Retsu capacity as one layer of protection; still configure executor worker counts, Celery retry limits, and Ray resource options appropriately.",
+    "crumbs": [
+      "Home",
+      "Integrations"
+    ]
+  },
+  {
+    "objectID": "docs/integrations.html#optional-dependencies",
+    "href": "docs/integrations.html#optional-dependencies",
+    "title": "Integrations",
+    "section": "",
+    "text": "pip install \"retsu[celery]\"\npip install \"retsu[ray]\"\npip install \"retsu[django]\"\nThe base package installs Redis support because Redis/Valkey is the default backend.",
+    "crumbs": [
+      "Home",
+      "Integrations"
+    ]
+  },
+  {
+    "objectID": "docs/integrations.html#celery",
+    "href": "docs/integrations.html#celery",
+    "title": "Integrations",
+    "section": "",
+    "text": "Use celery_guard() inside a bound Celery task when capacity denial should use Celery’s retry mechanism:\nimport retsu\n\nfrom celery import Celery\n\napp = Celery(__name__)\n\nretsu.configure(backend=\"redis\", redis_url=\"redis://localhost:6379/0\")\nretsu.define_concurrency(\"pdf-render\", 2)\n\n\n@app.task(bind=True)\ndef render_pdf(self, document_id: str) -&gt; None:\n    with retsu.celery_guard(\n        self,\n        concurrency={\"pdf-render\": 1},\n        wait_strategy=\"retry\",\n    ):\n        render_document(document_id)\nWhen wait_strategy=\"retry\", celery_guard() catches ResourceUnavailable and raises task.retry(countdown=...). For fail or block, it preserves the core Retsu behavior.\nRecommended Celery pattern:\n\nconfigure Retsu when the worker starts;\ndefine capacities once per namespace;\nwrap the smallest section that needs the scarce capacity;\nuse Celery retry options for backoff, max retries, and dead-letter behavior.",
+    "crumbs": [
+      "Home",
+      "Integrations"
+    ]
+  },
+  {
+    "objectID": "docs/integrations.html#ray-guard-helpers",
+    "href": "docs/integrations.html#ray-guard-helpers",
+    "title": "Integrations",
+    "section": "",
+    "text": "Use ray_guard() when a Ray task already exists and only a section needs Retsu capacity:\nimport ray\nimport retsu\n\nretsu.configure(backend=\"redis\", redis_url=\"redis://localhost:6379/0\")\nretsu.define_resource(\"gpu-memory\", 1)\n\n\n@ray.remote\ndef train_one(model_id: str) -&gt; str:\n    with retsu.ray_guard(resources={\"gpu-memory\": 1}):\n        return train(model_id)\nUse ray_task() when you want one decorator to create a Ray remote function and wrap it with Retsu guard mode:\n@retsu.ray_task(resources={\"gpu-memory\": 1}, num_gpus=1)\ndef train_one(model_id: str) -&gt; str:\n    return train(model_id)\nThe keyword arguments after the Retsu parameters are passed to ray.remote. Ray controls cluster placement; Retsu controls your named application capacity.",
+    "crumbs": [
+      "Home",
+      "Integrations"
+    ]
+  },
+  {
+    "objectID": "docs/integrations.html#ray-executor-for-admission-mode",
+    "href": "docs/integrations.html#ray-executor-for-admission-mode",
+    "title": "Integrations",
+    "section": "",
+    "text": "Admission jobs can request the Ray executor:\nhandle = retsu.submit(\n    train,\n    args=(\"model-a\",),\n    resources={\"gpu-memory\": 1},\n    executor=\"ray\",\n)\nretsu.Scheduler().run_once()\nThe scheduler acquires Retsu capacity first, then dispatches the function to Ray. A local daemon thread waits for ray.get() and releases the lease when the Ray task finishes or fails.",
+    "crumbs": [
+      "Home",
+      "Integrations"
+    ]
+  },
+  {
+    "objectID": "docs/integrations.html#django",
+    "href": "docs/integrations.html#django",
+    "title": "Integrations",
+    "section": "",
+    "text": "Most Django applications should configure Retsu in application startup code and then use the public guard or admission APIs from views, tasks, or management commands.\nThe package also includes retsu.plugins.django.create_app_config() for manager-style integrations that need start() on app readiness and stop() on request_finished:\nfrom retsu.plugins.django import create_app_config\n\nRetsuAppConfig = create_app_config(manager, app_name=\"myapp\")\nThis helper expects the supplied manager object to expose start() and stop() methods. Import it only in Django projects that install the django extra.",
+    "crumbs": [
+      "Home",
+      "Integrations"
+    ]
+  },
+  {
+    "objectID": "docs/integrations.html#integration-checklist",
+    "href": "docs/integrations.html#integration-checklist",
+    "title": "Integrations",
+    "section": "",
+    "text": "Keep Retsu configuration and capacity bootstrap close to worker startup.\nUse Redis/Valkey for any integration that runs in multiple processes.\nKeep framework imports out of modules that should remain lightweight.\nMatch wait strategy to the framework: retry for Celery retry flows, fail for request/response paths, and block for worker paths where waiting is acceptable.\nTreat Retsu capacity as one layer of protection; still configure executor worker counts, Celery retry limits, and Ray resource options appropriately.",
+    "crumbs": [
+      "Home",
+      "Integrations"
+    ]
+  },
+  {
+    "objectID": "docs/index.html",
+    "href": "docs/index.html",
     "title": "Retsu",
     "section": "",
-    "text": "Retsu is Python library that aims to do …",
+    "text": "Retsu logo",
     "crumbs": [
-      "Home",
-      "Example"
+      "Home"
     ]
   },
   {
-    "objectID": "docs/example.html#getting-started",
-    "href": "docs/example.html#getting-started",
+    "objectID": "docs/index.html#why-use-it",
+    "href": "docs/index.html#why-use-it",
     "title": "Retsu",
-    "section": "Getting Started",
-    "text": "Getting Started\nFirst, check our documentation about the installation.\nNow, let’s import our library:\n\nimport retsu",
+    "section": "Why use it?",
+    "text": "Why use it?\nQueues and executors decide where work runs. They usually do not understand all of the external limits your application depends on:\n\none SaaS API allows only five concurrent exports;\na tenant should never run more than one expensive rebuild at a time;\na worker host has enough CPU threads but not enough GPU memory;\na licensed solver has a fixed number of seats;\na batch job needs to reserve memory before it starts, not after it crashes.\n\nRetsu turns those limits into named capacities and applies them consistently across guarded functions and admission-mode scheduling.",
     "crumbs": [
-      "Home",
-      "Example"
+      "Home"
     ]
   },
   {
-    "objectID": "docs/installation.html",
-    "href": "docs/installation.html",
-    "title": "Installation",
-    "section": "",
-    "text": "To install Retsu, run this command in your terminal:\n$ pip install retsu\nThis is the preferred method to install Retsu, as it will always install the most recent stable release.\nIf you don’t have pip installed, this Python installation guide can guide you through the process.\n\n\n\nThe sources for Retsu can be downloaded from the Github repo.\nYou can either clone the public repository:\n$ git clone https://github.com/xmnlab/retsu.git\nOr download the tarball:\n$ curl -OJL https://github.com/xmnlab/retsu.git/tarball/main\nOnce you have a copy of the source, you can install it with:\n$ poetry install",
+    "objectID": "docs/index.html#what-retsu-provides",
+    "href": "docs/index.html#what-retsu-provides",
+    "title": "Retsu",
+    "section": "What Retsu provides",
+    "text": "What Retsu provides\n\n\n\n\n\n\n\nArea\nWhat you get\n\n\n\n\nResource definitions\nNamed quantitative capacity such as memory_mb, gpu, or license_seats.\n\n\nConcurrency definitions\nNamed slot limits such as billing-api, tenant:42, or reports.\n\n\nGuard mode\nDecorators and context managers that acquire a lease before entering user code.\n\n\nAdmission mode\nsubmit(), Scheduler, executors, and JobHandle for resource-aware dispatch.\n\n\nBackends\nRedis/Valkey for shared atomic accounting; memory for tests and local tools.\n\n\nIntegrations\nCelery retry-friendly guards and Ray guard/task helpers.\n\n\nOperations\nUsage snapshots, active lease listing, cleanup of expired leases, and a small CLI.",
     "crumbs": [
-      "Home",
-      "Installation"
+      "Home"
     ]
   },
   {
-    "objectID": "docs/installation.html#stable-release",
-    "href": "docs/installation.html#stable-release",
-    "title": "Installation",
-    "section": "",
-    "text": "To install Retsu, run this command in your terminal:\n$ pip install retsu\nThis is the preferred method to install Retsu, as it will always install the most recent stable release.\nIf you don’t have pip installed, this Python installation guide can guide you through the process.",
+    "objectID": "docs/index.html#the-mental-model",
+    "href": "docs/index.html#the-mental-model",
+    "title": "Retsu",
+    "section": "The mental model",
+    "text": "The mental model\nDefine capacity  -&gt;  Evaluate request  -&gt;  Acquire lease  -&gt;  Run work\n       ^                    |                    |               |\n       |                    |                    v               v\n   resources and       static values or      usage increments  release in\n   concurrency         callables from        atomically        finally path\n                       function args\nA successful acquire creates exactly one lease. Usage is incremented once for that lease and decremented once when the lease is released or expires. Redis and Valkey accounting is implemented with Lua scripts so capacity checks and usage updates happen atomically.",
     "crumbs": [
-      "Home",
-      "Installation"
+      "Home"
     ]
   },
   {
-    "objectID": "docs/installation.html#from-sources",
-    "href": "docs/installation.html#from-sources",
-    "title": "Installation",
-    "section": "",
-    "text": "The sources for Retsu can be downloaded from the Github repo.\nYou can either clone the public repository:\n$ git clone https://github.com/xmnlab/retsu.git\nOr download the tarball:\n$ curl -OJL https://github.com/xmnlab/retsu.git/tarball/main\nOnce you have a copy of the source, you can install it with:\n$ poetry install",
+    "objectID": "docs/index.html#choose-a-workflow",
+    "href": "docs/index.html#choose-a-workflow",
+    "title": "Retsu",
+    "section": "Choose a workflow",
+    "text": "Choose a workflow\n\n\nGuard mode\nUse when you already have an execution system and only need to protect a function or critical section.\n@retsu.guard(concurrency={\"vendor-api\": 1})\ndef sync_customer(customer_id: str) -&gt; None:\n    push_to_vendor(customer_id)\nLearn guard mode\n\n\nAdmission mode\nUse when jobs should be stored first, admitted only after capacity is acquired, and then dispatched by a scheduler.\nhandle = retsu.submit(render, args=(\"scene-42\",), resources={\"gpu\": 1})\nretsu.Scheduler().run_once()\nresult = handle.result(timeout=30)\nLearn admission mode",
     "crumbs": [
-      "Home",
-      "Installation"
+      "Home"
+    ]
+  },
+  {
+    "objectID": "docs/index.html#when-retsu-is-a-good-fit",
+    "href": "docs/index.html#when-retsu-is-a-good-fit",
+    "title": "Retsu",
+    "section": "When Retsu is a good fit",
+    "text": "When Retsu is a good fit\nRetsu is a good fit when capacity is an application-level concern and the resource cannot be expressed cleanly as a worker-pool size. Examples include external API quotas, tenant locks, GPU fractions, memory reservations, and licensed software seats.\nRetsu is not a replacement for a durable task queue, a general distributed lock service, or a full autoscaler. It complements those tools by making admission resource-aware.",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "docs/index.html#start-here",
+    "href": "docs/index.html#start-here",
+    "title": "Retsu",
+    "section": "Start here",
+    "text": "Start here\n\nFollow the quickstart for a copy-paste local example.\nRead concepts to understand resources, leases, and wait policies.\nUse guard mode for protected functions and critical sections.\nUse admission mode when work should be scheduled after capacity is acquired.\nReview operations before using Redis/Valkey in production.",
+    "crumbs": [
+      "Home"
     ]
   },
   {
@@ -59,73 +294,106 @@
     "href": "docs/contributing.html",
     "title": "Contributing",
     "section": "",
-    "text": "In order to be able to contribute, it is important that you understand the project layout.\nThis project uses the src layout, which means that the package code is located at ./src/retsu.\nFor my information, check the official documentation: https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/\nIn addition, you should know that to build our package we use Poetry, it’s a Python package management tool that simplifies the process of building and publishing Python packages. It allows us to easily manage dependencies, virtual environments and package versions. Poetry also includes features such as dependency resolution, lock files and publishing to PyPI. Overall, Poetry streamlines the process of managing Python packages, making it easier for us to create and share our code with others.\nContributions are welcome, and they are greatly appreciated! Every little bit helps, and credit will always be given.\nYou can contribute in many ways:\n\n\n\n\nReport bugs at https://github.com/xmnlab/retsu.git/issues.\nIf you are reporting a bug, please include:\n\nYour operating system name and version.\nAny details about your local setup that might be helpful in troubleshooting.\nDetailed steps to reproduce the bug.\n\n\n\n\nLook through the GitHub issues for bugs. Anything tagged with “bug” and “help wanted” is open to whoever wants to implement it.\n\n\n\nLook through the GitHub issues for features. Anything tagged with “enhancement” and “help wanted” is open to whoever wants to implement it.\n\n\n\nRetsu could always use more documentation, whether as part of the official Retsu docs, in docstrings, or even on the web in blog posts, articles, and such.\n\n\n\nThe best way to send feedback is to file an issue at https://github.com/xmnlab/retsu.git/issues.\nIf you are proposing a feature:\n\nExplain in detail how it would work.\nKeep the scope as narrow as possible, to make it easier to implement.\nRemember that this is a volunteer-driven project, and that contributions are welcome :)\n\n\n\n\n\nReady to contribute? Here’s how to set up retsu for local development.\n\nFork the retsu repo on GitHub.\nClone your fork locally and change to the directory of your project:\n\n$ git clone git@github.com:your_name_here/retsu.git\n$ cd retsu/\nAlso, create a remote to the upstream repository, you will need that later:\n$ git remote add upstream https://github.com/xmnlab/retsu.git\n$ git fetch --all\n\nPrepare and use virtual environment: If you don’t have yet conda installed in your machine, you can check the installation steps here: https://github.com/conda-forge/miniforge?tab=readme-ov-file#download After that, ensure that conda is already available in your terminal session and run:\n\n$ conda env create env create --file conda/dev.yaml\n$ conda activate retsu\nNote: you can use mamba env create instead, if you have it already installed, in order to boost the installation step.\n\nInstall the dependencies: Now, you can already install the dependencies for the project:\n\n$ poetry install\n\nretsu uses a set of pre-commit hooks to improve code quality. The hooks can be installed locally using:\n\n$ pre-commit install\nThis would run the checks every time a git commit is executed locally. Usually, the verification will only run on the files modified by that commit, but the verification can also be triggered for all the files using:\n$ pre-commit run --all-files\nIf you would like to skip the failing checks and push the code for further discussion, use the --no-verify option with git commit.\n\nThis project uses pytest as a testing tool. pytest is responsible for testing the code, whose configuration is available in pyproject.toml. Additionally, this project also uses pytest-cov to calculate the coverage of these unit tests. For more information, check the section about tests later in this document.\nCommit your changes and push your branch to GitHub::\n\n$ git add .\n$ git commit -m \"Your detailed description of your changes.\"\"\n$ git push origin name-of-your-bugfix-or-feature\n\nSubmit a pull request through the GitHub website.\n\n\n\n\nBefore you submit a pull request, check that it meets these guidelines:\n\nThe pull request should include tests.\nIf the pull request adds functionality, the docs should be updated. Put your new functionality into a function with a docstring, and add the feature to the list in README.rst.\nThe pull request should work for Python &gt;= 3.10.\n\n\n\n\nThe tests can be executed using the test dependencies of retsu in the following way:\n$ python -m pytest\n\n\nThe coverage value can be obtained while running the tests using pytest-cov in the following way:\n$ python -m pytest --cov=retsu tests/\nA much more detailed guide on testing with pytest is available here.\n\n\n\n\nThis project uses makim as an automation tool. Please, check the .makim.yaml file to check all the tasks available or run:\n$ makim --help\n\n\n\nThis project uses semantic-release in order to cut a new release based on the commit-message.\n\n\nsemantic-release uses the commit messages to determine the consumer impact of changes in the codebase. Following formalized conventions for commit messages, semantic-release automatically determines the next semantic version number, generates a changelog and publishes the release.\nBy default, semantic-release uses Angular Commit Message Conventions. The commit message format can be changed with the preset or config options_ of the @semantic-release/commit-analyzer and @semantic-release/release-notes-generator plugins.\nTools such as commitizen or commitlint can be used to help contributors and enforce valid commit messages.\nThe table below shows which commit message gets you which release type when semantic-release runs (using the default configuration):\n\n\n\n\n\n\n\nCommit message\nRelease type\n\n\n\n\nfix(pencil): stop graphite breaking when pressure is applied\nFix Release\n\n\nfeat(pencil): add 'graphiteWidth' option\nFeature Release\n\n\nperf(pencil): remove graphiteWidth option\nChore\n\n\nfeat(pencil)!: The graphiteWidth option has been removed\nBreaking Release\n\n\n\nNote: For a breaking change release, uses ! at the end of the message prefix.\nsource: https://github.com/semantic-release/semantic-release/blob/master/README.md#commit-message-format\nAs this project uses the squash and merge strategy, ensure to apply the commit message format to the PR’s title.",
+    "text": "Thank you for improving Retsu. The project is small, but it protects important resource-safety guarantees, so changes should be focused, tested, and easy to audit.\n\n\n\n\n\n\n\n\n\nPath\nPurpose\n\n\n\n\nsrc/retsu/\nPublic APIs, configuration, leases, resources, scheduling, and state models.\n\n\nsrc/retsu/backends/\nBackend protocol plus memory and Redis/Valkey implementations.\n\n\nsrc/retsu/executors/\nAdmission-mode executor protocol and local/Ray executors.\n\n\nsrc/retsu/integrations/\nCelery and Ray guard helpers.\n\n\nsrc/retsu/plugins/\nFramework plugins such as Django app config support.\n\n\nsrc/retsu/cli/\nretsu command line interface.\n\n\ntests/\nMemory-only and Redis-backed tests.\n\n\ndocs/\nQuarto documentation.\n\n\nexamples/\nUsage examples and example notes.\n\n\ncontainers/\nValkey and optional worker container definitions.\n\n\n\nThe package uses the src layout. Import package code as retsu, not through local path hacks.\n\n\n\ngit clone https://github.com/osl-incubator/retsu.git\ncd retsu\nmamba env create --file conda/dev.yaml\nconda activate retsu\npoetry install\npre-commit install\nConda also works if Mamba is not installed:\nconda env create --file conda/dev.yaml\nconda activate retsu\npoetry install\n\n\n\nFast service-free tests:\npytest -q -m no_services\nFull unit suite with Redis/Valkey managed by project automation:\nmakim tests.unit\nRedis backend only, after starting services:\nmakim tests.setup\npytest -q tests/test_redis_backend.py\nmakim tests.teardown\nLinting, typing, and pre-commit checks:\nruff format src tests\nruff check src tests\nmypy .\npre-commit run --all-files\nmakim tests.linter\nDocumentation build:\nmakim docs.build\n\n\n\n\nNever over-allocate configured capacity.\nRelease leases exactly once on success, failure, timeout, and cleanup paths.\nKeep memory and Redis/Valkey behavior aligned.\nKeep Redis capacity accounting atomic; do not replace Lua-scripted acquire or release paths with Python read-modify-write sequences.\nKeep optional integrations optional at import time.\nUpdate docs, examples, and API references for user-facing behavior changes.\nPrefer small targeted edits over broad refactors.\n\n\n\n\n\nAdd or update tests near the behavior you change.\nMark service-free tests with pytest.mark.no_services.\nMark Redis/Valkey integration tests with pytest.mark.redis.\nFor backend behavior, cover both memory and Redis where the feature applies.\nFor scheduler/executor behavior, test status transitions, result handling, failure handling, and lease release.\nFor CLI behavior, test return codes and user-facing output.\n\n\n\n\nUpdate documentation in the same change when behavior changes:\n\nREADME.md for high-level positioning and quick examples;\ndocs/index.md for the website overview;\ntopic pages such as guard-mode.md, admission-mode.md, and operations.md for workflow details;\ndocs/api/references.md for public API changes;\nexamples/ when example usage changes.\n\nDo not commit generated Quarto output from build/ unless a task explicitly asks for it.\n\n\n\n\nPython line length is 79 characters.\nMypy is strict; avoid unnecessary Any and broad type: ignore comments.\nRuff handles formatting, import order, pycodestyle, pyflakes, pydocstyle, and pyupgrade-style checks.\nUse existing Retsu exception types for expected user-facing errors.\nDo not use heredocs inside YAML-backed configuration files.\n\n\n\n\nBefore opening a PR, verify:\n\ntests cover the behavior change;\nresource accounting cannot over-allocate or go negative;\nleases release on success, failure, and cleanup paths;\nmemory and Redis behavior remain aligned where applicable;\noptional dependencies remain optional;\npublic API changes are reflected in docs and examples;\nruff, mypy, and relevant tests pass, or blockers are clearly stated.\n\n\n\n\nRetsu uses semantic-release. Pull request titles should follow conventional commit style because squash-merge titles drive release notes:\nfix: release leases after dispatch failure\nfeat: add scheduler queue filtering\nchore: update development dependencies\nUse ! for breaking changes:\nfeat!: change admission result serialization format",
     "crumbs": [
       "Home",
       "Contributing"
     ]
   },
   {
-    "objectID": "docs/contributing.html#types-of-contributions",
-    "href": "docs/contributing.html#types-of-contributions",
+    "objectID": "docs/contributing.html#repository-layout",
+    "href": "docs/contributing.html#repository-layout",
     "title": "Contributing",
     "section": "",
-    "text": "Report bugs at https://github.com/xmnlab/retsu.git/issues.\nIf you are reporting a bug, please include:\n\nYour operating system name and version.\nAny details about your local setup that might be helpful in troubleshooting.\nDetailed steps to reproduce the bug.\n\n\n\n\nLook through the GitHub issues for bugs. Anything tagged with “bug” and “help wanted” is open to whoever wants to implement it.\n\n\n\nLook through the GitHub issues for features. Anything tagged with “enhancement” and “help wanted” is open to whoever wants to implement it.\n\n\n\nRetsu could always use more documentation, whether as part of the official Retsu docs, in docstrings, or even on the web in blog posts, articles, and such.\n\n\n\nThe best way to send feedback is to file an issue at https://github.com/xmnlab/retsu.git/issues.\nIf you are proposing a feature:\n\nExplain in detail how it would work.\nKeep the scope as narrow as possible, to make it easier to implement.\nRemember that this is a volunteer-driven project, and that contributions are welcome :)",
+    "text": "Path\nPurpose\n\n\n\n\nsrc/retsu/\nPublic APIs, configuration, leases, resources, scheduling, and state models.\n\n\nsrc/retsu/backends/\nBackend protocol plus memory and Redis/Valkey implementations.\n\n\nsrc/retsu/executors/\nAdmission-mode executor protocol and local/Ray executors.\n\n\nsrc/retsu/integrations/\nCelery and Ray guard helpers.\n\n\nsrc/retsu/plugins/\nFramework plugins such as Django app config support.\n\n\nsrc/retsu/cli/\nretsu command line interface.\n\n\ntests/\nMemory-only and Redis-backed tests.\n\n\ndocs/\nQuarto documentation.\n\n\nexamples/\nUsage examples and example notes.\n\n\ncontainers/\nValkey and optional worker container definitions.\n\n\n\nThe package uses the src layout. Import package code as retsu, not through local path hacks.",
     "crumbs": [
       "Home",
       "Contributing"
     ]
   },
   {
-    "objectID": "docs/contributing.html#get-started",
-    "href": "docs/contributing.html#get-started",
+    "objectID": "docs/contributing.html#development-setup",
+    "href": "docs/contributing.html#development-setup",
     "title": "Contributing",
     "section": "",
-    "text": "Ready to contribute? Here’s how to set up retsu for local development.\n\nFork the retsu repo on GitHub.\nClone your fork locally and change to the directory of your project:\n\n$ git clone git@github.com:your_name_here/retsu.git\n$ cd retsu/\nAlso, create a remote to the upstream repository, you will need that later:\n$ git remote add upstream https://github.com/xmnlab/retsu.git\n$ git fetch --all\n\nPrepare and use virtual environment: If you don’t have yet conda installed in your machine, you can check the installation steps here: https://github.com/conda-forge/miniforge?tab=readme-ov-file#download After that, ensure that conda is already available in your terminal session and run:\n\n$ conda env create env create --file conda/dev.yaml\n$ conda activate retsu\nNote: you can use mamba env create instead, if you have it already installed, in order to boost the installation step.\n\nInstall the dependencies: Now, you can already install the dependencies for the project:\n\n$ poetry install\n\nretsu uses a set of pre-commit hooks to improve code quality. The hooks can be installed locally using:\n\n$ pre-commit install\nThis would run the checks every time a git commit is executed locally. Usually, the verification will only run on the files modified by that commit, but the verification can also be triggered for all the files using:\n$ pre-commit run --all-files\nIf you would like to skip the failing checks and push the code for further discussion, use the --no-verify option with git commit.\n\nThis project uses pytest as a testing tool. pytest is responsible for testing the code, whose configuration is available in pyproject.toml. Additionally, this project also uses pytest-cov to calculate the coverage of these unit tests. For more information, check the section about tests later in this document.\nCommit your changes and push your branch to GitHub::\n\n$ git add .\n$ git commit -m \"Your detailed description of your changes.\"\"\n$ git push origin name-of-your-bugfix-or-feature\n\nSubmit a pull request through the GitHub website.",
+    "text": "git clone https://github.com/osl-incubator/retsu.git\ncd retsu\nmamba env create --file conda/dev.yaml\nconda activate retsu\npoetry install\npre-commit install\nConda also works if Mamba is not installed:\nconda env create --file conda/dev.yaml\nconda activate retsu\npoetry install",
     "crumbs": [
       "Home",
       "Contributing"
     ]
   },
   {
-    "objectID": "docs/contributing.html#pull-request-guidelines",
-    "href": "docs/contributing.html#pull-request-guidelines",
+    "objectID": "docs/contributing.html#high-value-commands",
+    "href": "docs/contributing.html#high-value-commands",
     "title": "Contributing",
     "section": "",
-    "text": "Before you submit a pull request, check that it meets these guidelines:\n\nThe pull request should include tests.\nIf the pull request adds functionality, the docs should be updated. Put your new functionality into a function with a docstring, and add the feature to the list in README.rst.\nThe pull request should work for Python &gt;= 3.10.",
+    "text": "Fast service-free tests:\npytest -q -m no_services\nFull unit suite with Redis/Valkey managed by project automation:\nmakim tests.unit\nRedis backend only, after starting services:\nmakim tests.setup\npytest -q tests/test_redis_backend.py\nmakim tests.teardown\nLinting, typing, and pre-commit checks:\nruff format src tests\nruff check src tests\nmypy .\npre-commit run --all-files\nmakim tests.linter\nDocumentation build:\nmakim docs.build",
     "crumbs": [
       "Home",
       "Contributing"
     ]
   },
   {
-    "objectID": "docs/contributing.html#running-tests-locally",
-    "href": "docs/contributing.html#running-tests-locally",
+    "objectID": "docs/contributing.html#design-priorities",
+    "href": "docs/contributing.html#design-priorities",
     "title": "Contributing",
     "section": "",
-    "text": "The tests can be executed using the test dependencies of retsu in the following way:\n$ python -m pytest\n\n\nThe coverage value can be obtained while running the tests using pytest-cov in the following way:\n$ python -m pytest --cov=retsu tests/\nA much more detailed guide on testing with pytest is available here.",
+    "text": "Never over-allocate configured capacity.\nRelease leases exactly once on success, failure, timeout, and cleanup paths.\nKeep memory and Redis/Valkey behavior aligned.\nKeep Redis capacity accounting atomic; do not replace Lua-scripted acquire or release paths with Python read-modify-write sequences.\nKeep optional integrations optional at import time.\nUpdate docs, examples, and API references for user-facing behavior changes.\nPrefer small targeted edits over broad refactors.",
     "crumbs": [
       "Home",
       "Contributing"
     ]
   },
   {
-    "objectID": "docs/contributing.html#automation-tasks-with-makim",
-    "href": "docs/contributing.html#automation-tasks-with-makim",
+    "objectID": "docs/contributing.html#testing-expectations",
+    "href": "docs/contributing.html#testing-expectations",
     "title": "Contributing",
     "section": "",
-    "text": "This project uses makim as an automation tool. Please, check the .makim.yaml file to check all the tasks available or run:\n$ makim --help",
+    "text": "Add or update tests near the behavior you change.\nMark service-free tests with pytest.mark.no_services.\nMark Redis/Valkey integration tests with pytest.mark.redis.\nFor backend behavior, cover both memory and Redis where the feature applies.\nFor scheduler/executor behavior, test status transitions, result handling, failure handling, and lease release.\nFor CLI behavior, test return codes and user-facing output.",
     "crumbs": [
       "Home",
       "Contributing"
     ]
   },
   {
-    "objectID": "docs/contributing.html#release",
-    "href": "docs/contributing.html#release",
+    "objectID": "docs/contributing.html#documentation-expectations",
+    "href": "docs/contributing.html#documentation-expectations",
     "title": "Contributing",
     "section": "",
-    "text": "This project uses semantic-release in order to cut a new release based on the commit-message.\n\n\nsemantic-release uses the commit messages to determine the consumer impact of changes in the codebase. Following formalized conventions for commit messages, semantic-release automatically determines the next semantic version number, generates a changelog and publishes the release.\nBy default, semantic-release uses Angular Commit Message Conventions. The commit message format can be changed with the preset or config options_ of the @semantic-release/commit-analyzer and @semantic-release/release-notes-generator plugins.\nTools such as commitizen or commitlint can be used to help contributors and enforce valid commit messages.\nThe table below shows which commit message gets you which release type when semantic-release runs (using the default configuration):\n\n\n\n\n\n\n\nCommit message\nRelease type\n\n\n\n\nfix(pencil): stop graphite breaking when pressure is applied\nFix Release\n\n\nfeat(pencil): add 'graphiteWidth' option\nFeature Release\n\n\nperf(pencil): remove graphiteWidth option\nChore\n\n\nfeat(pencil)!: The graphiteWidth option has been removed\nBreaking Release\n\n\n\nNote: For a breaking change release, uses ! at the end of the message prefix.\nsource: https://github.com/semantic-release/semantic-release/blob/master/README.md#commit-message-format\nAs this project uses the squash and merge strategy, ensure to apply the commit message format to the PR’s title.",
+    "text": "Update documentation in the same change when behavior changes:\n\nREADME.md for high-level positioning and quick examples;\ndocs/index.md for the website overview;\ntopic pages such as guard-mode.md, admission-mode.md, and operations.md for workflow details;\ndocs/api/references.md for public API changes;\nexamples/ when example usage changes.\n\nDo not commit generated Quarto output from build/ unless a task explicitly asks for it.",
+    "crumbs": [
+      "Home",
+      "Contributing"
+    ]
+  },
+  {
+    "objectID": "docs/contributing.html#style",
+    "href": "docs/contributing.html#style",
+    "title": "Contributing",
+    "section": "",
+    "text": "Python line length is 79 characters.\nMypy is strict; avoid unnecessary Any and broad type: ignore comments.\nRuff handles formatting, import order, pycodestyle, pyflakes, pydocstyle, and pyupgrade-style checks.\nUse existing Retsu exception types for expected user-facing errors.\nDo not use heredocs inside YAML-backed configuration files.",
+    "crumbs": [
+      "Home",
+      "Contributing"
+    ]
+  },
+  {
+    "objectID": "docs/contributing.html#pull-request-checklist",
+    "href": "docs/contributing.html#pull-request-checklist",
+    "title": "Contributing",
+    "section": "",
+    "text": "Before opening a PR, verify:\n\ntests cover the behavior change;\nresource accounting cannot over-allocate or go negative;\nleases release on success, failure, and cleanup paths;\nmemory and Redis behavior remain aligned where applicable;\noptional dependencies remain optional;\npublic API changes are reflected in docs and examples;\nruff, mypy, and relevant tests pass, or blockers are clearly stated.",
+    "crumbs": [
+      "Home",
+      "Contributing"
+    ]
+  },
+  {
+    "objectID": "docs/contributing.html#commit-messages-and-releases",
+    "href": "docs/contributing.html#commit-messages-and-releases",
+    "title": "Contributing",
+    "section": "",
+    "text": "Retsu uses semantic-release. Pull request titles should follow conventional commit style because squash-merge titles drive release notes:\nfix: release leases after dispatch failure\nfeat: add scheduler queue filtering\nchore: update development dependencies\nUse ! for breaking changes:\nfeat!: change admission result serialization format",
     "crumbs": [
       "Home",
       "Contributing"
@@ -231,33 +499,498 @@
     ]
   },
   {
-    "objectID": "docs/index.html",
-    "href": "docs/index.html",
-    "title": "Retsu",
+    "objectID": "docs/admission-mode.html",
+    "href": "docs/admission-mode.html",
+    "title": "Admission mode",
     "section": "",
-    "text": "LOGO",
+    "text": "Admission mode is Retsu’s resource-aware dispatch path. Instead of immediately running a guarded function, you submit a job, let a scheduler acquire capacity, and dispatch the job only after the lease exists.\nUse admission mode when:\n\njobs should wait in Retsu state until capacity is available;\na scheduler should decide when to dispatch queued work;\ncallers need a JobHandle for status, metadata, cancellation, and result access;\nyou want the same resource accounting for local threads or Ray dispatch.\n\n\n\nimport retsu\n\nretsu.configure(backend=\"memory\")\nretsu.define_resource(\"cpu\", 2)\nretsu.define_concurrency(\"reports\", 1)\n\n\ndef build_report(name: str) -&gt; str:\n    return f\"built {name}\"\n\n\nhandle = retsu.submit(\n    build_report,\n    args=(\"weekly\",),\n    resources={\"cpu\": 1},\n    concurrency={\"reports\": 1},\n)\n\nscheduler = retsu.Scheduler()\nscheduler.run_once()\n\nprint(handle.result(timeout=5))\nThe default local executor runs admitted jobs in daemon threads.\n\n\n\n\n\nsubmit() evaluates the resource request immediately, serializes args and kwargs, stores a JobRecord, and returns a JobHandle.\nhandle = retsu.submit(\n    func,\n    args=(\"customer-42\",),\n    kwargs={\"force\": True},\n    resources={\"memory_mb\": 256},\n    concurrency={\"customer-sync\": 1},\n    executor=\"local\",\n    priority=10,\n)\nThe local executor also stores the submitted Python callable in a process-local function registry. That means local admission execution is currently best suited for scheduler loops running in the same process as submission, or for tests and single-process services.\n\n\n\nThe scheduler performs one admission pass with run_once():\n\ncleanup expired leases;\nload queued and waiting jobs;\ntry to acquire each job’s requested capacity;\nmark unavailable jobs as waiting_for_resources;\nmark admitted jobs as leased and dispatched;\ncall the configured executor.\n\nscheduler = retsu.Scheduler()\nscheduler.run_once(limit=100)\nA service can call run_once() in a loop:\nimport signal\nimport time\n\nstop = False\n\n\ndef request_stop(*_: object) -&gt; None:\n    global stop\n    stop = True\n\n\nsignal.signal(signal.SIGTERM, request_stop)\nscheduler = retsu.Scheduler()\n\nwhile not stop:\n    scheduler.run_once(limit=100)\n    time.sleep(0.5)\n\n\n\nRetsu includes two executor implementations:\n\n\n\n\n\n\n\n\nExecutor\nName\nBehavior\n\n\n\n\nLocalExecutor\nlocal\nRuns jobs in local daemon threads and releases the lease after success or failure.\n\n\nRayExecutor\nray\nDispatches jobs to Ray and tracks completion in a local daemon thread.\n\n\n\nScheduler() registers the local executor by default. If a job asks for executor=\"ray\", the scheduler creates a RayExecutor on demand.\n\n\n\nThe handle returned by submit() exposes:\nhandle.status()       # current JobStatus\nhandle.result(10)     # wait up to 10 seconds, then return or raise\nhandle.metadata()     # serializable job metadata\nhandle.cancel()       # mark the job cancelled\nresult() returns the unpickled result for succeeded jobs. It raises RuntimeError for failed or cancelled jobs and TimeoutError if the timeout expires before a terminal state.\n\n\n\n\nCommon statuses are:\n\n\n\n\n\n\n\nStatus\nMeaning\n\n\n\n\nqueued\nThe job has been submitted and is eligible for scheduling.\n\n\nwaiting_for_resources\nA scheduler pass could not acquire capacity.\n\n\nleased\nCapacity was acquired.\n\n\ndispatched\nThe executor was called.\n\n\nrunning\nThe executor started executing the callable.\n\n\nsucceeded\nThe callable returned successfully.\n\n\nfailed\nDispatch or execution raised an exception.\n\n\ncancelled\nThe job was marked cancelled.\n\n\n\nTimestamps such as leased_at, started_at, and finished_at are updated as jobs move through these states.\n\n\n\nQueued jobs are sorted by descending priority, then by creation time. A higher priority value is considered first during each scheduler pass.\nhigh = retsu.submit(expensive_job, priority=100)\nnormal = retsu.submit(expensive_job, priority=0)\nRetsu does not currently implement aging, weighted fairness, or per-queue scheduler filters. If you use the queue field, treat it as metadata unless you provide custom scheduler logic.\n\n\n\nhandle = retsu.submit(\n    train_model,\n    args=(\"model-a\",),\n    resources={\"gpu\": 1},\n    executor=\"ray\",\n)\n\nretsu.Scheduler().run_once()\nRay still controls Ray cluster placement. Retsu controls the application-level capacity definitions you declare in its backend.\n\n\n\n\nDispatch failures release the acquired lease and mark the job failed.\nExecutors release leases after success and after exceptions.\nAdmission payloads and results use pickle; treat them as trusted-process data, not untrusted user input.\nLocal admission mode is intentionally lightweight. For durable, multi-worker task distribution, pair Retsu guard mode with Celery/Ray or build a custom executor around the backend protocol.",
     "crumbs": [
-      "Home"
+      "Home",
+      "Admission Mode"
     ]
   },
   {
-    "objectID": "docs/index.html#features",
-    "href": "docs/index.html#features",
-    "title": "Retsu",
-    "section": "Features",
-    "text": "Features\n\nThe security of our code: Bandit is a powerful tool that we use in our Python project to ensure its security. This tool analyzes the code and detects potential vulnerabilities. Some of the key features of Bandit are its ease of use, its ability to integrate with other tools, and its support for multiple Python versions. If you want to know about bandit you can check its documentation.\nFinds unused code: Vulture is useful for cleaning up and finding errors in large code bases in Python.\nComplexity of functions and modules: We use McCabe to identify the complexity in our Python code that may be difficult to maintain or understand. By identifying complex code at the outset, we as developers can refactor it to make it easier to maintain and understand. In summary, McCabe helps us to improve the quality of our code and make it easier to maintain. If you would like to learn more about McCabe and code complexity, you can visit McCabe - Code Complexity Checker. This tool is included with Flake8.\nTODO",
+    "objectID": "docs/admission-mode.html#minimal-local-example",
+    "href": "docs/admission-mode.html#minimal-local-example",
+    "title": "Admission mode",
+    "section": "",
+    "text": "import retsu\n\nretsu.configure(backend=\"memory\")\nretsu.define_resource(\"cpu\", 2)\nretsu.define_concurrency(\"reports\", 1)\n\n\ndef build_report(name: str) -&gt; str:\n    return f\"built {name}\"\n\n\nhandle = retsu.submit(\n    build_report,\n    args=(\"weekly\",),\n    resources={\"cpu\": 1},\n    concurrency={\"reports\": 1},\n)\n\nscheduler = retsu.Scheduler()\nscheduler.run_once()\n\nprint(handle.result(timeout=5))\nThe default local executor runs admitted jobs in daemon threads.",
     "crumbs": [
-      "Home"
+      "Home",
+      "Admission Mode"
     ]
   },
   {
-    "objectID": "docs/index.html#credits",
-    "href": "docs/index.html#credits",
-    "title": "Retsu",
-    "section": "Credits",
-    "text": "Credits\nThis package was created with Cookiecutter and the osl-incubator/scicookie project template.",
+    "objectID": "docs/admission-mode.html#components",
+    "href": "docs/admission-mode.html#components",
+    "title": "Admission mode",
+    "section": "",
+    "text": "submit() evaluates the resource request immediately, serializes args and kwargs, stores a JobRecord, and returns a JobHandle.\nhandle = retsu.submit(\n    func,\n    args=(\"customer-42\",),\n    kwargs={\"force\": True},\n    resources={\"memory_mb\": 256},\n    concurrency={\"customer-sync\": 1},\n    executor=\"local\",\n    priority=10,\n)\nThe local executor also stores the submitted Python callable in a process-local function registry. That means local admission execution is currently best suited for scheduler loops running in the same process as submission, or for tests and single-process services.\n\n\n\nThe scheduler performs one admission pass with run_once():\n\ncleanup expired leases;\nload queued and waiting jobs;\ntry to acquire each job’s requested capacity;\nmark unavailable jobs as waiting_for_resources;\nmark admitted jobs as leased and dispatched;\ncall the configured executor.\n\nscheduler = retsu.Scheduler()\nscheduler.run_once(limit=100)\nA service can call run_once() in a loop:\nimport signal\nimport time\n\nstop = False\n\n\ndef request_stop(*_: object) -&gt; None:\n    global stop\n    stop = True\n\n\nsignal.signal(signal.SIGTERM, request_stop)\nscheduler = retsu.Scheduler()\n\nwhile not stop:\n    scheduler.run_once(limit=100)\n    time.sleep(0.5)\n\n\n\nRetsu includes two executor implementations:\n\n\n\n\n\n\n\n\nExecutor\nName\nBehavior\n\n\n\n\nLocalExecutor\nlocal\nRuns jobs in local daemon threads and releases the lease after success or failure.\n\n\nRayExecutor\nray\nDispatches jobs to Ray and tracks completion in a local daemon thread.\n\n\n\nScheduler() registers the local executor by default. If a job asks for executor=\"ray\", the scheduler creates a RayExecutor on demand.\n\n\n\nThe handle returned by submit() exposes:\nhandle.status()       # current JobStatus\nhandle.result(10)     # wait up to 10 seconds, then return or raise\nhandle.metadata()     # serializable job metadata\nhandle.cancel()       # mark the job cancelled\nresult() returns the unpickled result for succeeded jobs. It raises RuntimeError for failed or cancelled jobs and TimeoutError if the timeout expires before a terminal state.",
     "crumbs": [
-      "Home"
+      "Home",
+      "Admission Mode"
+    ]
+  },
+  {
+    "objectID": "docs/admission-mode.html#job-statuses",
+    "href": "docs/admission-mode.html#job-statuses",
+    "title": "Admission mode",
+    "section": "",
+    "text": "Common statuses are:\n\n\n\n\n\n\n\nStatus\nMeaning\n\n\n\n\nqueued\nThe job has been submitted and is eligible for scheduling.\n\n\nwaiting_for_resources\nA scheduler pass could not acquire capacity.\n\n\nleased\nCapacity was acquired.\n\n\ndispatched\nThe executor was called.\n\n\nrunning\nThe executor started executing the callable.\n\n\nsucceeded\nThe callable returned successfully.\n\n\nfailed\nDispatch or execution raised an exception.\n\n\ncancelled\nThe job was marked cancelled.\n\n\n\nTimestamps such as leased_at, started_at, and finished_at are updated as jobs move through these states.",
+    "crumbs": [
+      "Home",
+      "Admission Mode"
+    ]
+  },
+  {
+    "objectID": "docs/admission-mode.html#priorities-and-fairness",
+    "href": "docs/admission-mode.html#priorities-and-fairness",
+    "title": "Admission mode",
+    "section": "",
+    "text": "Queued jobs are sorted by descending priority, then by creation time. A higher priority value is considered first during each scheduler pass.\nhigh = retsu.submit(expensive_job, priority=100)\nnormal = retsu.submit(expensive_job, priority=0)\nRetsu does not currently implement aging, weighted fairness, or per-queue scheduler filters. If you use the queue field, treat it as metadata unless you provide custom scheduler logic.",
+    "crumbs": [
+      "Home",
+      "Admission Mode"
+    ]
+  },
+  {
+    "objectID": "docs/admission-mode.html#ray-dispatch",
+    "href": "docs/admission-mode.html#ray-dispatch",
+    "title": "Admission mode",
+    "section": "",
+    "text": "handle = retsu.submit(\n    train_model,\n    args=(\"model-a\",),\n    resources={\"gpu\": 1},\n    executor=\"ray\",\n)\n\nretsu.Scheduler().run_once()\nRay still controls Ray cluster placement. Retsu controls the application-level capacity definitions you declare in its backend.",
+    "crumbs": [
+      "Home",
+      "Admission Mode"
+    ]
+  },
+  {
+    "objectID": "docs/admission-mode.html#reliability-notes",
+    "href": "docs/admission-mode.html#reliability-notes",
+    "title": "Admission mode",
+    "section": "",
+    "text": "Dispatch failures release the acquired lease and mark the job failed.\nExecutors release leases after success and after exceptions.\nAdmission payloads and results use pickle; treat them as trusted-process data, not untrusted user input.\nLocal admission mode is intentionally lightweight. For durable, multi-worker task distribution, pair Retsu guard mode with Celery/Ray or build a custom executor around the backend protocol.",
+    "crumbs": [
+      "Home",
+      "Admission Mode"
+    ]
+  },
+  {
+    "objectID": "docs/concepts.html",
+    "href": "docs/concepts.html",
+    "title": "Concepts",
+    "section": "",
+    "text": "Retsu is intentionally small. Understanding the few core concepts makes the API predictable and helps you design safe capacity policies.\n\n\nA capacity is a named limit stored in the backend.\nretsu.define_resource(\"memory_mb\", 16_000)\nretsu.define_concurrency(\"vendor-api\", 5)\nRetsu keeps two kinds of capacity separate:\n\nResources are quantitative amounts. They are useful for memory, GPU fractions, license seats, token budgets, or any other value where a job may need more than one unit.\nConcurrency limits are named slot counts. They are useful for per-service, per-tenant, or per-critical-section limits.\n\nBoth kinds use floating-point values internally. Names must be non-empty strings. Capacity values must be non-negative. A request for an undefined name raises ResourceDefinitionMissing.\n\n\n\nA request is the concrete capacity needed by one lease.\nrequest = retsu.ResourceRequest(\n    resources={\"memory_mb\": 256},\n    concurrency={\"vendor-api\": 1},\n)\nGuard APIs usually build the request for you from a ResourceSpec. Values can be static numbers or callables evaluated with the wrapped function arguments:\n@retsu.guard(resources={\"memory_mb\": lambda batch: batch.estimated_mb})\ndef process(batch):\n    ...\nEstimator failures are wrapped in ResourceEstimationError before any lease is acquired. Zero-valued requests are ignored. Negative or non-finite values are rejected.\n\n\n\nA lease is a time-limited reservation of a request. On successful acquire:\n\nRetsu verifies every requested name exists.\nRetsu checks whether used + requested &lt;= capacity for every item.\nUsage is incremented.\nA lease record is stored with an owner id and expiry time.\n\nWhen the lease is released or cleaned up after expiry, usage is decremented once and clamped so it cannot go below zero.\nGuard decorators and context managers release leases in finally blocks. They also run a daemon heartbeat thread that renews the lease while user code is running.\n\n\n\nEach lease has an owner id. Guard mode uses a process-stable owner id based on the host name and process id. Admission-mode schedulers use their own owner id.\nRelease and renewal operations include the owner id. If an owner is supplied and it does not match the lease owner, the backend leaves the lease untouched. This prevents one worker from accidentally releasing another worker’s reservation.\n\n\n\nWait strategies control what happens when capacity is currently full.\n\n\n\n\n\n\n\nStrategy\nBehavior\n\n\n\n\nblock\nKeep trying until capacity is available or the acquire timeout expires. This is the default.\n\n\nfail\nRaise ResourceUnavailable immediately.\n\n\nretry\nRaise ResourceUnavailable immediately so an integration can schedule a retry. Celery uses this path.\n\n\n\nIf block waits longer than acquire_timeout_seconds, Retsu raises ResourceAcquireTimeout.\n\n\n\n\n\nThe memory backend is thread-safe and service-free. Use it for tests, notebooks, local scripts, and single-process tools.\nretsu.configure(backend=\"memory\")\nMemory state is process-local. It does not coordinate across processes.\n\n\n\nThe Redis backend is the default. It stores capacity, usage, leases, and admission jobs under namespace-scoped keys:\nretsu:{namespace}:capacity:resources\nretsu:{namespace}:capacity:concurrency\nretsu:{namespace}:usage:resources\nretsu:{namespace}:usage:concurrency\nretsu:{namespace}:leases\nretsu:{namespace}:lease:{lease_id}\nretsu:{namespace}:job:{job_id}\nAcquisition, release, and renewal use Lua scripts for atomic accounting. Do not replace those paths with application-side read-modify-write sequences.\n\n\n\n\nget_usage() returns configured capacity, used capacity, and available capacity for every resource and concurrency definition:\nsnapshot = retsu.get_usage()\nprint(snapshot.resources[\"memory_mb\"].available)\nRetsu cleans expired leases before acquisition and before usage snapshots. You can also call cleanup_expired_leases() directly or use the CLI cleanup command as an operational maintenance action.\n\n\n\nAdmission mode uses persisted JobRecord objects. A typical successful job moves through these statuses:\nqueued -&gt; leased -&gt; dispatched -&gt; running -&gt; succeeded\nIf capacity is unavailable during a scheduler pass, the job becomes waiting_for_resources and can be considered again later. Dispatch failures and runtime exceptions mark the job failed, and executors release the lease in a finally path.\n\n\n\nRetsu protects capacity accounting. It does not make the guarded work itself idempotent, transactional, or safe for untrusted input. Admission-mode payloads and results are serialized with pickle, so treat them as trusted-process data.",
+    "crumbs": [
+      "Home",
+      "Concepts"
+    ]
+  },
+  {
+    "objectID": "docs/concepts.html#capacities",
+    "href": "docs/concepts.html#capacities",
+    "title": "Concepts",
+    "section": "",
+    "text": "A capacity is a named limit stored in the backend.\nretsu.define_resource(\"memory_mb\", 16_000)\nretsu.define_concurrency(\"vendor-api\", 5)\nRetsu keeps two kinds of capacity separate:\n\nResources are quantitative amounts. They are useful for memory, GPU fractions, license seats, token budgets, or any other value where a job may need more than one unit.\nConcurrency limits are named slot counts. They are useful for per-service, per-tenant, or per-critical-section limits.\n\nBoth kinds use floating-point values internally. Names must be non-empty strings. Capacity values must be non-negative. A request for an undefined name raises ResourceDefinitionMissing.",
+    "crumbs": [
+      "Home",
+      "Concepts"
+    ]
+  },
+  {
+    "objectID": "docs/concepts.html#requests",
+    "href": "docs/concepts.html#requests",
+    "title": "Concepts",
+    "section": "",
+    "text": "A request is the concrete capacity needed by one lease.\nrequest = retsu.ResourceRequest(\n    resources={\"memory_mb\": 256},\n    concurrency={\"vendor-api\": 1},\n)\nGuard APIs usually build the request for you from a ResourceSpec. Values can be static numbers or callables evaluated with the wrapped function arguments:\n@retsu.guard(resources={\"memory_mb\": lambda batch: batch.estimated_mb})\ndef process(batch):\n    ...\nEstimator failures are wrapped in ResourceEstimationError before any lease is acquired. Zero-valued requests are ignored. Negative or non-finite values are rejected.",
+    "crumbs": [
+      "Home",
+      "Concepts"
+    ]
+  },
+  {
+    "objectID": "docs/concepts.html#leases",
+    "href": "docs/concepts.html#leases",
+    "title": "Concepts",
+    "section": "",
+    "text": "A lease is a time-limited reservation of a request. On successful acquire:\n\nRetsu verifies every requested name exists.\nRetsu checks whether used + requested &lt;= capacity for every item.\nUsage is incremented.\nA lease record is stored with an owner id and expiry time.\n\nWhen the lease is released or cleaned up after expiry, usage is decremented once and clamped so it cannot go below zero.\nGuard decorators and context managers release leases in finally blocks. They also run a daemon heartbeat thread that renews the lease while user code is running.",
+    "crumbs": [
+      "Home",
+      "Concepts"
+    ]
+  },
+  {
+    "objectID": "docs/concepts.html#owners",
+    "href": "docs/concepts.html#owners",
+    "title": "Concepts",
+    "section": "",
+    "text": "Each lease has an owner id. Guard mode uses a process-stable owner id based on the host name and process id. Admission-mode schedulers use their own owner id.\nRelease and renewal operations include the owner id. If an owner is supplied and it does not match the lease owner, the backend leaves the lease untouched. This prevents one worker from accidentally releasing another worker’s reservation.",
+    "crumbs": [
+      "Home",
+      "Concepts"
+    ]
+  },
+  {
+    "objectID": "docs/concepts.html#wait-strategies",
+    "href": "docs/concepts.html#wait-strategies",
+    "title": "Concepts",
+    "section": "",
+    "text": "Wait strategies control what happens when capacity is currently full.\n\n\n\n\n\n\n\nStrategy\nBehavior\n\n\n\n\nblock\nKeep trying until capacity is available or the acquire timeout expires. This is the default.\n\n\nfail\nRaise ResourceUnavailable immediately.\n\n\nretry\nRaise ResourceUnavailable immediately so an integration can schedule a retry. Celery uses this path.\n\n\n\nIf block waits longer than acquire_timeout_seconds, Retsu raises ResourceAcquireTimeout.",
+    "crumbs": [
+      "Home",
+      "Concepts"
+    ]
+  },
+  {
+    "objectID": "docs/concepts.html#backends",
+    "href": "docs/concepts.html#backends",
+    "title": "Concepts",
+    "section": "",
+    "text": "The memory backend is thread-safe and service-free. Use it for tests, notebooks, local scripts, and single-process tools.\nretsu.configure(backend=\"memory\")\nMemory state is process-local. It does not coordinate across processes.\n\n\n\nThe Redis backend is the default. It stores capacity, usage, leases, and admission jobs under namespace-scoped keys:\nretsu:{namespace}:capacity:resources\nretsu:{namespace}:capacity:concurrency\nretsu:{namespace}:usage:resources\nretsu:{namespace}:usage:concurrency\nretsu:{namespace}:leases\nretsu:{namespace}:lease:{lease_id}\nretsu:{namespace}:job:{job_id}\nAcquisition, release, and renewal use Lua scripts for atomic accounting. Do not replace those paths with application-side read-modify-write sequences.",
+    "crumbs": [
+      "Home",
+      "Concepts"
+    ]
+  },
+  {
+    "objectID": "docs/concepts.html#usage-snapshots-and-cleanup",
+    "href": "docs/concepts.html#usage-snapshots-and-cleanup",
+    "title": "Concepts",
+    "section": "",
+    "text": "get_usage() returns configured capacity, used capacity, and available capacity for every resource and concurrency definition:\nsnapshot = retsu.get_usage()\nprint(snapshot.resources[\"memory_mb\"].available)\nRetsu cleans expired leases before acquisition and before usage snapshots. You can also call cleanup_expired_leases() directly or use the CLI cleanup command as an operational maintenance action.",
+    "crumbs": [
+      "Home",
+      "Concepts"
+    ]
+  },
+  {
+    "objectID": "docs/concepts.html#job-lifecycle-in-admission-mode",
+    "href": "docs/concepts.html#job-lifecycle-in-admission-mode",
+    "title": "Concepts",
+    "section": "",
+    "text": "Admission mode uses persisted JobRecord objects. A typical successful job moves through these statuses:\nqueued -&gt; leased -&gt; dispatched -&gt; running -&gt; succeeded\nIf capacity is unavailable during a scheduler pass, the job becomes waiting_for_resources and can be considered again later. Dispatch failures and runtime exceptions mark the job failed, and executors release the lease in a finally path.",
+    "crumbs": [
+      "Home",
+      "Concepts"
+    ]
+  },
+  {
+    "objectID": "docs/concepts.html#safety-boundaries",
+    "href": "docs/concepts.html#safety-boundaries",
+    "title": "Concepts",
+    "section": "",
+    "text": "Retsu protects capacity accounting. It does not make the guarded work itself idempotent, transactional, or safe for untrusted input. Admission-mode payloads and results are serialized with pickle, so treat them as trusted-process data.",
+    "crumbs": [
+      "Home",
+      "Concepts"
+    ]
+  },
+  {
+    "objectID": "docs/guard-mode.html",
+    "href": "docs/guard-mode.html",
+    "title": "Guard mode",
+    "section": "",
+    "text": "Guard mode is the simplest way to use Retsu. You keep your existing execution model and wrap the code that must not run unless capacity is available.\nUse guard mode for:\n\nCelery tasks that should retry when a shared limit is full;\nlocal functions that need a Redis-backed cross-process semaphore;\ncritical sections that use scarce external resources;\nRay tasks that need Retsu capacity in addition to Ray placement resources.\n\n\n\nimport retsu\n\nretsu.configure(backend=\"memory\")\nretsu.define_concurrency(\"vendor-api\", 2)\n\n\n@retsu.guard(concurrency={\"vendor-api\": 1})\ndef sync_order(order_id: str) -&gt; None:\n    push_order_to_vendor(order_id)\nThe wrapper preserves the function metadata with functools.wraps. Retsu acquires capacity before calling your function and releases it whether the function returns or raises.\n\n\n\nUse acquire() when only part of a function needs protection:\nwith retsu.acquire(resources={\"memory_mb\": 512}, concurrency={\"exports\": 1}):\n    export_large_file()\nUse limit() for the common case of one named concurrency limit:\nwith retsu.limit(\"exports\", slots=1):\n    export_large_file()\nBoth APIs return a Lease object from the context manager if you need the lease id for logs:\nwith retsu.limit(\"exports\") as lease:\n    logger.info(\"running export under lease %s\", lease.id)\n    export_large_file()\n\n\n\nRequests can be static:\n@retsu.guard(resources={\"gpu\": 1}, concurrency={\"training\": 1})\ndef train(model_id: str) -&gt; None:\n    ...\nThey can also be dynamic. Callable values receive the wrapped function’s arguments:\n@retsu.guard(\n    resources={\"memory_mb\": lambda records: max(128, len(records) * 2)},\n)\ndef import_records(records: list[dict[str, object]]) -&gt; None:\n    ...\nIf a dynamic estimator raises, Retsu raises ResourceEstimationError and does not acquire a lease.\n\n\n\n\n\n@retsu.guard(concurrency={\"reports\": 1}, wait_strategy=\"block\")\ndef build_report(report_id: str) -&gt; None:\n    ...\nblock is the default. It retries until capacity is available or the acquire timeout expires.\n\n\n\ntry:\n    with retsu.limit(\"reports\", wait_strategy=\"fail\"):\n        build_report_now()\nexcept retsu.ResourceUnavailable as exc:\n    return {\"status\": \"busy\", \"blocked_by\": exc.blocked_by}\nUse fail for request/response paths where waiting would be worse than telling the caller to try again.\n\n\n\n@app.task(bind=True)\ndef build_report(self, report_id: str) -&gt; None:\n    with retsu.celery_guard(\n        self,\n        concurrency={\"reports\": 1},\n        wait_strategy=\"retry\",\n    ):\n        render_report(report_id)\ncelery_guard() converts ResourceUnavailable into task.retry(...) when the strategy is retry.\n\n\n\n\nEvery lease has a TTL. Guard mode starts a daemon heartbeat thread and renews the lease while the guarded code is active. If the worker process crashes, the heartbeat stops and the lease eventually expires. Expired leases are cleaned up before capacity acquisition and usage snapshots.\nTune these values together:\nretsu.configure(\n    backend=\"redis\",\n    redis_url=\"redis://localhost:6379/0\",\n    default_ttl_seconds=300,\n    default_heartbeat_interval_seconds=30,\n    default_acquire_timeout_seconds=60,\n)\nChoose a TTL long enough to tolerate normal heartbeat delays, and an acquire timeout that matches how long callers are willing to wait.\n\n\n\n\n\n\n\n\n\n\nException\nTypical cause\n\n\n\n\nResourceDefinitionMissing\nA request referenced a capacity that was never defined.\n\n\nResourceUnavailable\nCapacity is full and the policy is fail or retry.\n\n\nResourceAcquireTimeout\nCapacity stayed full until the blocking acquire timed out.\n\n\nResourceEstimationError\nA dynamic resource estimator raised an exception.\n\n\n\n\n\n\n\nDefine capacities during process startup, before tasks begin running.\nUse clear names that match operational dashboards or limits.\nKeep guarded sections as small as practical.\nPrefer dynamic estimates when input size materially changes resource needs.\nUse wait_strategy=\"retry\" for Celery tasks that should return to the queue.\nSet namespaces deliberately when multiple environments share Redis/Valkey.\n\n\n\n\n\nGuarding code that can block forever without a suitable TTL/heartbeat setup.\nUsing the memory backend when multiple processes need shared accounting.\nCatching broad exceptions around guarded code and forgetting that the work may have partially completed.\nTreating a Retsu lease as a database transaction. It controls admission; it does not roll back side effects.",
+    "crumbs": [
+      "Home",
+      "Guard Mode"
+    ]
+  },
+  {
+    "objectID": "docs/guard-mode.html#decorate-a-function",
+    "href": "docs/guard-mode.html#decorate-a-function",
+    "title": "Guard mode",
+    "section": "",
+    "text": "import retsu\n\nretsu.configure(backend=\"memory\")\nretsu.define_concurrency(\"vendor-api\", 2)\n\n\n@retsu.guard(concurrency={\"vendor-api\": 1})\ndef sync_order(order_id: str) -&gt; None:\n    push_order_to_vendor(order_id)\nThe wrapper preserves the function metadata with functools.wraps. Retsu acquires capacity before calling your function and releases it whether the function returns or raises.",
+    "crumbs": [
+      "Home",
+      "Guard Mode"
+    ]
+  },
+  {
+    "objectID": "docs/guard-mode.html#guard-a-critical-section",
+    "href": "docs/guard-mode.html#guard-a-critical-section",
+    "title": "Guard mode",
+    "section": "",
+    "text": "Use acquire() when only part of a function needs protection:\nwith retsu.acquire(resources={\"memory_mb\": 512}, concurrency={\"exports\": 1}):\n    export_large_file()\nUse limit() for the common case of one named concurrency limit:\nwith retsu.limit(\"exports\", slots=1):\n    export_large_file()\nBoth APIs return a Lease object from the context manager if you need the lease id for logs:\nwith retsu.limit(\"exports\") as lease:\n    logger.info(\"running export under lease %s\", lease.id)\n    export_large_file()",
+    "crumbs": [
+      "Home",
+      "Guard Mode"
+    ]
+  },
+  {
+    "objectID": "docs/guard-mode.html#static-and-dynamic-requests",
+    "href": "docs/guard-mode.html#static-and-dynamic-requests",
+    "title": "Guard mode",
+    "section": "",
+    "text": "Requests can be static:\n@retsu.guard(resources={\"gpu\": 1}, concurrency={\"training\": 1})\ndef train(model_id: str) -&gt; None:\n    ...\nThey can also be dynamic. Callable values receive the wrapped function’s arguments:\n@retsu.guard(\n    resources={\"memory_mb\": lambda records: max(128, len(records) * 2)},\n)\ndef import_records(records: list[dict[str, object]]) -&gt; None:\n    ...\nIf a dynamic estimator raises, Retsu raises ResourceEstimationError and does not acquire a lease.",
+    "crumbs": [
+      "Home",
+      "Guard Mode"
+    ]
+  },
+  {
+    "objectID": "docs/guard-mode.html#wait-policy-examples",
+    "href": "docs/guard-mode.html#wait-policy-examples",
+    "title": "Guard mode",
+    "section": "",
+    "text": "@retsu.guard(concurrency={\"reports\": 1}, wait_strategy=\"block\")\ndef build_report(report_id: str) -&gt; None:\n    ...\nblock is the default. It retries until capacity is available or the acquire timeout expires.\n\n\n\ntry:\n    with retsu.limit(\"reports\", wait_strategy=\"fail\"):\n        build_report_now()\nexcept retsu.ResourceUnavailable as exc:\n    return {\"status\": \"busy\", \"blocked_by\": exc.blocked_by}\nUse fail for request/response paths where waiting would be worse than telling the caller to try again.\n\n\n\n@app.task(bind=True)\ndef build_report(self, report_id: str) -&gt; None:\n    with retsu.celery_guard(\n        self,\n        concurrency={\"reports\": 1},\n        wait_strategy=\"retry\",\n    ):\n        render_report(report_id)\ncelery_guard() converts ResourceUnavailable into task.retry(...) when the strategy is retry.",
+    "crumbs": [
+      "Home",
+      "Guard Mode"
+    ]
+  },
+  {
+    "objectID": "docs/guard-mode.html#ttls-and-heartbeat",
+    "href": "docs/guard-mode.html#ttls-and-heartbeat",
+    "title": "Guard mode",
+    "section": "",
+    "text": "Every lease has a TTL. Guard mode starts a daemon heartbeat thread and renews the lease while the guarded code is active. If the worker process crashes, the heartbeat stops and the lease eventually expires. Expired leases are cleaned up before capacity acquisition and usage snapshots.\nTune these values together:\nretsu.configure(\n    backend=\"redis\",\n    redis_url=\"redis://localhost:6379/0\",\n    default_ttl_seconds=300,\n    default_heartbeat_interval_seconds=30,\n    default_acquire_timeout_seconds=60,\n)\nChoose a TTL long enough to tolerate normal heartbeat delays, and an acquire timeout that matches how long callers are willing to wait.",
+    "crumbs": [
+      "Home",
+      "Guard Mode"
+    ]
+  },
+  {
+    "objectID": "docs/guard-mode.html#exceptions-to-handle",
+    "href": "docs/guard-mode.html#exceptions-to-handle",
+    "title": "Guard mode",
+    "section": "",
+    "text": "Exception\nTypical cause\n\n\n\n\nResourceDefinitionMissing\nA request referenced a capacity that was never defined.\n\n\nResourceUnavailable\nCapacity is full and the policy is fail or retry.\n\n\nResourceAcquireTimeout\nCapacity stayed full until the blocking acquire timed out.\n\n\nResourceEstimationError\nA dynamic resource estimator raised an exception.",
+    "crumbs": [
+      "Home",
+      "Guard Mode"
+    ]
+  },
+  {
+    "objectID": "docs/guard-mode.html#good-guard-mode-practices",
+    "href": "docs/guard-mode.html#good-guard-mode-practices",
+    "title": "Guard mode",
+    "section": "",
+    "text": "Define capacities during process startup, before tasks begin running.\nUse clear names that match operational dashboards or limits.\nKeep guarded sections as small as practical.\nPrefer dynamic estimates when input size materially changes resource needs.\nUse wait_strategy=\"retry\" for Celery tasks that should return to the queue.\nSet namespaces deliberately when multiple environments share Redis/Valkey.",
+    "crumbs": [
+      "Home",
+      "Guard Mode"
+    ]
+  },
+  {
+    "objectID": "docs/guard-mode.html#avoid",
+    "href": "docs/guard-mode.html#avoid",
+    "title": "Guard mode",
+    "section": "",
+    "text": "Guarding code that can block forever without a suitable TTL/heartbeat setup.\nUsing the memory backend when multiple processes need shared accounting.\nCatching broad exceptions around guarded code and forgetting that the work may have partially completed.\nTreating a Retsu lease as a database transaction. It controls admission; it does not roll back side effects.",
+    "crumbs": [
+      "Home",
+      "Guard Mode"
+    ]
+  },
+  {
+    "objectID": "docs/installation.html",
+    "href": "docs/installation.html",
+    "title": "Installation",
+    "section": "",
+    "text": "Retsu supports Python &gt;=3.10,&lt;4 and uses Redis/Valkey as its default shared backend. The memory backend is included for local development, notebooks, and service-free tests.\n\n\npip install retsu\nVerify the package imports:\npython -c \"import retsu; print(retsu.__version__)\"\n\n\n\nInstall only the framework integrations you use:\npip install \"retsu[celery]\"\npip install \"retsu[ray]\"\npip install \"retsu[django]\"\nYou can combine extras:\npip install \"retsu[celery,ray]\"\n\n\n\nFor production-style multi-process coordination, run Redis or Valkey and point Retsu at it:\nimport retsu\n\nretsu.configure(\n    backend=\"redis\",\n    redis_url=\"redis://localhost:6379/0\",\n    namespace=\"my-app\",\n)\nYou can also configure the default Redis backend with environment variables before your application imports Retsu:\nexport RETSU_REDIS_URL=redis://localhost:6379/0\nexport RETSU_NAMESPACE=my-app\nIf RETSU_REDIS_URL is not set, Retsu falls back to host/port/db variables:\nexport RETSU_REDIS_HOST=localhost\nexport RETSU_REDIS_PORT=6379\nexport RETSU_REDIS_DB=0\n\n\n\nNo Redis service is required for the memory backend:\nimport retsu\n\nretsu.configure(backend=\"memory\")\nretsu.define_concurrency(\"local-demo\", 1)\nUse this backend for unit tests and examples that do not need cross-process coordination.\n\n\n\nClone the repository and install development dependencies:\ngit clone https://github.com/osl-incubator/retsu.git\ncd retsu\nmamba env create --file conda/dev.yaml\nconda activate retsu\npoetry install\nIf you use Conda instead of Mamba:\nconda env create --file conda/dev.yaml\nconda activate retsu\npoetry install\n\n\n\nFast tests that do not require services:\npytest -q -m no_services\nFull unit suite with Redis/Valkey managed by the project automation:\nmakim tests.unit\nLinting, typing, and pre-commit checks:\nruff format src tests\nruff check src tests\nmypy .\npre-commit run --all-files\nDocumentation build:\nmakim docs.build\n\n\n\n\n\nEither start Redis/Valkey, set the correct RETSU_REDIS_URL, or use retsu.configure(backend=\"memory\") for local examples.\n\n\n\nInstall the matching extra. For example, retsu.ray_task() requires Ray:\npip install \"retsu[ray]\"\n\n\n\nSet a unique RETSU_NAMESPACE per environment:\nexport RETSU_NAMESPACE=staging",
+    "crumbs": [
+      "Home",
+      "Installation"
+    ]
+  },
+  {
+    "objectID": "docs/installation.html#package-install",
+    "href": "docs/installation.html#package-install",
+    "title": "Installation",
+    "section": "",
+    "text": "pip install retsu\nVerify the package imports:\npython -c \"import retsu; print(retsu.__version__)\"",
+    "crumbs": [
+      "Home",
+      "Installation"
+    ]
+  },
+  {
+    "objectID": "docs/installation.html#optional-integrations",
+    "href": "docs/installation.html#optional-integrations",
+    "title": "Installation",
+    "section": "",
+    "text": "Install only the framework integrations you use:\npip install \"retsu[celery]\"\npip install \"retsu[ray]\"\npip install \"retsu[django]\"\nYou can combine extras:\npip install \"retsu[celery,ray]\"",
+    "crumbs": [
+      "Home",
+      "Installation"
+    ]
+  },
+  {
+    "objectID": "docs/installation.html#redis-or-valkey",
+    "href": "docs/installation.html#redis-or-valkey",
+    "title": "Installation",
+    "section": "",
+    "text": "For production-style multi-process coordination, run Redis or Valkey and point Retsu at it:\nimport retsu\n\nretsu.configure(\n    backend=\"redis\",\n    redis_url=\"redis://localhost:6379/0\",\n    namespace=\"my-app\",\n)\nYou can also configure the default Redis backend with environment variables before your application imports Retsu:\nexport RETSU_REDIS_URL=redis://localhost:6379/0\nexport RETSU_NAMESPACE=my-app\nIf RETSU_REDIS_URL is not set, Retsu falls back to host/port/db variables:\nexport RETSU_REDIS_HOST=localhost\nexport RETSU_REDIS_PORT=6379\nexport RETSU_REDIS_DB=0",
+    "crumbs": [
+      "Home",
+      "Installation"
+    ]
+  },
+  {
+    "objectID": "docs/installation.html#local-only-install-without-redis-service",
+    "href": "docs/installation.html#local-only-install-without-redis-service",
+    "title": "Installation",
+    "section": "",
+    "text": "No Redis service is required for the memory backend:\nimport retsu\n\nretsu.configure(backend=\"memory\")\nretsu.define_concurrency(\"local-demo\", 1)\nUse this backend for unit tests and examples that do not need cross-process coordination.",
+    "crumbs": [
+      "Home",
+      "Installation"
+    ]
+  },
+  {
+    "objectID": "docs/installation.html#install-from-source",
+    "href": "docs/installation.html#install-from-source",
+    "title": "Installation",
+    "section": "",
+    "text": "Clone the repository and install development dependencies:\ngit clone https://github.com/osl-incubator/retsu.git\ncd retsu\nmamba env create --file conda/dev.yaml\nconda activate retsu\npoetry install\nIf you use Conda instead of Mamba:\nconda env create --file conda/dev.yaml\nconda activate retsu\npoetry install",
+    "crumbs": [
+      "Home",
+      "Installation"
+    ]
+  },
+  {
+    "objectID": "docs/installation.html#run-checks-from-a-checkout",
+    "href": "docs/installation.html#run-checks-from-a-checkout",
+    "title": "Installation",
+    "section": "",
+    "text": "Fast tests that do not require services:\npytest -q -m no_services\nFull unit suite with Redis/Valkey managed by the project automation:\nmakim tests.unit\nLinting, typing, and pre-commit checks:\nruff format src tests\nruff check src tests\nmypy .\npre-commit run --all-files\nDocumentation build:\nmakim docs.build",
+    "crumbs": [
+      "Home",
+      "Installation"
+    ]
+  },
+  {
+    "objectID": "docs/installation.html#common-installation-issues",
+    "href": "docs/installation.html#common-installation-issues",
+    "title": "Installation",
+    "section": "",
+    "text": "Either start Redis/Valkey, set the correct RETSU_REDIS_URL, or use retsu.configure(backend=\"memory\") for local examples.\n\n\n\nInstall the matching extra. For example, retsu.ray_task() requires Ray:\npip install \"retsu[ray]\"\n\n\n\nSet a unique RETSU_NAMESPACE per environment:\nexport RETSU_NAMESPACE=staging",
+    "crumbs": [
+      "Home",
+      "Installation"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html",
+    "href": "docs/operations.html",
+    "title": "Operations",
+    "section": "",
+    "text": "This guide covers the practical details of running Retsu with Redis/Valkey, observing capacity, sizing leases, and troubleshooting common failures.\n\n\nRetsu defaults to the Redis backend:\nretsu.configure(backend=\"redis\")\nUse memory only when process-local state is correct:\nretsu.configure(backend=\"memory\")\nThe memory backend is useful for tests and notebooks, but it does not coordinate between processes.\n\n\n\nThe most explicit configuration is:\nretsu.configure(\n    backend=\"redis\",\n    redis_url=\"redis://localhost:6379/0\",\n    namespace=\"production\",\n)\nIf you rely on environment variables and do not call configure() yourself, Retsu reads these values during import:\nexport RETSU_REDIS_URL=redis://localhost:6379/0\nexport RETSU_NAMESPACE=production\nIf RETSU_REDIS_URL is absent, the Redis backend uses the queue helper variables:\nexport RETSU_REDIS_HOST=localhost\nexport RETSU_REDIS_PORT=6379\nexport RETSU_REDIS_DB=0\nUse a distinct RETSU_NAMESPACE per environment, test run, or tenant boundary that needs isolated accounting.\n\n\n\nDefine capacities before workers start executing guarded code:\ndef configure_retsu() -&gt; None:\n    retsu.configure(\n        backend=\"redis\",\n        redis_url=os.environ[\"RETSU_REDIS_URL\"],\n        namespace=os.getenv(\"RETSU_NAMESPACE\", \"production\"),\n    )\n    retsu.define_resource(\"memory_mb\", 64_000)\n    retsu.define_resource(\"gpu\", 4)\n    retsu.define_concurrency(\"billing-api\", 5)\n    retsu.define_concurrency(\"tenant:acme\", 1)\nCapacity definitions are idempotent in normal startup flows. Redefining a capacity changes the stored capacity without resetting current usage.\n\n\n\nThe retsu command uses the same backend configuration flags as the Python API:\nretsu --redis-url redis://localhost:6379/0 --namespace production usage\nAvailable commands:\nretsu resource memory_mb 64000\nretsu concurrency billing-api 5\nretsu usage\nretsu leases\nretsu cleanup\nExamples with explicit Redis flags:\nretsu --redis-url redis://localhost:6379/0 resource gpu 4\nretsu --redis-url redis://localhost:6379/0 concurrency billing-api 5\nretsu --redis-url redis://localhost:6379/0 usage\n\n\n\nUse get_usage() for metrics and dashboards:\nusage = retsu.get_usage()\nfor name, item in usage.resources.items():\n    emit_metric(f\"retsu.resource.{name}.used\", item.used)\n    emit_metric(f\"retsu.resource.{name}.available\", item.available)\nUse list_leases() for debugging active reservations:\nfor lease in retsu.list_leases():\n    print(lease.id, lease.job_id, lease.owner_id, lease.expires_at)\nget_usage() and list_leases() clean expired leases before returning data, so snapshots should not include expired reservations.\n\n\n\nDefaults:\n\n\n\nSetting\nDefault\n\n\n\n\ndefault_ttl_seconds\n300\n\n\ndefault_acquire_timeout_seconds\n60\n\n\ndefault_heartbeat_interval_seconds\n30\n\n\ndefault_wait_strategy\nblock\n\n\n\nGuidance:\n\nMake the heartbeat interval comfortably smaller than the TTL.\nMake the TTL long enough to tolerate short pauses, GC, or temporary Redis latency.\nMake the acquire timeout match caller expectations. A web request may need a short timeout; a batch worker may tolerate a long one.\nUse cleanup_expired_leases() or retsu cleanup as a safe maintenance action if you suspect a worker died while holding leases.\n\n\n\n\nRedis keys are scoped by namespace:\nretsu:{namespace}:capacity:resources\nretsu:{namespace}:capacity:concurrency\nretsu:{namespace}:usage:resources\nretsu:{namespace}:usage:concurrency\nretsu:{namespace}:leases\nretsu:{namespace}:lease:{lease_id}\nretsu:{namespace}:job:{job_id}\nAvoid deleting broad Redis patterns manually. For tests and controlled tools, use backend namespace cleanup helpers rather than deleting unrelated keys.\n\n\n\nAdmission-mode args, kwargs, and results are serialized with pickle. Treat those blobs as trusted-process data. Do not expose admission job storage as a way for untrusted users to submit arbitrary payloads.\nRedis should be protected like other application infrastructure: enable network controls, authentication where appropriate, and environment-specific namespaces.\n\n\n\n\n\nThe job requested a resource or concurrency name that was not defined in the current backend namespace.\nCheck:\nretsu usage\nThen define the missing capacity during startup or with the CLI.\n\n\n\nCheck active leases:\nretsu leases\nretsu cleanup\nretsu usage\nIf usage drops after cleanup, a worker likely disappeared and the lease expired. Consider whether the TTL is too long for your failure-recovery expectations.\n\n\n\nA ResourceAcquireTimeout means the block strategy waited longer than acquire_timeout_seconds. Either increase capacity, reduce request size, increase timeout, or switch to fail/retry and handle backpressure at the caller.\n\n\n\nThe memory backend coordinates only inside one process. Use Redis/Valkey for multi-process workers, web applications with multiple processes, Celery, Ray, or multiple hosts.\n\n\n\n\n\nSet a deliberate Redis/Valkey namespace.\nDefine every resource and concurrency capacity during startup.\nUse Redis/Valkey, not memory, for multi-process coordination.\nSize TTL and heartbeat values for your workload.\nExport usage metrics for important capacities.\nAlert on unexpected long-lived leases or sustained zero availability.\nKeep admission-mode payloads restricted to trusted producers.\nTest failure paths that raise inside guarded code and executor code.",
+    "crumbs": [
+      "Home",
+      "Operations"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html#backend-selection",
+    "href": "docs/operations.html#backend-selection",
+    "title": "Operations",
+    "section": "",
+    "text": "Retsu defaults to the Redis backend:\nretsu.configure(backend=\"redis\")\nUse memory only when process-local state is correct:\nretsu.configure(backend=\"memory\")\nThe memory backend is useful for tests and notebooks, but it does not coordinate between processes.",
+    "crumbs": [
+      "Home",
+      "Operations"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html#redisvalkey-configuration",
+    "href": "docs/operations.html#redisvalkey-configuration",
+    "title": "Operations",
+    "section": "",
+    "text": "The most explicit configuration is:\nretsu.configure(\n    backend=\"redis\",\n    redis_url=\"redis://localhost:6379/0\",\n    namespace=\"production\",\n)\nIf you rely on environment variables and do not call configure() yourself, Retsu reads these values during import:\nexport RETSU_REDIS_URL=redis://localhost:6379/0\nexport RETSU_NAMESPACE=production\nIf RETSU_REDIS_URL is absent, the Redis backend uses the queue helper variables:\nexport RETSU_REDIS_HOST=localhost\nexport RETSU_REDIS_PORT=6379\nexport RETSU_REDIS_DB=0\nUse a distinct RETSU_NAMESPACE per environment, test run, or tenant boundary that needs isolated accounting.",
+    "crumbs": [
+      "Home",
+      "Operations"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html#capacity-bootstrap",
+    "href": "docs/operations.html#capacity-bootstrap",
+    "title": "Operations",
+    "section": "",
+    "text": "Define capacities before workers start executing guarded code:\ndef configure_retsu() -&gt; None:\n    retsu.configure(\n        backend=\"redis\",\n        redis_url=os.environ[\"RETSU_REDIS_URL\"],\n        namespace=os.getenv(\"RETSU_NAMESPACE\", \"production\"),\n    )\n    retsu.define_resource(\"memory_mb\", 64_000)\n    retsu.define_resource(\"gpu\", 4)\n    retsu.define_concurrency(\"billing-api\", 5)\n    retsu.define_concurrency(\"tenant:acme\", 1)\nCapacity definitions are idempotent in normal startup flows. Redefining a capacity changes the stored capacity without resetting current usage.",
+    "crumbs": [
+      "Home",
+      "Operations"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html#cli-operations",
+    "href": "docs/operations.html#cli-operations",
+    "title": "Operations",
+    "section": "",
+    "text": "The retsu command uses the same backend configuration flags as the Python API:\nretsu --redis-url redis://localhost:6379/0 --namespace production usage\nAvailable commands:\nretsu resource memory_mb 64000\nretsu concurrency billing-api 5\nretsu usage\nretsu leases\nretsu cleanup\nExamples with explicit Redis flags:\nretsu --redis-url redis://localhost:6379/0 resource gpu 4\nretsu --redis-url redis://localhost:6379/0 concurrency billing-api 5\nretsu --redis-url redis://localhost:6379/0 usage",
+    "crumbs": [
+      "Home",
+      "Operations"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html#observability",
+    "href": "docs/operations.html#observability",
+    "title": "Operations",
+    "section": "",
+    "text": "Use get_usage() for metrics and dashboards:\nusage = retsu.get_usage()\nfor name, item in usage.resources.items():\n    emit_metric(f\"retsu.resource.{name}.used\", item.used)\n    emit_metric(f\"retsu.resource.{name}.available\", item.available)\nUse list_leases() for debugging active reservations:\nfor lease in retsu.list_leases():\n    print(lease.id, lease.job_id, lease.owner_id, lease.expires_at)\nget_usage() and list_leases() clean expired leases before returning data, so snapshots should not include expired reservations.",
+    "crumbs": [
+      "Home",
+      "Operations"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html#lease-ttl-sizing",
+    "href": "docs/operations.html#lease-ttl-sizing",
+    "title": "Operations",
+    "section": "",
+    "text": "Defaults:\n\n\n\nSetting\nDefault\n\n\n\n\ndefault_ttl_seconds\n300\n\n\ndefault_acquire_timeout_seconds\n60\n\n\ndefault_heartbeat_interval_seconds\n30\n\n\ndefault_wait_strategy\nblock\n\n\n\nGuidance:\n\nMake the heartbeat interval comfortably smaller than the TTL.\nMake the TTL long enough to tolerate short pauses, GC, or temporary Redis latency.\nMake the acquire timeout match caller expectations. A web request may need a short timeout; a batch worker may tolerate a long one.\nUse cleanup_expired_leases() or retsu cleanup as a safe maintenance action if you suspect a worker died while holding leases.",
+    "crumbs": [
+      "Home",
+      "Operations"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html#redis-keys",
+    "href": "docs/operations.html#redis-keys",
+    "title": "Operations",
+    "section": "",
+    "text": "Redis keys are scoped by namespace:\nretsu:{namespace}:capacity:resources\nretsu:{namespace}:capacity:concurrency\nretsu:{namespace}:usage:resources\nretsu:{namespace}:usage:concurrency\nretsu:{namespace}:leases\nretsu:{namespace}:lease:{lease_id}\nretsu:{namespace}:job:{job_id}\nAvoid deleting broad Redis patterns manually. For tests and controlled tools, use backend namespace cleanup helpers rather than deleting unrelated keys.",
+    "crumbs": [
+      "Home",
+      "Operations"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html#security-and-serialization",
+    "href": "docs/operations.html#security-and-serialization",
+    "title": "Operations",
+    "section": "",
+    "text": "Admission-mode args, kwargs, and results are serialized with pickle. Treat those blobs as trusted-process data. Do not expose admission job storage as a way for untrusted users to submit arbitrary payloads.\nRedis should be protected like other application infrastructure: enable network controls, authentication where appropriate, and environment-specific namespaces.",
+    "crumbs": [
+      "Home",
+      "Operations"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html#troubleshooting",
+    "href": "docs/operations.html#troubleshooting",
+    "title": "Operations",
+    "section": "",
+    "text": "The job requested a resource or concurrency name that was not defined in the current backend namespace.\nCheck:\nretsu usage\nThen define the missing capacity during startup or with the CLI.\n\n\n\nCheck active leases:\nretsu leases\nretsu cleanup\nretsu usage\nIf usage drops after cleanup, a worker likely disappeared and the lease expired. Consider whether the TTL is too long for your failure-recovery expectations.\n\n\n\nA ResourceAcquireTimeout means the block strategy waited longer than acquire_timeout_seconds. Either increase capacity, reduce request size, increase timeout, or switch to fail/retry and handle backpressure at the caller.\n\n\n\nThe memory backend coordinates only inside one process. Use Redis/Valkey for multi-process workers, web applications with multiple processes, Celery, Ray, or multiple hosts.",
+    "crumbs": [
+      "Home",
+      "Operations"
+    ]
+  },
+  {
+    "objectID": "docs/operations.html#production-checklist",
+    "href": "docs/operations.html#production-checklist",
+    "title": "Operations",
+    "section": "",
+    "text": "Set a deliberate Redis/Valkey namespace.\nDefine every resource and concurrency capacity during startup.\nUse Redis/Valkey, not memory, for multi-process coordination.\nSize TTL and heartbeat values for your workload.\nExport usage metrics for important capacities.\nAlert on unexpected long-lived leases or sustained zero availability.\nKeep admission-mode payloads restricted to trusted producers.\nTest failure paths that raise inside guarded code and executor code.",
+    "crumbs": [
+      "Home",
+      "Operations"
     ]
   },
   {
@@ -265,7 +998,7 @@
     "href": "docs/api/references.html",
     "title": "API Reference",
     "section": "",
-    "text": "Retsu exposes a small public API from the retsu package.\n\n\n\nretsu.configure\nretsu.get_config\nretsu.get_backend\nretsu.set_backend\n\n\n\n\n\nretsu.define_resource\nretsu.define_concurrency\nretsu.get_usage\nretsu.list_leases\nretsu.cleanup_expired_leases\n\n\n\n\n\nretsu.guard\nretsu.acquire\nretsu.limit\nretsu.celery_guard\nretsu.ray_guard\nretsu.ray_task\n\n\n\n\n\nretsu.submit\nretsu.JobHandle\nretsu.Scheduler\n\n\n\n\n\nretsu.ResourceSpec\nretsu.ResourceRequest\nretsu.AcquireResult\nretsu.UsageSnapshot\nretsu.UsageItem\nretsu.JobRecord\nretsu.JobStatus\nretsu.LeaseRecord\n\n\n\n\n\nretsu.RetsuError\nretsu.ResourceUnavailable\nretsu.ResourceAcquireTimeout\nretsu.ResourceDefinitionMissing\nretsu.ResourceEstimationError\nretsu.RetsuBackendUnavailable",
+    "text": "Retsu’s stable user-facing API is re-exported from the retsu package. Backend classes and plugin helpers are available from their module paths when you need advanced integration points.\n\n\n\n\nretsu.configure(\n    backend=\"redis\",\n    redis_url=None,\n    namespace=\"default\",\n    default_ttl_seconds=300,\n    default_acquire_timeout_seconds=60,\n    default_heartbeat_interval_seconds=30,\n    default_wait_strategy=\"block\",\n)\nSet process-global Retsu configuration and reset the cached backend. Supported backend names are \"redis\" and \"memory\".\nImportant behavior:\n\nthe backend is created lazily by get_backend();\ncalling configure() discards the cached backend object;\ndefault_wait_strategy must be \"block\", \"fail\", or \"retry\";\ndefault_acquire_timeout_seconds=None allows blocking acquires to wait indefinitely.\n\n\n\n\nReturn the current process-global configuration dataclass.\n\n\n\nReturn the configured backend, creating it if needed. The Redis backend uses redis_url if supplied; otherwise it uses the Redis environment helper values.\n\n\n\nSet an explicit backend object. This is most useful in tests or advanced applications that construct their own backend instance.\nfrom retsu.backends.memory import MemoryBackend\n\nretsu.set_backend(MemoryBackend())\n\n\n\n\n\n\nDefine or update a named quantitative resource.\nretsu.define_resource(\"memory_mb\", 64_000)\nretsu.define_resource(\"gpu\", 4)\n\n\n\nDefine or update a named concurrency limit.\nretsu.define_concurrency(\"billing-api\", 5)\nretsu.define_concurrency(\"tenant:acme\", 1)\n\n\n\nReturn current used, capacity, and available values for all configured capacities. Expired leases are cleaned before the snapshot is returned.\nusage = retsu.get_usage()\nitem = usage.concurrency[\"billing-api\"]\nprint(item.used, item.capacity, item.available)\n\n\n\nReturn active leases after cleaning expired leases.\n\n\n\nRelease all expired leases and return their ids.\nexpired = retsu.cleanup_expired_leases().expired_lease_ids\n\n\n\n\n\n\nretsu.guard(\n    resources=None,\n    concurrency=None,\n    ttl_seconds=None,\n    acquire_timeout_seconds=None,\n    wait_strategy=None,\n)\nReturn a decorator that acquires capacity before calling the wrapped function. resources and concurrency are mappings of names to either numbers or callables evaluated with the wrapped function arguments.\n@retsu.guard(\n    resources={\"memory_mb\": lambda batch: batch.estimated_mb},\n    concurrency={\"imports\": 1},\n)\ndef import_batch(batch):\n    ...\nRaises:\n\nResourceDefinitionMissing for undefined capacity names;\nResourceUnavailable when the selected strategy fails fast;\nResourceAcquireTimeout when blocking acquisition times out;\nResourceEstimationError when a dynamic estimator raises.\n\n\n\n\nContext manager that acquires capacity for a critical section.\nwith retsu.acquire(resources={\"memory_mb\": 512}, concurrency={\"exports\": 1}):\n    export_file()\nThe yielded object is a Lease.\n\n\n\nConvenience context manager for one named concurrency limit.\nwith retsu.limit(\"billing-api\", slots=1):\n    call_billing_api()\n\n\n\nLower-level API used by guard mode. It accepts an already evaluated ResourceRequest plus explicit job_id and owner_id.\nlease = retsu.acquire_with_policy(\n    job_id=\"manual-job\",\n    owner_id=\"worker-1\",\n    request=retsu.ResourceRequest(resources={}, concurrency={\"api\": 1}),\n)\ntry:\n    do_work()\nfinally:\n    lease.release()\n\n\n\n\n\n\nretsu.submit(\n    func,\n    args=(),\n    kwargs=None,\n    resources=None,\n    concurrency=None,\n    executor=\"local\",\n    queue=None,\n    priority=0,\n    max_attempts=1,\n)\nCreate a queued admission job and return a handle. The resource request is evaluated at submit time. Args, kwargs, and results are serialized with pickle, so treat admission payloads as trusted-process data.\nhandle = retsu.submit(\n    build_report,\n    args=(\"weekly\",),\n    resources={\"cpu\": 1},\n    concurrency={\"reports\": 1},\n    priority=10,\n)\n\n\n\nscheduler = retsu.Scheduler()\nscheduler.run_once(limit=100)\nrun_once() cleans expired leases, considers queued/waiting jobs, acquires capacity, and dispatches admitted jobs through an executor. The default executor is local. Jobs with executor=\"ray\" create a Ray executor on demand.\nConstructor arguments:\n\nbackend: explicit backend, otherwise retsu.get_backend();\nexecutors: mapping of executor names to executor objects;\nowner_id: explicit owner id for acquired leases.\n\n\n\n\nReturned by submit().\n\n\n\n\n\n\n\nMethod\nBehavior\n\n\n\n\nstatus()\nReturn the current JobStatus.\n\n\nresult(timeout=None)\nWait for success and return the unpickled result. Raise for failure, cancellation, or timeout.\n\n\nmetadata()\nReturn a dictionary of job metadata.\n\n\ncancel()\nMark the job cancelled.\n\n\n\n\n\n\n\n\n\nContext manager for bound Celery tasks. With wait_strategy=\"retry\", capacity denial is converted into task.retry(countdown=...).\n@app.task(bind=True)\ndef render(self, document_id: str) -&gt; None:\n    with retsu.celery_guard(self, concurrency={\"render\": 1}):\n        render_document(document_id)\n\n\n\nContext manager for guarded sections inside Ray tasks.\n@ray.remote\ndef train(model_id: str) -&gt; str:\n    with retsu.ray_guard(resources={\"gpu\": 1}):\n        return run_training(model_id)\n\n\n\nDecorator that wraps a function with Retsu guard mode and then applies ray.remote.\n@retsu.ray_task(resources={\"gpu\": 1}, num_gpus=1)\ndef train(model_id: str) -&gt; str:\n    return run_training(model_id)\n\n\n\nDjango plugin helper for manager-style integrations. Import from the module path rather than retsu:\nfrom retsu.plugins.django import create_app_config\n\n\n\n\n\n\nConcrete request for one lease.\nrequest = retsu.ResourceRequest(\n    resources={\"memory_mb\": 512},\n    concurrency={\"api\": 1},\n)\nValidation rules:\n\nnames must be non-empty strings;\nvalues must be finite and non-negative;\nzero values are ignored;\nvalues are normalized to floats.\n\n\n\n\nStatic or dynamic resource requirements. evaluate(*args, **kwargs) returns a ResourceRequest.\n\n\n\nBackend acquire result:\n\n\n\nField\nMeaning\n\n\n\n\nacquired\nWhether capacity was acquired.\n\n\nlease_id\nNew lease id when acquired.\n\n\nreason\nBackend reason when not acquired.\n\n\nblocked_by\nCapacity name that blocked acquisition.\n\n\nretry_after_seconds\nSuggested retry delay.\n\n\n\n\n\n\nUsageSnapshot.resources and UsageSnapshot.concurrency map names to UsageItem objects. UsageItem.available is max(capacity - used, 0).\n\n\n\nContains expired_lease_ids.\n\n\n\nPersisted lease metadata: id, job id, owner id, resource request, concurrency request, creation time, renewal time, and expiry time.\n\n\n\nAdmission-mode job metadata and status enum. Common statuses include queued, waiting_for_resources, leased, dispatched, running, succeeded, failed, and cancelled.\n\n\n\nDataclass representing a named capacity definition. It is exported for typed integrations that need to describe capacity metadata.\n\n\n\n\nAdvanced users can import implementations directly:\nfrom retsu.backends.memory import MemoryBackend\nfrom retsu.backends.redis import RedisBackend\nfrom retsu.executors.local import LocalExecutor\nfrom retsu.executors.ray import RayExecutor\nBackend implementations follow the protocol in retsu.backends.base.Backend. Custom executors should implement dispatch(job, lease_id, owner_id) and must release the lease on every success and failure path.\n\n\n\n\n\n\n\n\n\n\nException\nMeaning\n\n\n\n\nRetsuError\nBase class for Retsu errors.\n\n\nResourceDefinitionMissing\nA request referenced an undefined resource or concurrency name.\n\n\nResourceUnavailable\nCapacity is full and the wait strategy failed fast.\n\n\nResourceAcquireTimeout\nBlocking acquisition exceeded the configured timeout.\n\n\nResourceEstimationError\nA dynamic request estimator raised before acquisition.\n\n\nRetsuBackendUnavailable\nBackend connectivity/configuration error type for integrations.\n\n\nJobNotFound\nA backend job lookup failed. Import from retsu.exceptions.\n\n\n\n\n\n\nretsu.__version__\nretsu.__author__\nretsu.__email__",
     "crumbs": [
       "Home",
       "API",
@@ -277,7 +1010,7 @@
     "href": "docs/api/references.html#configuration",
     "title": "API Reference",
     "section": "",
-    "text": "retsu.configure\nretsu.get_config\nretsu.get_backend\nretsu.set_backend",
+    "text": "retsu.configure(\n    backend=\"redis\",\n    redis_url=None,\n    namespace=\"default\",\n    default_ttl_seconds=300,\n    default_acquire_timeout_seconds=60,\n    default_heartbeat_interval_seconds=30,\n    default_wait_strategy=\"block\",\n)\nSet process-global Retsu configuration and reset the cached backend. Supported backend names are \"redis\" and \"memory\".\nImportant behavior:\n\nthe backend is created lazily by get_backend();\ncalling configure() discards the cached backend object;\ndefault_wait_strategy must be \"block\", \"fail\", or \"retry\";\ndefault_acquire_timeout_seconds=None allows blocking acquires to wait indefinitely.\n\n\n\n\nReturn the current process-global configuration dataclass.\n\n\n\nReturn the configured backend, creating it if needed. The Redis backend uses redis_url if supplied; otherwise it uses the Redis environment helper values.\n\n\n\nSet an explicit backend object. This is most useful in tests or advanced applications that construct their own backend instance.\nfrom retsu.backends.memory import MemoryBackend\n\nretsu.set_backend(MemoryBackend())",
     "crumbs": [
       "Home",
       "API",
@@ -285,11 +1018,11 @@
     ]
   },
   {
-    "objectID": "docs/api/references.html#capacity-definitions",
-    "href": "docs/api/references.html#capacity-definitions",
+    "objectID": "docs/api/references.html#capacity-management",
+    "href": "docs/api/references.html#capacity-management",
     "title": "API Reference",
     "section": "",
-    "text": "retsu.define_resource\nretsu.define_concurrency\nretsu.get_usage\nretsu.list_leases\nretsu.cleanup_expired_leases",
+    "text": "Define or update a named quantitative resource.\nretsu.define_resource(\"memory_mb\", 64_000)\nretsu.define_resource(\"gpu\", 4)\n\n\n\nDefine or update a named concurrency limit.\nretsu.define_concurrency(\"billing-api\", 5)\nretsu.define_concurrency(\"tenant:acme\", 1)\n\n\n\nReturn current used, capacity, and available values for all configured capacities. Expired leases are cleaned before the snapshot is returned.\nusage = retsu.get_usage()\nitem = usage.concurrency[\"billing-api\"]\nprint(item.used, item.capacity, item.available)\n\n\n\nReturn active leases after cleaning expired leases.\n\n\n\nRelease all expired leases and return their ids.\nexpired = retsu.cleanup_expired_leases().expired_lease_ids",
     "crumbs": [
       "Home",
       "API",
@@ -301,7 +1034,7 @@
     "href": "docs/api/references.html#guard-mode",
     "title": "API Reference",
     "section": "",
-    "text": "retsu.guard\nretsu.acquire\nretsu.limit\nretsu.celery_guard\nretsu.ray_guard\nretsu.ray_task",
+    "text": "retsu.guard(\n    resources=None,\n    concurrency=None,\n    ttl_seconds=None,\n    acquire_timeout_seconds=None,\n    wait_strategy=None,\n)\nReturn a decorator that acquires capacity before calling the wrapped function. resources and concurrency are mappings of names to either numbers or callables evaluated with the wrapped function arguments.\n@retsu.guard(\n    resources={\"memory_mb\": lambda batch: batch.estimated_mb},\n    concurrency={\"imports\": 1},\n)\ndef import_batch(batch):\n    ...\nRaises:\n\nResourceDefinitionMissing for undefined capacity names;\nResourceUnavailable when the selected strategy fails fast;\nResourceAcquireTimeout when blocking acquisition times out;\nResourceEstimationError when a dynamic estimator raises.\n\n\n\n\nContext manager that acquires capacity for a critical section.\nwith retsu.acquire(resources={\"memory_mb\": 512}, concurrency={\"exports\": 1}):\n    export_file()\nThe yielded object is a Lease.\n\n\n\nConvenience context manager for one named concurrency limit.\nwith retsu.limit(\"billing-api\", slots=1):\n    call_billing_api()\n\n\n\nLower-level API used by guard mode. It accepts an already evaluated ResourceRequest plus explicit job_id and owner_id.\nlease = retsu.acquire_with_policy(\n    job_id=\"manual-job\",\n    owner_id=\"worker-1\",\n    request=retsu.ResourceRequest(resources={}, concurrency={\"api\": 1}),\n)\ntry:\n    do_work()\nfinally:\n    lease.release()",
     "crumbs": [
       "Home",
       "API",
@@ -313,7 +1046,7 @@
     "href": "docs/api/references.html#admission-mode",
     "title": "API Reference",
     "section": "",
-    "text": "retsu.submit\nretsu.JobHandle\nretsu.Scheduler",
+    "text": "retsu.submit(\n    func,\n    args=(),\n    kwargs=None,\n    resources=None,\n    concurrency=None,\n    executor=\"local\",\n    queue=None,\n    priority=0,\n    max_attempts=1,\n)\nCreate a queued admission job and return a handle. The resource request is evaluated at submit time. Args, kwargs, and results are serialized with pickle, so treat admission payloads as trusted-process data.\nhandle = retsu.submit(\n    build_report,\n    args=(\"weekly\",),\n    resources={\"cpu\": 1},\n    concurrency={\"reports\": 1},\n    priority=10,\n)\n\n\n\nscheduler = retsu.Scheduler()\nscheduler.run_once(limit=100)\nrun_once() cleans expired leases, considers queued/waiting jobs, acquires capacity, and dispatches admitted jobs through an executor. The default executor is local. Jobs with executor=\"ray\" create a Ray executor on demand.\nConstructor arguments:\n\nbackend: explicit backend, otherwise retsu.get_backend();\nexecutors: mapping of executor names to executor objects;\nowner_id: explicit owner id for acquired leases.\n\n\n\n\nReturned by submit().\n\n\n\n\n\n\n\nMethod\nBehavior\n\n\n\n\nstatus()\nReturn the current JobStatus.\n\n\nresult(timeout=None)\nWait for success and return the unpickled result. Raise for failure, cancellation, or timeout.\n\n\nmetadata()\nReturn a dictionary of job metadata.\n\n\ncancel()\nMark the job cancelled.",
     "crumbs": [
       "Home",
       "API",
@@ -321,11 +1054,35 @@
     ]
   },
   {
-    "objectID": "docs/api/references.html#core-models",
-    "href": "docs/api/references.html#core-models",
+    "objectID": "docs/api/references.html#integrations",
+    "href": "docs/api/references.html#integrations",
     "title": "API Reference",
     "section": "",
-    "text": "retsu.ResourceSpec\nretsu.ResourceRequest\nretsu.AcquireResult\nretsu.UsageSnapshot\nretsu.UsageItem\nretsu.JobRecord\nretsu.JobStatus\nretsu.LeaseRecord",
+    "text": "Context manager for bound Celery tasks. With wait_strategy=\"retry\", capacity denial is converted into task.retry(countdown=...).\n@app.task(bind=True)\ndef render(self, document_id: str) -&gt; None:\n    with retsu.celery_guard(self, concurrency={\"render\": 1}):\n        render_document(document_id)\n\n\n\nContext manager for guarded sections inside Ray tasks.\n@ray.remote\ndef train(model_id: str) -&gt; str:\n    with retsu.ray_guard(resources={\"gpu\": 1}):\n        return run_training(model_id)\n\n\n\nDecorator that wraps a function with Retsu guard mode and then applies ray.remote.\n@retsu.ray_task(resources={\"gpu\": 1}, num_gpus=1)\ndef train(model_id: str) -&gt; str:\n    return run_training(model_id)\n\n\n\nDjango plugin helper for manager-style integrations. Import from the module path rather than retsu:\nfrom retsu.plugins.django import create_app_config",
+    "crumbs": [
+      "Home",
+      "API",
+      "Reference"
+    ]
+  },
+  {
+    "objectID": "docs/api/references.html#data-models",
+    "href": "docs/api/references.html#data-models",
+    "title": "API Reference",
+    "section": "",
+    "text": "Concrete request for one lease.\nrequest = retsu.ResourceRequest(\n    resources={\"memory_mb\": 512},\n    concurrency={\"api\": 1},\n)\nValidation rules:\n\nnames must be non-empty strings;\nvalues must be finite and non-negative;\nzero values are ignored;\nvalues are normalized to floats.\n\n\n\n\nStatic or dynamic resource requirements. evaluate(*args, **kwargs) returns a ResourceRequest.\n\n\n\nBackend acquire result:\n\n\n\nField\nMeaning\n\n\n\n\nacquired\nWhether capacity was acquired.\n\n\nlease_id\nNew lease id when acquired.\n\n\nreason\nBackend reason when not acquired.\n\n\nblocked_by\nCapacity name that blocked acquisition.\n\n\nretry_after_seconds\nSuggested retry delay.\n\n\n\n\n\n\nUsageSnapshot.resources and UsageSnapshot.concurrency map names to UsageItem objects. UsageItem.available is max(capacity - used, 0).\n\n\n\nContains expired_lease_ids.\n\n\n\nPersisted lease metadata: id, job id, owner id, resource request, concurrency request, creation time, renewal time, and expiry time.\n\n\n\nAdmission-mode job metadata and status enum. Common statuses include queued, waiting_for_resources, leased, dispatched, running, succeeded, failed, and cancelled.\n\n\n\nDataclass representing a named capacity definition. It is exported for typed integrations that need to describe capacity metadata.",
+    "crumbs": [
+      "Home",
+      "API",
+      "Reference"
+    ]
+  },
+  {
+    "objectID": "docs/api/references.html#backends-and-executors",
+    "href": "docs/api/references.html#backends-and-executors",
+    "title": "API Reference",
+    "section": "",
+    "text": "Advanced users can import implementations directly:\nfrom retsu.backends.memory import MemoryBackend\nfrom retsu.backends.redis import RedisBackend\nfrom retsu.executors.local import LocalExecutor\nfrom retsu.executors.ray import RayExecutor\nBackend implementations follow the protocol in retsu.backends.base.Backend. Custom executors should implement dispatch(job, lease_id, owner_id) and must release the lease on every success and failure path.",
     "crumbs": [
       "Home",
       "API",
@@ -337,7 +1094,19 @@
     "href": "docs/api/references.html#exceptions",
     "title": "API Reference",
     "section": "",
-    "text": "retsu.RetsuError\nretsu.ResourceUnavailable\nretsu.ResourceAcquireTimeout\nretsu.ResourceDefinitionMissing\nretsu.ResourceEstimationError\nretsu.RetsuBackendUnavailable",
+    "text": "Exception\nMeaning\n\n\n\n\nRetsuError\nBase class for Retsu errors.\n\n\nResourceDefinitionMissing\nA request referenced an undefined resource or concurrency name.\n\n\nResourceUnavailable\nCapacity is full and the wait strategy failed fast.\n\n\nResourceAcquireTimeout\nBlocking acquisition exceeded the configured timeout.\n\n\nResourceEstimationError\nA dynamic request estimator raised before acquisition.\n\n\nRetsuBackendUnavailable\nBackend connectivity/configuration error type for integrations.\n\n\nJobNotFound\nA backend job lookup failed. Import from retsu.exceptions.",
+    "crumbs": [
+      "Home",
+      "API",
+      "Reference"
+    ]
+  },
+  {
+    "objectID": "docs/api/references.html#version-metadata",
+    "href": "docs/api/references.html#version-metadata",
+    "title": "API Reference",
+    "section": "",
+    "text": "retsu.__version__\nretsu.__author__\nretsu.__email__",
     "crumbs": [
       "Home",
       "API",

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>index – Retsu</title>
+<title>guard-mode – Retsu</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -68,7 +68,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../docs/quickstart.html" rel="next">
+<link href="../docs/admission-mode.html" rel="next">
+<link href="../docs/concepts.html" rel="prev">
 <link href="../docs/images/favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -345,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../docs/index.html">Home</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../docs/guard-mode.html">Guard Mode</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -359,7 +360,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../docs/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../docs/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Home</span></a>
   </div>
 </li>
@@ -383,7 +384,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../docs/guard-mode.html" class="sidebar-item-text sidebar-link">
+  <a href="../docs/guard-mode.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Guard Mode</span></a>
   </div>
 </li>
@@ -450,14 +451,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#retsu" id="toc-retsu" class="nav-link active" data-scroll-target="#retsu">Retsu</a>
+  <li><a href="#guard-mode" id="toc-guard-mode" class="nav-link active" data-scroll-target="#guard-mode">Guard mode</a>
   <ul class="collapse">
-  <li><a href="#why-use-it" id="toc-why-use-it" class="nav-link" data-scroll-target="#why-use-it">Why use it?</a></li>
-  <li><a href="#what-retsu-provides" id="toc-what-retsu-provides" class="nav-link" data-scroll-target="#what-retsu-provides">What Retsu provides</a></li>
-  <li><a href="#the-mental-model" id="toc-the-mental-model" class="nav-link" data-scroll-target="#the-mental-model">The mental model</a></li>
-  <li><a href="#choose-a-workflow" id="toc-choose-a-workflow" class="nav-link" data-scroll-target="#choose-a-workflow">Choose a workflow</a></li>
-  <li><a href="#when-retsu-is-a-good-fit" id="toc-when-retsu-is-a-good-fit" class="nav-link" data-scroll-target="#when-retsu-is-a-good-fit">When Retsu is a good fit</a></li>
-  <li><a href="#start-here" id="toc-start-here" class="nav-link" data-scroll-target="#start-here">Start here</a></li>
+  <li><a href="#decorate-a-function" id="toc-decorate-a-function" class="nav-link" data-scroll-target="#decorate-a-function">Decorate a function</a></li>
+  <li><a href="#guard-a-critical-section" id="toc-guard-a-critical-section" class="nav-link" data-scroll-target="#guard-a-critical-section">Guard a critical section</a></li>
+  <li><a href="#static-and-dynamic-requests" id="toc-static-and-dynamic-requests" class="nav-link" data-scroll-target="#static-and-dynamic-requests">Static and dynamic requests</a></li>
+  <li><a href="#wait-policy-examples" id="toc-wait-policy-examples" class="nav-link" data-scroll-target="#wait-policy-examples">Wait policy examples</a>
+  <ul class="collapse">
+  <li><a href="#block-until-capacity-is-available" id="toc-block-until-capacity-is-available" class="nav-link" data-scroll-target="#block-until-capacity-is-available">Block until capacity is available</a></li>
+  <li><a href="#fail-fast" id="toc-fail-fast" class="nav-link" data-scroll-target="#fail-fast">Fail fast</a></li>
+  <li><a href="#retry-in-an-integration" id="toc-retry-in-an-integration" class="nav-link" data-scroll-target="#retry-in-an-integration">Retry in an integration</a></li>
+  </ul></li>
+  <li><a href="#ttls-and-heartbeat" id="toc-ttls-and-heartbeat" class="nav-link" data-scroll-target="#ttls-and-heartbeat">TTLs and heartbeat</a></li>
+  <li><a href="#exceptions-to-handle" id="toc-exceptions-to-handle" class="nav-link" data-scroll-target="#exceptions-to-handle">Exceptions to handle</a></li>
+  <li><a href="#good-guard-mode-practices" id="toc-good-guard-mode-practices" class="nav-link" data-scroll-target="#good-guard-mode-practices">Good guard-mode practices</a></li>
+  <li><a href="#avoid" id="toc-avoid" class="nav-link" data-scroll-target="#avoid">Avoid</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -469,33 +477,102 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/logo.png" class="img-fluid figure-img"></p>
-<figcaption>Retsu logo</figcaption>
-</figure>
-</div>
-<section id="retsu" class="level1">
-<h1>Retsu</h1>
-<p>Retsu is a resource and concurrency control layer for Python background jobs. It sits beside Celery, Ray, local worker threads, or your own scheduler and answers one operational question before work starts:</p>
-<blockquote class="blockquote">
-<p>Is there enough configured capacity available to run this job safely right now?</p>
-</blockquote>
-<p>If the answer is yes, Retsu creates a lease and accounts for the capacity. If not, it can block, fail fast, or let an integration retry later. Leases are released explicitly when work exits and are also protected by time-to-live based cleanup if a worker disappears.</p>
-<section id="why-use-it" class="level2">
-<h2 class="anchored" data-anchor-id="why-use-it">Why use it?</h2>
-<p>Queues and executors decide <em>where</em> work runs. They usually do not understand all of the external limits your application depends on:</p>
+<section id="guard-mode" class="level1">
+<h1>Guard mode</h1>
+<p>Guard mode is the simplest way to use Retsu. You keep your existing execution model and wrap the code that must not run unless capacity is available.</p>
+<p>Use guard mode for:</p>
 <ul>
-<li>one SaaS API allows only five concurrent exports;</li>
-<li>a tenant should never run more than one expensive rebuild at a time;</li>
-<li>a worker host has enough CPU threads but not enough GPU memory;</li>
-<li>a licensed solver has a fixed number of seats;</li>
-<li>a batch job needs to reserve memory before it starts, not after it crashes.</li>
+<li>Celery tasks that should retry when a shared limit is full;</li>
+<li>local functions that need a Redis-backed cross-process semaphore;</li>
+<li>critical sections that use scarce external resources;</li>
+<li>Ray tasks that need Retsu capacity in addition to Ray placement resources.</li>
 </ul>
-<p>Retsu turns those limits into named capacities and applies them consistently across guarded functions and admission-mode scheduling.</p>
+<section id="decorate-a-function" class="level2">
+<h2 class="anchored" data-anchor-id="decorate-a-function">Decorate a function</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> retsu</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>retsu.configure(backend<span class="op">=</span><span class="st">"memory"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>retsu.define_concurrency(<span class="st">"vendor-api"</span>, <span class="dv">2</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(concurrency<span class="op">=</span>{<span class="st">"vendor-api"</span>: <span class="dv">1</span>})</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_order(order_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    push_order_to_vendor(order_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The wrapper preserves the function metadata with <code>functools.wraps</code>. Retsu acquires capacity before calling your function and releases it whether the function returns or raises.</p>
 </section>
-<section id="what-retsu-provides" class="level2">
-<h2 class="anchored" data-anchor-id="what-retsu-provides">What Retsu provides</h2>
+<section id="guard-a-critical-section" class="level2">
+<h2 class="anchored" data-anchor-id="guard-a-critical-section">Guard a critical section</h2>
+<p>Use <code>acquire()</code> when only part of a function needs protection:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> retsu.acquire(resources<span class="op">=</span>{<span class="st">"memory_mb"</span>: <span class="dv">512</span>}, concurrency<span class="op">=</span>{<span class="st">"exports"</span>: <span class="dv">1</span>}):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    export_large_file()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Use <code>limit()</code> for the common case of one named concurrency limit:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> retsu.limit(<span class="st">"exports"</span>, slots<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    export_large_file()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Both APIs return a <code>Lease</code> object from the context manager if you need the lease id for logs:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> retsu.limit(<span class="st">"exports"</span>) <span class="im">as</span> lease:</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"running export under lease </span><span class="sc">%s</span><span class="st">"</span>, lease.<span class="bu">id</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    export_large_file()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="static-and-dynamic-requests" class="level2">
+<h2 class="anchored" data-anchor-id="static-and-dynamic-requests">Static and dynamic requests</h2>
+<p>Requests can be static:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(resources<span class="op">=</span>{<span class="st">"gpu"</span>: <span class="dv">1</span>}, concurrency<span class="op">=</span>{<span class="st">"training"</span>: <span class="dv">1</span>})</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(model_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>They can also be dynamic. Callable values receive the wrapped function’s arguments:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span>{<span class="st">"memory_mb"</span>: <span class="kw">lambda</span> records: <span class="bu">max</span>(<span class="dv">128</span>, <span class="bu">len</span>(records) <span class="op">*</span> <span class="dv">2</span>)},</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> import_records(records: <span class="bu">list</span>[<span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">object</span>]]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If a dynamic estimator raises, Retsu raises <code>ResourceEstimationError</code> and does not acquire a lease.</p>
+</section>
+<section id="wait-policy-examples" class="level2">
+<h2 class="anchored" data-anchor-id="wait-policy-examples">Wait policy examples</h2>
+<section id="block-until-capacity-is-available" class="level3">
+<h3 class="anchored" data-anchor-id="block-until-capacity-is-available">Block until capacity is available</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(concurrency<span class="op">=</span>{<span class="st">"reports"</span>: <span class="dv">1</span>}, wait_strategy<span class="op">=</span><span class="st">"block"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_report(report_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>block</code> is the default. It retries until capacity is available or the acquire timeout expires.</p>
+</section>
+<section id="fail-fast" class="level3">
+<h3 class="anchored" data-anchor-id="fail-fast">Fail fast</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> retsu.limit(<span class="st">"reports"</span>, wait_strategy<span class="op">=</span><span class="st">"fail"</span>):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        build_report_now()</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> retsu.ResourceUnavailable <span class="im">as</span> exc:</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"status"</span>: <span class="st">"busy"</span>, <span class="st">"blocked_by"</span>: exc.blocked_by}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Use <code>fail</code> for request/response paths where waiting would be worse than telling the caller to try again.</p>
+</section>
+<section id="retry-in-an-integration" class="level3">
+<h3 class="anchored" data-anchor-id="retry-in-an-integration">Retry in an integration</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.task</span>(bind<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_report(<span class="va">self</span>, report_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> retsu.celery_guard(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        concurrency<span class="op">=</span>{<span class="st">"reports"</span>: <span class="dv">1</span>},</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        wait_strategy<span class="op">=</span><span class="st">"retry"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    ):</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        render_report(report_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>celery_guard()</code> converts <code>ResourceUnavailable</code> into <code>task.retry(...)</code> when the strategy is <code>retry</code>.</p>
+</section>
+</section>
+<section id="ttls-and-heartbeat" class="level2">
+<h2 class="anchored" data-anchor-id="ttls-and-heartbeat">TTLs and heartbeat</h2>
+<p>Every lease has a TTL. Guard mode starts a daemon heartbeat thread and renews the lease while the guarded code is active. If the worker process crashes, the heartbeat stops and the lease eventually expires. Expired leases are cleaned up before capacity acquisition and usage snapshots.</p>
+<p>Tune these values together:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>retsu.configure(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    backend<span class="op">=</span><span class="st">"redis"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    redis_url<span class="op">=</span><span class="st">"redis://localhost:6379/0"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    default_ttl_seconds<span class="op">=</span><span class="dv">300</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    default_heartbeat_interval_seconds<span class="op">=</span><span class="dv">30</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    default_acquire_timeout_seconds<span class="op">=</span><span class="dv">60</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Choose a TTL long enough to tolerate normal heartbeat delays, and an acquire timeout that matches how long callers are willing to wait.</p>
+</section>
+<section id="exceptions-to-handle" class="level2">
+<h2 class="anchored" data-anchor-id="exceptions-to-handle">Exceptions to handle</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -503,87 +580,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </colgroup>
 <thead>
 <tr class="header">
-<th>Area</th>
-<th>What you get</th>
+<th>Exception</th>
+<th>Typical cause</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Resource definitions</td>
-<td>Named quantitative capacity such as <code>memory_mb</code>, <code>gpu</code>, or <code>license_seats</code>.</td>
+<td><code>ResourceDefinitionMissing</code></td>
+<td>A request referenced a capacity that was never defined.</td>
 </tr>
 <tr class="even">
-<td>Concurrency definitions</td>
-<td>Named slot limits such as <code>billing-api</code>, <code>tenant:42</code>, or <code>reports</code>.</td>
+<td><code>ResourceUnavailable</code></td>
+<td>Capacity is full and the policy is <code>fail</code> or <code>retry</code>.</td>
 </tr>
 <tr class="odd">
-<td>Guard mode</td>
-<td>Decorators and context managers that acquire a lease before entering user code.</td>
+<td><code>ResourceAcquireTimeout</code></td>
+<td>Capacity stayed full until the blocking acquire timed out.</td>
 </tr>
 <tr class="even">
-<td>Admission mode</td>
-<td><code>submit()</code>, <code>Scheduler</code>, executors, and <code>JobHandle</code> for resource-aware dispatch.</td>
-</tr>
-<tr class="odd">
-<td>Backends</td>
-<td>Redis/Valkey for shared atomic accounting; memory for tests and local tools.</td>
-</tr>
-<tr class="even">
-<td>Integrations</td>
-<td>Celery retry-friendly guards and Ray guard/task helpers.</td>
-</tr>
-<tr class="odd">
-<td>Operations</td>
-<td>Usage snapshots, active lease listing, cleanup of expired leases, and a small CLI.</td>
+<td><code>ResourceEstimationError</code></td>
+<td>A dynamic resource estimator raised an exception.</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="the-mental-model" class="level2">
-<h2 class="anchored" data-anchor-id="the-mental-model">The mental model</h2>
-<pre class="text"><code>Define capacity  -&gt;  Evaluate request  -&gt;  Acquire lease  -&gt;  Run work
-       ^                    |                    |               |
-       |                    |                    v               v
-   resources and       static values or      usage increments  release in
-   concurrency         callables from        atomically        finally path
-                       function args</code></pre>
-<p>A successful acquire creates exactly one lease. Usage is incremented once for that lease and decremented once when the lease is released or expires. Redis and Valkey accounting is implemented with Lua scripts so capacity checks and usage updates happen atomically.</p>
+<section id="good-guard-mode-practices" class="level2">
+<h2 class="anchored" data-anchor-id="good-guard-mode-practices">Good guard-mode practices</h2>
+<ul>
+<li>Define capacities during process startup, before tasks begin running.</li>
+<li>Use clear names that match operational dashboards or limits.</li>
+<li>Keep guarded sections as small as practical.</li>
+<li>Prefer dynamic estimates when input size materially changes resource needs.</li>
+<li>Use <code>wait_strategy="retry"</code> for Celery tasks that should return to the queue.</li>
+<li>Set namespaces deliberately when multiple environments share Redis/Valkey.</li>
+</ul>
 </section>
-<section id="choose-a-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="choose-a-workflow">Choose a workflow</h2>
-<div class="grid">
-<section id="guard-mode" class="level3 g-col-12 g-col-md-6">
-<h3 class="anchored" data-anchor-id="guard-mode">Guard mode</h3>
-<p>Use when you already have an execution system and only need to protect a function or critical section.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(concurrency<span class="op">=</span>{<span class="st">"vendor-api"</span>: <span class="dv">1</span>})</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_customer(customer_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    push_to_vendor(customer_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><a href="../docs/guard-mode.html">Learn guard mode</a></p>
-</section>
-<section id="admission-mode" class="level3 g-col-12 g-col-md-6">
-<h3 class="anchored" data-anchor-id="admission-mode">Admission mode</h3>
-<p>Use when jobs should be stored first, admitted only after capacity is acquired, and then dispatched by a scheduler.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>handle <span class="op">=</span> retsu.submit(render, args<span class="op">=</span>(<span class="st">"scene-42"</span>,), resources<span class="op">=</span>{<span class="st">"gpu"</span>: <span class="dv">1</span>})</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>retsu.Scheduler().run_once()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> handle.result(timeout<span class="op">=</span><span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><a href="../docs/admission-mode.html">Learn admission mode</a></p>
-</section>
-</div>
-</section>
-<section id="when-retsu-is-a-good-fit" class="level2">
-<h2 class="anchored" data-anchor-id="when-retsu-is-a-good-fit">When Retsu is a good fit</h2>
-<p>Retsu is a good fit when capacity is an application-level concern and the resource cannot be expressed cleanly as a worker-pool size. Examples include external API quotas, tenant locks, GPU fractions, memory reservations, and licensed software seats.</p>
-<p>Retsu is not a replacement for a durable task queue, a general distributed lock service, or a full autoscaler. It complements those tools by making admission resource-aware.</p>
-</section>
-<section id="start-here" class="level2">
-<h2 class="anchored" data-anchor-id="start-here">Start here</h2>
-<ol type="1">
-<li>Follow the <a href="../docs/quickstart.html">quickstart</a> for a copy-paste local example.</li>
-<li>Read <a href="../docs/concepts.html">concepts</a> to understand resources, leases, and wait policies.</li>
-<li>Use <a href="../docs/guard-mode.html">guard mode</a> for protected functions and critical sections.</li>
-<li>Use <a href="../docs/admission-mode.html">admission mode</a> when work should be scheduled after capacity is acquired.</li>
-<li>Review <a href="../docs/operations.html">operations</a> before using Redis/Valkey in production.</li>
-</ol>
+<section id="avoid" class="level2">
+<h2 class="anchored" data-anchor-id="avoid">Avoid</h2>
+<ul>
+<li>Guarding code that can block forever without a suitable TTL/heartbeat setup.</li>
+<li>Using the memory backend when multiple processes need shared accounting.</li>
+<li>Catching broad exceptions around guarded code and forgetting that the work may have partially completed.</li>
+<li>Treating a Retsu lease as a database transaction. It controls admission; it does not roll back side effects.</li>
+</ul>
 
 
 </section>
@@ -1010,10 +1049,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../docs/concepts.html" class="pagination-link" aria-label="Concepts">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Concepts</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../docs/quickstart.html" class="pagination-link" aria-label="Quickstart">
-        <span class="nav-page-text">Quickstart</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../docs/admission-mode.html" class="pagination-link" aria-label="Admission Mode">
+        <span class="nav-page-text">Admission Mode</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

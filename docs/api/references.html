@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -34,7 +69,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
 <link href="../../docs/example.html" rel="next">
-<link href="../../docs/installation.html" rel="prev">
+<link href="../../docs/operations.html" rel="prev">
 <link href="../../docs/images/favicon.ico" rel="icon">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -269,24 +304,28 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../docs/installation.html"> 
-<span class="menu-text">Installation</span></a>
+    <a class="nav-link" href="../../docs/quickstart.html"> 
+<span class="menu-text">Quickstart</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../docs/concepts.html"> 
+<span class="menu-text">Concepts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../docs/guard-mode.html"> 
+<span class="menu-text">Guard Mode</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../docs/admission-mode.html"> 
+<span class="menu-text">Admission Mode</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../docs/integrations.html"> 
+<span class="menu-text">Integrations</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../docs/api/references.html"> 
 <span class="menu-text">API</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../docs/example.html"> 
-<span class="menu-text">Example</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../docs/changelog.html"> 
-<span class="menu-text">Changelog</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../docs/contributing.html"> 
-<span class="menu-text">Contributing</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -327,8 +366,44 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../docs/quickstart.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quickstart</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../docs/installation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Installation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../docs/concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Concepts</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../docs/guard-mode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Guard Mode</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../docs/admission-mode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Admission Mode</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../docs/integrations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Integrations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../docs/operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Operations</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -351,7 +426,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../docs/example.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Example</span></a>
+ <span class="menu-text">Notebook Tour</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -378,12 +453,55 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#api-reference" id="toc-api-reference" class="nav-link active" data-scroll-target="#api-reference">API Reference</a>
   <ul class="collapse">
-  <li><a href="#configuration" id="toc-configuration" class="nav-link" data-scroll-target="#configuration">Configuration</a></li>
-  <li><a href="#capacity-definitions" id="toc-capacity-definitions" class="nav-link" data-scroll-target="#capacity-definitions">Capacity Definitions</a></li>
-  <li><a href="#guard-mode" id="toc-guard-mode" class="nav-link" data-scroll-target="#guard-mode">Guard Mode</a></li>
-  <li><a href="#admission-mode" id="toc-admission-mode" class="nav-link" data-scroll-target="#admission-mode">Admission Mode</a></li>
-  <li><a href="#core-models" id="toc-core-models" class="nav-link" data-scroll-target="#core-models">Core Models</a></li>
+  <li><a href="#configuration" id="toc-configuration" class="nav-link" data-scroll-target="#configuration">Configuration</a>
+  <ul class="collapse">
+  <li><a href="#retsu.configure...---retsuconfig" id="toc-retsu.configure...---retsuconfig" class="nav-link" data-scroll-target="#retsu.configure...---retsuconfig"><code>retsu.configure(...) -&gt; RetsuConfig</code></a></li>
+  <li><a href="#retsu.get_config---retsuconfig" id="toc-retsu.get_config---retsuconfig" class="nav-link" data-scroll-target="#retsu.get_config---retsuconfig"><code>retsu.get_config() -&gt; RetsuConfig</code></a></li>
+  <li><a href="#retsu.get_backend---backend" id="toc-retsu.get_backend---backend" class="nav-link" data-scroll-target="#retsu.get_backend---backend"><code>retsu.get_backend() -&gt; Backend</code></a></li>
+  <li><a href="#retsu.set_backendbackend---none" id="toc-retsu.set_backendbackend---none" class="nav-link" data-scroll-target="#retsu.set_backendbackend---none"><code>retsu.set_backend(backend) -&gt; None</code></a></li>
+  </ul></li>
+  <li><a href="#capacity-management" id="toc-capacity-management" class="nav-link" data-scroll-target="#capacity-management">Capacity management</a>
+  <ul class="collapse">
+  <li><a href="#retsu.define_resourcename-str-capacity-float---none" id="toc-retsu.define_resourcename-str-capacity-float---none" class="nav-link" data-scroll-target="#retsu.define_resourcename-str-capacity-float---none"><code>retsu.define_resource(name: str, capacity: float) -&gt; None</code></a></li>
+  <li><a href="#retsu.define_concurrencyname-str-capacity-float---none" id="toc-retsu.define_concurrencyname-str-capacity-float---none" class="nav-link" data-scroll-target="#retsu.define_concurrencyname-str-capacity-float---none"><code>retsu.define_concurrency(name: str, capacity: float) -&gt; None</code></a></li>
+  <li><a href="#retsu.get_usage---usagesnapshot" id="toc-retsu.get_usage---usagesnapshot" class="nav-link" data-scroll-target="#retsu.get_usage---usagesnapshot"><code>retsu.get_usage() -&gt; UsageSnapshot</code></a></li>
+  <li><a href="#retsu.list_leases---listleaserecord" id="toc-retsu.list_leases---listleaserecord" class="nav-link" data-scroll-target="#retsu.list_leases---listleaserecord"><code>retsu.list_leases() -&gt; list[LeaseRecord]</code></a></li>
+  <li><a href="#retsu.cleanup_expired_leases---cleanupresult" id="toc-retsu.cleanup_expired_leases---cleanupresult" class="nav-link" data-scroll-target="#retsu.cleanup_expired_leases---cleanupresult"><code>retsu.cleanup_expired_leases() -&gt; CleanupResult</code></a></li>
+  </ul></li>
+  <li><a href="#guard-mode" id="toc-guard-mode" class="nav-link" data-scroll-target="#guard-mode">Guard mode</a>
+  <ul class="collapse">
+  <li><a href="#retsu.guard..." id="toc-retsu.guard..." class="nav-link" data-scroll-target="#retsu.guard..."><code>retsu.guard(...)</code></a></li>
+  <li><a href="#retsu.acquire..." id="toc-retsu.acquire..." class="nav-link" data-scroll-target="#retsu.acquire..."><code>retsu.acquire(...)</code></a></li>
+  <li><a href="#retsu.limitname-str-slots-float-1-..." id="toc-retsu.limitname-str-slots-float-1-..." class="nav-link" data-scroll-target="#retsu.limitname-str-slots-float-1-..."><code>retsu.limit(name: str, slots: float = 1, ...)</code></a></li>
+  <li><a href="#retsu.acquire_with_policy...---lease" id="toc-retsu.acquire_with_policy...---lease" class="nav-link" data-scroll-target="#retsu.acquire_with_policy...---lease"><code>retsu.acquire_with_policy(...) -&gt; Lease</code></a></li>
+  </ul></li>
+  <li><a href="#admission-mode" id="toc-admission-mode" class="nav-link" data-scroll-target="#admission-mode">Admission mode</a>
+  <ul class="collapse">
+  <li><a href="#retsu.submit...---jobhandle" id="toc-retsu.submit...---jobhandle" class="nav-link" data-scroll-target="#retsu.submit...---jobhandle"><code>retsu.submit(...) -&gt; JobHandle</code></a></li>
+  <li><a href="#retsu.scheduler..." id="toc-retsu.scheduler..." class="nav-link" data-scroll-target="#retsu.scheduler..."><code>retsu.Scheduler(...)</code></a></li>
+  <li><a href="#retsu.jobhandle" id="toc-retsu.jobhandle" class="nav-link" data-scroll-target="#retsu.jobhandle"><code>retsu.JobHandle</code></a></li>
+  </ul></li>
+  <li><a href="#integrations" id="toc-integrations" class="nav-link" data-scroll-target="#integrations">Integrations</a>
+  <ul class="collapse">
+  <li><a href="#retsu.celery_guardtask-...-wait_strategyretry" id="toc-retsu.celery_guardtask-...-wait_strategyretry" class="nav-link" data-scroll-target="#retsu.celery_guardtask-...-wait_strategyretry"><code>retsu.celery_guard(task, ..., wait_strategy="retry")</code></a></li>
+  <li><a href="#retsu.ray_guard..." id="toc-retsu.ray_guard..." class="nav-link" data-scroll-target="#retsu.ray_guard..."><code>retsu.ray_guard(...)</code></a></li>
+  <li><a href="#retsu.ray_task...-ray_options" id="toc-retsu.ray_task...-ray_options" class="nav-link" data-scroll-target="#retsu.ray_task...-ray_options"><code>retsu.ray_task(..., **ray_options)</code></a></li>
+  <li><a href="#retsu.plugins.django.create_app_configmanager-app_namemyapp" id="toc-retsu.plugins.django.create_app_configmanager-app_namemyapp" class="nav-link" data-scroll-target="#retsu.plugins.django.create_app_configmanager-app_namemyapp"><code>retsu.plugins.django.create_app_config(manager, app_name="myapp")</code></a></li>
+  </ul></li>
+  <li><a href="#data-models" id="toc-data-models" class="nav-link" data-scroll-target="#data-models">Data models</a>
+  <ul class="collapse">
+  <li><a href="#resourcerequest" id="toc-resourcerequest" class="nav-link" data-scroll-target="#resourcerequest"><code>ResourceRequest</code></a></li>
+  <li><a href="#resourcespec" id="toc-resourcespec" class="nav-link" data-scroll-target="#resourcespec"><code>ResourceSpec</code></a></li>
+  <li><a href="#acquireresult" id="toc-acquireresult" class="nav-link" data-scroll-target="#acquireresult"><code>AcquireResult</code></a></li>
+  <li><a href="#usagesnapshot-and-usageitem" id="toc-usagesnapshot-and-usageitem" class="nav-link" data-scroll-target="#usagesnapshot-and-usageitem"><code>UsageSnapshot</code> and <code>UsageItem</code></a></li>
+  <li><a href="#cleanupresult" id="toc-cleanupresult" class="nav-link" data-scroll-target="#cleanupresult"><code>CleanupResult</code></a></li>
+  <li><a href="#leaserecord" id="toc-leaserecord" class="nav-link" data-scroll-target="#leaserecord"><code>LeaseRecord</code></a></li>
+  <li><a href="#jobrecord-and-jobstatus" id="toc-jobrecord-and-jobstatus" class="nav-link" data-scroll-target="#jobrecord-and-jobstatus"><code>JobRecord</code> and <code>JobStatus</code></a></li>
+  <li><a href="#capacitydefinition" id="toc-capacitydefinition" class="nav-link" data-scroll-target="#capacitydefinition"><code>CapacityDefinition</code></a></li>
+  </ul></li>
+  <li><a href="#backends-and-executors" id="toc-backends-and-executors" class="nav-link" data-scroll-target="#backends-and-executors">Backends and executors</a></li>
   <li><a href="#exceptions" id="toc-exceptions" class="nav-link" data-scroll-target="#exceptions">Exceptions</a></li>
+  <li><a href="#version-metadata" id="toc-version-metadata" class="nav-link" data-scroll-target="#version-metadata">Version metadata</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -397,68 +515,366 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="api-reference" class="level1">
 <h1>API Reference</h1>
-<p>Retsu exposes a small public API from the <code>retsu</code> package.</p>
+<p>Retsu’s stable user-facing API is re-exported from the <code>retsu</code> package. Backend classes and plugin helpers are available from their module paths when you need advanced integration points.</p>
 <section id="configuration" class="level2">
 <h2 class="anchored" data-anchor-id="configuration">Configuration</h2>
+<section id="retsu.configure...---retsuconfig" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.configure...---retsuconfig"><code>retsu.configure(...) -&gt; RetsuConfig</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>retsu.configure(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    backend<span class="op">=</span><span class="st">"redis"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    redis_url<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    namespace<span class="op">=</span><span class="st">"default"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    default_ttl_seconds<span class="op">=</span><span class="dv">300</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    default_acquire_timeout_seconds<span class="op">=</span><span class="dv">60</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    default_heartbeat_interval_seconds<span class="op">=</span><span class="dv">30</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    default_wait_strategy<span class="op">=</span><span class="st">"block"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Set process-global Retsu configuration and reset the cached backend. Supported backend names are <code>"redis"</code> and <code>"memory"</code>.</p>
+<p>Important behavior:</p>
 <ul>
-<li><code>retsu.configure</code></li>
-<li><code>retsu.get_config</code></li>
-<li><code>retsu.get_backend</code></li>
-<li><code>retsu.set_backend</code></li>
+<li>the backend is created lazily by <code>get_backend()</code>;</li>
+<li>calling <code>configure()</code> discards the cached backend object;</li>
+<li><code>default_wait_strategy</code> must be <code>"block"</code>, <code>"fail"</code>, or <code>"retry"</code>;</li>
+<li><code>default_acquire_timeout_seconds=None</code> allows blocking acquires to wait indefinitely.</li>
 </ul>
 </section>
-<section id="capacity-definitions" class="level2">
-<h2 class="anchored" data-anchor-id="capacity-definitions">Capacity Definitions</h2>
-<ul>
-<li><code>retsu.define_resource</code></li>
-<li><code>retsu.define_concurrency</code></li>
-<li><code>retsu.get_usage</code></li>
-<li><code>retsu.list_leases</code></li>
-<li><code>retsu.cleanup_expired_leases</code></li>
-</ul>
+<section id="retsu.get_config---retsuconfig" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.get_config---retsuconfig"><code>retsu.get_config() -&gt; RetsuConfig</code></h3>
+<p>Return the current process-global configuration dataclass.</p>
+</section>
+<section id="retsu.get_backend---backend" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.get_backend---backend"><code>retsu.get_backend() -&gt; Backend</code></h3>
+<p>Return the configured backend, creating it if needed. The Redis backend uses <code>redis_url</code> if supplied; otherwise it uses the Redis environment helper values.</p>
+</section>
+<section id="retsu.set_backendbackend---none" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.set_backendbackend---none"><code>retsu.set_backend(backend) -&gt; None</code></h3>
+<p>Set an explicit backend object. This is most useful in tests or advanced applications that construct their own backend instance.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> retsu.backends.memory <span class="im">import</span> MemoryBackend</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>retsu.set_backend(MemoryBackend())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="capacity-management" class="level2">
+<h2 class="anchored" data-anchor-id="capacity-management">Capacity management</h2>
+<section id="retsu.define_resourcename-str-capacity-float---none" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.define_resourcename-str-capacity-float---none"><code>retsu.define_resource(name: str, capacity: float) -&gt; None</code></h3>
+<p>Define or update a named quantitative resource.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>retsu.define_resource(<span class="st">"memory_mb"</span>, <span class="dv">64_000</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>retsu.define_resource(<span class="st">"gpu"</span>, <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="retsu.define_concurrencyname-str-capacity-float---none" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.define_concurrencyname-str-capacity-float---none"><code>retsu.define_concurrency(name: str, capacity: float) -&gt; None</code></h3>
+<p>Define or update a named concurrency limit.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>retsu.define_concurrency(<span class="st">"billing-api"</span>, <span class="dv">5</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>retsu.define_concurrency(<span class="st">"tenant:acme"</span>, <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="retsu.get_usage---usagesnapshot" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.get_usage---usagesnapshot"><code>retsu.get_usage() -&gt; UsageSnapshot</code></h3>
+<p>Return current used, capacity, and available values for all configured capacities. Expired leases are cleaned before the snapshot is returned.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>usage <span class="op">=</span> retsu.get_usage()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> usage.concurrency[<span class="st">"billing-api"</span>]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(item.used, item.capacity, item.available)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="retsu.list_leases---listleaserecord" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.list_leases---listleaserecord"><code>retsu.list_leases() -&gt; list[LeaseRecord]</code></h3>
+<p>Return active leases after cleaning expired leases.</p>
+</section>
+<section id="retsu.cleanup_expired_leases---cleanupresult" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.cleanup_expired_leases---cleanupresult"><code>retsu.cleanup_expired_leases() -&gt; CleanupResult</code></h3>
+<p>Release all expired leases and return their ids.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>expired <span class="op">=</span> retsu.cleanup_expired_leases().expired_lease_ids</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
 </section>
 <section id="guard-mode" class="level2">
-<h2 class="anchored" data-anchor-id="guard-mode">Guard Mode</h2>
+<h2 class="anchored" data-anchor-id="guard-mode">Guard mode</h2>
+<section id="retsu.guard..." class="level3">
+<h3 class="anchored" data-anchor-id="retsu.guard..."><code>retsu.guard(...)</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>retsu.guard(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    concurrency<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    ttl_seconds<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    acquire_timeout_seconds<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    wait_strategy<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Return a decorator that acquires capacity before calling the wrapped function. <code>resources</code> and <code>concurrency</code> are mappings of names to either numbers or callables evaluated with the wrapped function arguments.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span>{<span class="st">"memory_mb"</span>: <span class="kw">lambda</span> batch: batch.estimated_mb},</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    concurrency<span class="op">=</span>{<span class="st">"imports"</span>: <span class="dv">1</span>},</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> import_batch(batch):</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Raises:</p>
 <ul>
-<li><code>retsu.guard</code></li>
-<li><code>retsu.acquire</code></li>
-<li><code>retsu.limit</code></li>
-<li><code>retsu.celery_guard</code></li>
-<li><code>retsu.ray_guard</code></li>
-<li><code>retsu.ray_task</code></li>
+<li><code>ResourceDefinitionMissing</code> for undefined capacity names;</li>
+<li><code>ResourceUnavailable</code> when the selected strategy fails fast;</li>
+<li><code>ResourceAcquireTimeout</code> when blocking acquisition times out;</li>
+<li><code>ResourceEstimationError</code> when a dynamic estimator raises.</li>
 </ul>
+</section>
+<section id="retsu.acquire..." class="level3">
+<h3 class="anchored" data-anchor-id="retsu.acquire..."><code>retsu.acquire(...)</code></h3>
+<p>Context manager that acquires capacity for a critical section.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> retsu.acquire(resources<span class="op">=</span>{<span class="st">"memory_mb"</span>: <span class="dv">512</span>}, concurrency<span class="op">=</span>{<span class="st">"exports"</span>: <span class="dv">1</span>}):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    export_file()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The yielded object is a <code>Lease</code>.</p>
+</section>
+<section id="retsu.limitname-str-slots-float-1-..." class="level3">
+<h3 class="anchored" data-anchor-id="retsu.limitname-str-slots-float-1-..."><code>retsu.limit(name: str, slots: float = 1, ...)</code></h3>
+<p>Convenience context manager for one named concurrency limit.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> retsu.limit(<span class="st">"billing-api"</span>, slots<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    call_billing_api()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="retsu.acquire_with_policy...---lease" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.acquire_with_policy...---lease"><code>retsu.acquire_with_policy(...) -&gt; Lease</code></h3>
+<p>Lower-level API used by guard mode. It accepts an already evaluated <code>ResourceRequest</code> plus explicit <code>job_id</code> and <code>owner_id</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>lease <span class="op">=</span> retsu.acquire_with_policy(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    job_id<span class="op">=</span><span class="st">"manual-job"</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    owner_id<span class="op">=</span><span class="st">"worker-1"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    request<span class="op">=</span>retsu.ResourceRequest(resources<span class="op">=</span>{}, concurrency<span class="op">=</span>{<span class="st">"api"</span>: <span class="dv">1</span>}),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    do_work()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">finally</span>:</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    lease.release()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
 </section>
 <section id="admission-mode" class="level2">
-<h2 class="anchored" data-anchor-id="admission-mode">Admission Mode</h2>
+<h2 class="anchored" data-anchor-id="admission-mode">Admission mode</h2>
+<section id="retsu.submit...---jobhandle" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.submit...---jobhandle"><code>retsu.submit(...) -&gt; JobHandle</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>retsu.submit(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    func,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    kwargs<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    concurrency<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    executor<span class="op">=</span><span class="st">"local"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    queue<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    priority<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    max_attempts<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Create a queued admission job and return a handle. The resource request is evaluated at submit time. Args, kwargs, and results are serialized with <code>pickle</code>, so treat admission payloads as trusted-process data.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>handle <span class="op">=</span> retsu.submit(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    build_report,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(<span class="st">"weekly"</span>,),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span>{<span class="st">"cpu"</span>: <span class="dv">1</span>},</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    concurrency<span class="op">=</span>{<span class="st">"reports"</span>: <span class="dv">1</span>},</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    priority<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="retsu.scheduler..." class="level3">
+<h3 class="anchored" data-anchor-id="retsu.scheduler..."><code>retsu.Scheduler(...)</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>scheduler <span class="op">=</span> retsu.Scheduler()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>scheduler.run_once(limit<span class="op">=</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>run_once()</code> cleans expired leases, considers queued/waiting jobs, acquires capacity, and dispatches admitted jobs through an executor. The default executor is local. Jobs with <code>executor="ray"</code> create a Ray executor on demand.</p>
+<p>Constructor arguments:</p>
 <ul>
-<li><code>retsu.submit</code></li>
-<li><code>retsu.JobHandle</code></li>
-<li><code>retsu.Scheduler</code></li>
+<li><code>backend</code>: explicit backend, otherwise <code>retsu.get_backend()</code>;</li>
+<li><code>executors</code>: mapping of executor names to executor objects;</li>
+<li><code>owner_id</code>: explicit owner id for acquired leases.</li>
 </ul>
 </section>
-<section id="core-models" class="level2">
-<h2 class="anchored" data-anchor-id="core-models">Core Models</h2>
+<section id="retsu.jobhandle" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.jobhandle"><code>retsu.JobHandle</code></h3>
+<p>Returned by <code>submit()</code>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>status()</code></td>
+<td>Return the current <code>JobStatus</code>.</td>
+</tr>
+<tr class="even">
+<td><code>result(timeout=None)</code></td>
+<td>Wait for success and return the unpickled result. Raise for failure, cancellation, or timeout.</td>
+</tr>
+<tr class="odd">
+<td><code>metadata()</code></td>
+<td>Return a dictionary of job metadata.</td>
+</tr>
+<tr class="even">
+<td><code>cancel()</code></td>
+<td>Mark the job cancelled.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="integrations" class="level2">
+<h2 class="anchored" data-anchor-id="integrations">Integrations</h2>
+<section id="retsu.celery_guardtask-...-wait_strategyretry" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.celery_guardtask-...-wait_strategyretry"><code>retsu.celery_guard(task, ..., wait_strategy="retry")</code></h3>
+<p>Context manager for bound Celery tasks. With <code>wait_strategy="retry"</code>, capacity denial is converted into <code>task.retry(countdown=...)</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.task</span>(bind<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> render(<span class="va">self</span>, document_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> retsu.celery_guard(<span class="va">self</span>, concurrency<span class="op">=</span>{<span class="st">"render"</span>: <span class="dv">1</span>}):</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        render_document(document_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="retsu.ray_guard..." class="level3">
+<h3 class="anchored" data-anchor-id="retsu.ray_guard..."><code>retsu.ray_guard(...)</code></h3>
+<p>Context manager for guarded sections inside Ray tasks.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="at">@ray.remote</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(model_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> retsu.ray_guard(resources<span class="op">=</span>{<span class="st">"gpu"</span>: <span class="dv">1</span>}):</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> run_training(model_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="retsu.ray_task...-ray_options" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.ray_task...-ray_options"><code>retsu.ray_task(..., **ray_options)</code></h3>
+<p>Decorator that wraps a function with Retsu guard mode and then applies <code>ray.remote</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.ray_task</span>(resources<span class="op">=</span>{<span class="st">"gpu"</span>: <span class="dv">1</span>}, num_gpus<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(model_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> run_training(model_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="retsu.plugins.django.create_app_configmanager-app_namemyapp" class="level3">
+<h3 class="anchored" data-anchor-id="retsu.plugins.django.create_app_configmanager-app_namemyapp"><code>retsu.plugins.django.create_app_config(manager, app_name="myapp")</code></h3>
+<p>Django plugin helper for manager-style integrations. Import from the module path rather than <code>retsu</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> retsu.plugins.django <span class="im">import</span> create_app_config</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="data-models" class="level2">
+<h2 class="anchored" data-anchor-id="data-models">Data models</h2>
+<section id="resourcerequest" class="level3">
+<h3 class="anchored" data-anchor-id="resourcerequest"><code>ResourceRequest</code></h3>
+<p>Concrete request for one lease.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>request <span class="op">=</span> retsu.ResourceRequest(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span>{<span class="st">"memory_mb"</span>: <span class="dv">512</span>},</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    concurrency<span class="op">=</span>{<span class="st">"api"</span>: <span class="dv">1</span>},</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Validation rules:</p>
 <ul>
-<li><code>retsu.ResourceSpec</code></li>
-<li><code>retsu.ResourceRequest</code></li>
-<li><code>retsu.AcquireResult</code></li>
-<li><code>retsu.UsageSnapshot</code></li>
-<li><code>retsu.UsageItem</code></li>
-<li><code>retsu.JobRecord</code></li>
-<li><code>retsu.JobStatus</code></li>
-<li><code>retsu.LeaseRecord</code></li>
+<li>names must be non-empty strings;</li>
+<li>values must be finite and non-negative;</li>
+<li>zero values are ignored;</li>
+<li>values are normalized to floats.</li>
 </ul>
+</section>
+<section id="resourcespec" class="level3">
+<h3 class="anchored" data-anchor-id="resourcespec"><code>ResourceSpec</code></h3>
+<p>Static or dynamic resource requirements. <code>evaluate(*args, **kwargs)</code> returns a <code>ResourceRequest</code>.</p>
+</section>
+<section id="acquireresult" class="level3">
+<h3 class="anchored" data-anchor-id="acquireresult"><code>AcquireResult</code></h3>
+<p>Backend acquire result:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>acquired</code></td>
+<td>Whether capacity was acquired.</td>
+</tr>
+<tr class="even">
+<td><code>lease_id</code></td>
+<td>New lease id when acquired.</td>
+</tr>
+<tr class="odd">
+<td><code>reason</code></td>
+<td>Backend reason when not acquired.</td>
+</tr>
+<tr class="even">
+<td><code>blocked_by</code></td>
+<td>Capacity name that blocked acquisition.</td>
+</tr>
+<tr class="odd">
+<td><code>retry_after_seconds</code></td>
+<td>Suggested retry delay.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="usagesnapshot-and-usageitem" class="level3">
+<h3 class="anchored" data-anchor-id="usagesnapshot-and-usageitem"><code>UsageSnapshot</code> and <code>UsageItem</code></h3>
+<p><code>UsageSnapshot.resources</code> and <code>UsageSnapshot.concurrency</code> map names to <code>UsageItem</code> objects. <code>UsageItem.available</code> is <code>max(capacity - used, 0)</code>.</p>
+</section>
+<section id="cleanupresult" class="level3">
+<h3 class="anchored" data-anchor-id="cleanupresult"><code>CleanupResult</code></h3>
+<p>Contains <code>expired_lease_ids</code>.</p>
+</section>
+<section id="leaserecord" class="level3">
+<h3 class="anchored" data-anchor-id="leaserecord"><code>LeaseRecord</code></h3>
+<p>Persisted lease metadata: id, job id, owner id, resource request, concurrency request, creation time, renewal time, and expiry time.</p>
+</section>
+<section id="jobrecord-and-jobstatus" class="level3">
+<h3 class="anchored" data-anchor-id="jobrecord-and-jobstatus"><code>JobRecord</code> and <code>JobStatus</code></h3>
+<p>Admission-mode job metadata and status enum. Common statuses include <code>queued</code>, <code>waiting_for_resources</code>, <code>leased</code>, <code>dispatched</code>, <code>running</code>, <code>succeeded</code>, <code>failed</code>, and <code>cancelled</code>.</p>
+</section>
+<section id="capacitydefinition" class="level3">
+<h3 class="anchored" data-anchor-id="capacitydefinition"><code>CapacityDefinition</code></h3>
+<p>Dataclass representing a named capacity definition. It is exported for typed integrations that need to describe capacity metadata.</p>
+</section>
+</section>
+<section id="backends-and-executors" class="level2">
+<h2 class="anchored" data-anchor-id="backends-and-executors">Backends and executors</h2>
+<p>Advanced users can import implementations directly:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> retsu.backends.memory <span class="im">import</span> MemoryBackend</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> retsu.backends.redis <span class="im">import</span> RedisBackend</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> retsu.executors.local <span class="im">import</span> LocalExecutor</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> retsu.executors.ray <span class="im">import</span> RayExecutor</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Backend implementations follow the protocol in <code>retsu.backends.base.Backend</code>. Custom executors should implement <code>dispatch(job, lease_id, owner_id)</code> and must release the lease on every success and failure path.</p>
 </section>
 <section id="exceptions" class="level2">
 <h2 class="anchored" data-anchor-id="exceptions">Exceptions</h2>
-<ul>
-<li><code>retsu.RetsuError</code></li>
-<li><code>retsu.ResourceUnavailable</code></li>
-<li><code>retsu.ResourceAcquireTimeout</code></li>
-<li><code>retsu.ResourceDefinitionMissing</code></li>
-<li><code>retsu.ResourceEstimationError</code></li>
-<li><code>retsu.RetsuBackendUnavailable</code></li>
-</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Exception</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>RetsuError</code></td>
+<td>Base class for Retsu errors.</td>
+</tr>
+<tr class="even">
+<td><code>ResourceDefinitionMissing</code></td>
+<td>A request referenced an undefined resource or concurrency name.</td>
+</tr>
+<tr class="odd">
+<td><code>ResourceUnavailable</code></td>
+<td>Capacity is full and the wait strategy failed fast.</td>
+</tr>
+<tr class="even">
+<td><code>ResourceAcquireTimeout</code></td>
+<td>Blocking acquisition exceeded the configured timeout.</td>
+</tr>
+<tr class="odd">
+<td><code>ResourceEstimationError</code></td>
+<td>A dynamic request estimator raised before acquisition.</td>
+</tr>
+<tr class="even">
+<td><code>RetsuBackendUnavailable</code></td>
+<td>Backend connectivity/configuration error type for integrations.</td>
+</tr>
+<tr class="odd">
+<td><code>JobNotFound</code></td>
+<td>A backend job lookup failed. Import from <code>retsu.exceptions</code>.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="version-metadata" class="level2">
+<h2 class="anchored" data-anchor-id="version-metadata">Version metadata</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>retsu.__version__</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>retsu.__author__</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>retsu.__email__</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
@@ -885,13 +1301,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../docs/installation.html" class="pagination-link" aria-label="Installation">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Installation</span>
+      <a href="../../docs/operations.html" class="pagination-link" aria-label="Operations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Operations</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../docs/example.html" class="pagination-link" aria-label="Example">
-        <span class="nav-page-text">Example</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../docs/example.html" class="pagination-link" aria-label="Notebook Tour">
+        <span class="nav-page-text">Notebook Tour</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

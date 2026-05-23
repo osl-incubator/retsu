@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>index – Retsu</title>
+<title>concepts – Retsu</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -68,7 +68,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../docs/quickstart.html" rel="next">
+<link href="../docs/guard-mode.html" rel="next">
+<link href="../docs/installation.html" rel="prev">
 <link href="../docs/images/favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -345,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../docs/index.html">Home</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../docs/concepts.html">Concepts</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -359,7 +360,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../docs/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../docs/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Home</span></a>
   </div>
 </li>
@@ -377,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../docs/concepts.html" class="sidebar-item-text sidebar-link">
+  <a href="../docs/concepts.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Concepts</span></a>
   </div>
 </li>
@@ -450,14 +451,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#retsu" id="toc-retsu" class="nav-link active" data-scroll-target="#retsu">Retsu</a>
+  <li><a href="#concepts" id="toc-concepts" class="nav-link active" data-scroll-target="#concepts">Concepts</a>
   <ul class="collapse">
-  <li><a href="#why-use-it" id="toc-why-use-it" class="nav-link" data-scroll-target="#why-use-it">Why use it?</a></li>
-  <li><a href="#what-retsu-provides" id="toc-what-retsu-provides" class="nav-link" data-scroll-target="#what-retsu-provides">What Retsu provides</a></li>
-  <li><a href="#the-mental-model" id="toc-the-mental-model" class="nav-link" data-scroll-target="#the-mental-model">The mental model</a></li>
-  <li><a href="#choose-a-workflow" id="toc-choose-a-workflow" class="nav-link" data-scroll-target="#choose-a-workflow">Choose a workflow</a></li>
-  <li><a href="#when-retsu-is-a-good-fit" id="toc-when-retsu-is-a-good-fit" class="nav-link" data-scroll-target="#when-retsu-is-a-good-fit">When Retsu is a good fit</a></li>
-  <li><a href="#start-here" id="toc-start-here" class="nav-link" data-scroll-target="#start-here">Start here</a></li>
+  <li><a href="#capacities" id="toc-capacities" class="nav-link" data-scroll-target="#capacities">Capacities</a></li>
+  <li><a href="#requests" id="toc-requests" class="nav-link" data-scroll-target="#requests">Requests</a></li>
+  <li><a href="#leases" id="toc-leases" class="nav-link" data-scroll-target="#leases">Leases</a></li>
+  <li><a href="#owners" id="toc-owners" class="nav-link" data-scroll-target="#owners">Owners</a></li>
+  <li><a href="#wait-strategies" id="toc-wait-strategies" class="nav-link" data-scroll-target="#wait-strategies">Wait strategies</a></li>
+  <li><a href="#backends" id="toc-backends" class="nav-link" data-scroll-target="#backends">Backends</a>
+  <ul class="collapse">
+  <li><a href="#memory-backend" id="toc-memory-backend" class="nav-link" data-scroll-target="#memory-backend">Memory backend</a></li>
+  <li><a href="#redisvalkey-backend" id="toc-redisvalkey-backend" class="nav-link" data-scroll-target="#redisvalkey-backend">Redis/Valkey backend</a></li>
+  </ul></li>
+  <li><a href="#usage-snapshots-and-cleanup" id="toc-usage-snapshots-and-cleanup" class="nav-link" data-scroll-target="#usage-snapshots-and-cleanup">Usage snapshots and cleanup</a></li>
+  <li><a href="#job-lifecycle-in-admission-mode" id="toc-job-lifecycle-in-admission-mode" class="nav-link" data-scroll-target="#job-lifecycle-in-admission-mode">Job lifecycle in admission mode</a></li>
+  <li><a href="#safety-boundaries" id="toc-safety-boundaries" class="nav-link" data-scroll-target="#safety-boundaries">Safety boundaries</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -469,33 +477,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/logo.png" class="img-fluid figure-img"></p>
-<figcaption>Retsu logo</figcaption>
-</figure>
-</div>
-<section id="retsu" class="level1">
-<h1>Retsu</h1>
-<p>Retsu is a resource and concurrency control layer for Python background jobs. It sits beside Celery, Ray, local worker threads, or your own scheduler and answers one operational question before work starts:</p>
-<blockquote class="blockquote">
-<p>Is there enough configured capacity available to run this job safely right now?</p>
-</blockquote>
-<p>If the answer is yes, Retsu creates a lease and accounts for the capacity. If not, it can block, fail fast, or let an integration retry later. Leases are released explicitly when work exits and are also protected by time-to-live based cleanup if a worker disappears.</p>
-<section id="why-use-it" class="level2">
-<h2 class="anchored" data-anchor-id="why-use-it">Why use it?</h2>
-<p>Queues and executors decide <em>where</em> work runs. They usually do not understand all of the external limits your application depends on:</p>
+<section id="concepts" class="level1">
+<h1>Concepts</h1>
+<p>Retsu is intentionally small. Understanding the few core concepts makes the API predictable and helps you design safe capacity policies.</p>
+<section id="capacities" class="level2">
+<h2 class="anchored" data-anchor-id="capacities">Capacities</h2>
+<p>A capacity is a named limit stored in the backend.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>retsu.define_resource(<span class="st">"memory_mb"</span>, <span class="dv">16_000</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>retsu.define_concurrency(<span class="st">"vendor-api"</span>, <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Retsu keeps two kinds of capacity separate:</p>
 <ul>
-<li>one SaaS API allows only five concurrent exports;</li>
-<li>a tenant should never run more than one expensive rebuild at a time;</li>
-<li>a worker host has enough CPU threads but not enough GPU memory;</li>
-<li>a licensed solver has a fixed number of seats;</li>
-<li>a batch job needs to reserve memory before it starts, not after it crashes.</li>
+<li><strong>Resources</strong> are quantitative amounts. They are useful for memory, GPU fractions, license seats, token budgets, or any other value where a job may need more than one unit.</li>
+<li><strong>Concurrency limits</strong> are named slot counts. They are useful for per-service, per-tenant, or per-critical-section limits.</li>
 </ul>
-<p>Retsu turns those limits into named capacities and applies them consistently across guarded functions and admission-mode scheduling.</p>
+<p>Both kinds use floating-point values internally. Names must be non-empty strings. Capacity values must be non-negative. A request for an undefined name raises <code>ResourceDefinitionMissing</code>.</p>
 </section>
-<section id="what-retsu-provides" class="level2">
-<h2 class="anchored" data-anchor-id="what-retsu-provides">What Retsu provides</h2>
+<section id="requests" class="level2">
+<h2 class="anchored" data-anchor-id="requests">Requests</h2>
+<p>A request is the concrete capacity needed by one lease.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>request <span class="op">=</span> retsu.ResourceRequest(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    resources<span class="op">=</span>{<span class="st">"memory_mb"</span>: <span class="dv">256</span>},</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    concurrency<span class="op">=</span>{<span class="st">"vendor-api"</span>: <span class="dv">1</span>},</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Guard APIs usually build the request for you from a <code>ResourceSpec</code>. Values can be static numbers or callables evaluated with the wrapped function arguments:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(resources<span class="op">=</span>{<span class="st">"memory_mb"</span>: <span class="kw">lambda</span> batch: batch.estimated_mb})</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process(batch):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Estimator failures are wrapped in <code>ResourceEstimationError</code> before any lease is acquired. Zero-valued requests are ignored. Negative or non-finite values are rejected.</p>
+</section>
+<section id="leases" class="level2">
+<h2 class="anchored" data-anchor-id="leases">Leases</h2>
+<p>A lease is a time-limited reservation of a request. On successful acquire:</p>
+<ol type="1">
+<li>Retsu verifies every requested name exists.</li>
+<li>Retsu checks whether <code>used + requested &lt;= capacity</code> for every item.</li>
+<li>Usage is incremented.</li>
+<li>A lease record is stored with an owner id and expiry time.</li>
+</ol>
+<p>When the lease is released or cleaned up after expiry, usage is decremented once and clamped so it cannot go below zero.</p>
+<p>Guard decorators and context managers release leases in <code>finally</code> blocks. They also run a daemon heartbeat thread that renews the lease while user code is running.</p>
+</section>
+<section id="owners" class="level2">
+<h2 class="anchored" data-anchor-id="owners">Owners</h2>
+<p>Each lease has an owner id. Guard mode uses a process-stable owner id based on the host name and process id. Admission-mode schedulers use their own owner id.</p>
+<p>Release and renewal operations include the owner id. If an owner is supplied and it does not match the lease owner, the backend leaves the lease untouched. This prevents one worker from accidentally releasing another worker’s reservation.</p>
+</section>
+<section id="wait-strategies" class="level2">
+<h2 class="anchored" data-anchor-id="wait-strategies">Wait strategies</h2>
+<p>Wait strategies control what happens when capacity is currently full.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -503,87 +532,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </colgroup>
 <thead>
 <tr class="header">
-<th>Area</th>
-<th>What you get</th>
+<th>Strategy</th>
+<th>Behavior</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Resource definitions</td>
-<td>Named quantitative capacity such as <code>memory_mb</code>, <code>gpu</code>, or <code>license_seats</code>.</td>
+<td><code>block</code></td>
+<td>Keep trying until capacity is available or the acquire timeout expires. This is the default.</td>
 </tr>
 <tr class="even">
-<td>Concurrency definitions</td>
-<td>Named slot limits such as <code>billing-api</code>, <code>tenant:42</code>, or <code>reports</code>.</td>
+<td><code>fail</code></td>
+<td>Raise <code>ResourceUnavailable</code> immediately.</td>
 </tr>
 <tr class="odd">
-<td>Guard mode</td>
-<td>Decorators and context managers that acquire a lease before entering user code.</td>
-</tr>
-<tr class="even">
-<td>Admission mode</td>
-<td><code>submit()</code>, <code>Scheduler</code>, executors, and <code>JobHandle</code> for resource-aware dispatch.</td>
-</tr>
-<tr class="odd">
-<td>Backends</td>
-<td>Redis/Valkey for shared atomic accounting; memory for tests and local tools.</td>
-</tr>
-<tr class="even">
-<td>Integrations</td>
-<td>Celery retry-friendly guards and Ray guard/task helpers.</td>
-</tr>
-<tr class="odd">
-<td>Operations</td>
-<td>Usage snapshots, active lease listing, cleanup of expired leases, and a small CLI.</td>
+<td><code>retry</code></td>
+<td>Raise <code>ResourceUnavailable</code> immediately so an integration can schedule a retry. Celery uses this path.</td>
 </tr>
 </tbody>
 </table>
+<p>If <code>block</code> waits longer than <code>acquire_timeout_seconds</code>, Retsu raises <code>ResourceAcquireTimeout</code>.</p>
 </section>
-<section id="the-mental-model" class="level2">
-<h2 class="anchored" data-anchor-id="the-mental-model">The mental model</h2>
-<pre class="text"><code>Define capacity  -&gt;  Evaluate request  -&gt;  Acquire lease  -&gt;  Run work
-       ^                    |                    |               |
-       |                    |                    v               v
-   resources and       static values or      usage increments  release in
-   concurrency         callables from        atomically        finally path
-                       function args</code></pre>
-<p>A successful acquire creates exactly one lease. Usage is incremented once for that lease and decremented once when the lease is released or expires. Redis and Valkey accounting is implemented with Lua scripts so capacity checks and usage updates happen atomically.</p>
+<section id="backends" class="level2">
+<h2 class="anchored" data-anchor-id="backends">Backends</h2>
+<section id="memory-backend" class="level3">
+<h3 class="anchored" data-anchor-id="memory-backend">Memory backend</h3>
+<p>The memory backend is thread-safe and service-free. Use it for tests, notebooks, local scripts, and single-process tools.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>retsu.configure(backend<span class="op">=</span><span class="st">"memory"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Memory state is process-local. It does not coordinate across processes.</p>
 </section>
-<section id="choose-a-workflow" class="level2">
-<h2 class="anchored" data-anchor-id="choose-a-workflow">Choose a workflow</h2>
-<div class="grid">
-<section id="guard-mode" class="level3 g-col-12 g-col-md-6">
-<h3 class="anchored" data-anchor-id="guard-mode">Guard mode</h3>
-<p>Use when you already have an execution system and only need to protect a function or critical section.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">@retsu.guard</span>(concurrency<span class="op">=</span>{<span class="st">"vendor-api"</span>: <span class="dv">1</span>})</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sync_customer(customer_id: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    push_to_vendor(customer_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><a href="../docs/guard-mode.html">Learn guard mode</a></p>
+<section id="redisvalkey-backend" class="level3">
+<h3 class="anchored" data-anchor-id="redisvalkey-backend">Redis/Valkey backend</h3>
+<p>The Redis backend is the default. It stores capacity, usage, leases, and admission jobs under namespace-scoped keys:</p>
+<pre class="text"><code>retsu:{namespace}:capacity:resources
+retsu:{namespace}:capacity:concurrency
+retsu:{namespace}:usage:resources
+retsu:{namespace}:usage:concurrency
+retsu:{namespace}:leases
+retsu:{namespace}:lease:{lease_id}
+retsu:{namespace}:job:{job_id}</code></pre>
+<p>Acquisition, release, and renewal use Lua scripts for atomic accounting. Do not replace those paths with application-side read-modify-write sequences.</p>
 </section>
-<section id="admission-mode" class="level3 g-col-12 g-col-md-6">
-<h3 class="anchored" data-anchor-id="admission-mode">Admission mode</h3>
-<p>Use when jobs should be stored first, admitted only after capacity is acquired, and then dispatched by a scheduler.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>handle <span class="op">=</span> retsu.submit(render, args<span class="op">=</span>(<span class="st">"scene-42"</span>,), resources<span class="op">=</span>{<span class="st">"gpu"</span>: <span class="dv">1</span>})</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>retsu.Scheduler().run_once()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> handle.result(timeout<span class="op">=</span><span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><a href="../docs/admission-mode.html">Learn admission mode</a></p>
 </section>
-</div>
+<section id="usage-snapshots-and-cleanup" class="level2">
+<h2 class="anchored" data-anchor-id="usage-snapshots-and-cleanup">Usage snapshots and cleanup</h2>
+<p><code>get_usage()</code> returns configured capacity, used capacity, and available capacity for every resource and concurrency definition:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>snapshot <span class="op">=</span> retsu.get_usage()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(snapshot.resources[<span class="st">"memory_mb"</span>].available)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Retsu cleans expired leases before acquisition and before usage snapshots. You can also call <code>cleanup_expired_leases()</code> directly or use the CLI <code>cleanup</code> command as an operational maintenance action.</p>
 </section>
-<section id="when-retsu-is-a-good-fit" class="level2">
-<h2 class="anchored" data-anchor-id="when-retsu-is-a-good-fit">When Retsu is a good fit</h2>
-<p>Retsu is a good fit when capacity is an application-level concern and the resource cannot be expressed cleanly as a worker-pool size. Examples include external API quotas, tenant locks, GPU fractions, memory reservations, and licensed software seats.</p>
-<p>Retsu is not a replacement for a durable task queue, a general distributed lock service, or a full autoscaler. It complements those tools by making admission resource-aware.</p>
+<section id="job-lifecycle-in-admission-mode" class="level2">
+<h2 class="anchored" data-anchor-id="job-lifecycle-in-admission-mode">Job lifecycle in admission mode</h2>
+<p>Admission mode uses persisted <code>JobRecord</code> objects. A typical successful job moves through these statuses:</p>
+<pre class="text"><code>queued -&gt; leased -&gt; dispatched -&gt; running -&gt; succeeded</code></pre>
+<p>If capacity is unavailable during a scheduler pass, the job becomes <code>waiting_for_resources</code> and can be considered again later. Dispatch failures and runtime exceptions mark the job <code>failed</code>, and executors release the lease in a <code>finally</code> path.</p>
 </section>
-<section id="start-here" class="level2">
-<h2 class="anchored" data-anchor-id="start-here">Start here</h2>
-<ol type="1">
-<li>Follow the <a href="../docs/quickstart.html">quickstart</a> for a copy-paste local example.</li>
-<li>Read <a href="../docs/concepts.html">concepts</a> to understand resources, leases, and wait policies.</li>
-<li>Use <a href="../docs/guard-mode.html">guard mode</a> for protected functions and critical sections.</li>
-<li>Use <a href="../docs/admission-mode.html">admission mode</a> when work should be scheduled after capacity is acquired.</li>
-<li>Review <a href="../docs/operations.html">operations</a> before using Redis/Valkey in production.</li>
-</ol>
+<section id="safety-boundaries" class="level2">
+<h2 class="anchored" data-anchor-id="safety-boundaries">Safety boundaries</h2>
+<p>Retsu protects capacity accounting. It does not make the guarded work itself idempotent, transactional, or safe for untrusted input. Admission-mode payloads and results are serialized with <code>pickle</code>, so treat them as trusted-process data.</p>
 
 
 </section>
@@ -1010,10 +1016,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../docs/installation.html" class="pagination-link" aria-label="Installation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Installation</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../docs/quickstart.html" class="pagination-link" aria-label="Quickstart">
-        <span class="nav-page-text">Quickstart</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../docs/guard-mode.html" class="pagination-link" aria-label="Guard Mode">
+        <span class="nav-page-text">Guard Mode</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
