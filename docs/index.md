@@ -1,5 +1,3 @@
-![Retsu logo](images/logo.png)
-
 # Retsu
 
 Retsu is a resource and concurrency control layer for Python background jobs.
