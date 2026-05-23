@@ -224,7 +224,7 @@
     "href": "docs/index.html",
     "title": "Retsu",
     "section": "",
-    "text": "Retsu logo",
+    "text": "Retsu is a resource and concurrency control layer for Python background jobs. It sits beside Celery, Ray, local worker threads, or your own scheduler and answers one operational question before work starts:\n\nIs there enough configured capacity available to run this job safely right now?\n\nIf the answer is yes, Retsu creates a lease and accounts for the capacity. If not, it can block, fail fast, or let an integration retry later. Leases are released explicitly when work exits and are also protected by time-to-live based cleanup if a worker disappears.\n\n\nQueues and executors decide where work runs. They usually do not understand all of the external limits your application depends on:\n\none SaaS API allows only five concurrent exports;\na tenant should never run more than one expensive rebuild at a time;\na worker host has enough CPU threads but not enough GPU memory;\na licensed solver has a fixed number of seats;\na batch job needs to reserve memory before it starts, not after it crashes.\n\nRetsu turns those limits into named capacities and applies them consistently across guarded functions and admission-mode scheduling.\n\n\n\n\n\n\n\n\n\n\nArea\nWhat you get\n\n\n\n\nResource definitions\nNamed quantitative capacity such as memory_mb, gpu, or license_seats.\n\n\nConcurrency definitions\nNamed slot limits such as billing-api, tenant:42, or reports.\n\n\nGuard mode\nDecorators and context managers that acquire a lease before entering user code.\n\n\nAdmission mode\nsubmit(), Scheduler, executors, and JobHandle for resource-aware dispatch.\n\n\nBackends\nRedis/Valkey for shared atomic accounting; memory for tests and local tools.\n\n\nIntegrations\nCelery retry-friendly guards and Ray guard/task helpers.\n\n\nOperations\nUsage snapshots, active lease listing, cleanup of expired leases, and a small CLI.\n\n\n\n\n\n\nDefine capacity  -&gt;  Evaluate request  -&gt;  Acquire lease  -&gt;  Run work\n       ^                    |                    |               |\n       |                    |                    v               v\n   resources and       static values or      usage increments  release in\n   concurrency         callables from        atomically        finally path\n                       function args\nA successful acquire creates exactly one lease. Usage is incremented once for that lease and decremented once when the lease is released or expires. Redis and Valkey accounting is implemented with Lua scripts so capacity checks and usage updates happen atomically.\n\n\n\n\n\n\nUse when you already have an execution system and only need to protect a function or critical section.\n@retsu.guard(concurrency={\"vendor-api\": 1})\ndef sync_customer(customer_id: str) -&gt; None:\n    push_to_vendor(customer_id)\nLearn guard mode\n\n\n\nUse when jobs should be stored first, admitted only after capacity is acquired, and then dispatched by a scheduler.\nhandle = retsu.submit(render, args=(\"scene-42\",), resources={\"gpu\": 1})\nretsu.Scheduler().run_once()\nresult = handle.result(timeout=30)\nLearn admission mode\n\n\n\n\n\nRetsu is a good fit when capacity is an application-level concern and the resource cannot be expressed cleanly as a worker-pool size. Examples include external API quotas, tenant locks, GPU fractions, memory reservations, and licensed software seats.\nRetsu is not a replacement for a durable task queue, a general distributed lock service, or a full autoscaler. It complements those tools by making admission resource-aware.\n\n\n\n\nFollow the quickstart for a copy-paste local example.\nRead concepts to understand resources, leases, and wait policies.\nUse guard mode for protected functions and critical sections.\nUse admission mode when work should be scheduled after capacity is acquired.\nReview operations before using Redis/Valkey in production.",
     "crumbs": [
       "Home"
     ]
@@ -233,8 +233,8 @@
     "objectID": "docs/index.html#why-use-it",
     "href": "docs/index.html#why-use-it",
     "title": "Retsu",
-    "section": "Why use it?",
-    "text": "Why use it?\nQueues and executors decide where work runs. They usually do not understand all of the external limits your application depends on:\n\none SaaS API allows only five concurrent exports;\na tenant should never run more than one expensive rebuild at a time;\na worker host has enough CPU threads but not enough GPU memory;\na licensed solver has a fixed number of seats;\na batch job needs to reserve memory before it starts, not after it crashes.\n\nRetsu turns those limits into named capacities and applies them consistently across guarded functions and admission-mode scheduling.",
+    "section": "",
+    "text": "Queues and executors decide where work runs. They usually do not understand all of the external limits your application depends on:\n\none SaaS API allows only five concurrent exports;\na tenant should never run more than one expensive rebuild at a time;\na worker host has enough CPU threads but not enough GPU memory;\na licensed solver has a fixed number of seats;\na batch job needs to reserve memory before it starts, not after it crashes.\n\nRetsu turns those limits into named capacities and applies them consistently across guarded functions and admission-mode scheduling.",
     "crumbs": [
       "Home"
     ]
@@ -243,8 +243,8 @@
     "objectID": "docs/index.html#what-retsu-provides",
     "href": "docs/index.html#what-retsu-provides",
     "title": "Retsu",
-    "section": "What Retsu provides",
-    "text": "What Retsu provides\n\n\n\n\n\n\n\nArea\nWhat you get\n\n\n\n\nResource definitions\nNamed quantitative capacity such as memory_mb, gpu, or license_seats.\n\n\nConcurrency definitions\nNamed slot limits such as billing-api, tenant:42, or reports.\n\n\nGuard mode\nDecorators and context managers that acquire a lease before entering user code.\n\n\nAdmission mode\nsubmit(), Scheduler, executors, and JobHandle for resource-aware dispatch.\n\n\nBackends\nRedis/Valkey for shared atomic accounting; memory for tests and local tools.\n\n\nIntegrations\nCelery retry-friendly guards and Ray guard/task helpers.\n\n\nOperations\nUsage snapshots, active lease listing, cleanup of expired leases, and a small CLI.",
+    "section": "",
+    "text": "Area\nWhat you get\n\n\n\n\nResource definitions\nNamed quantitative capacity such as memory_mb, gpu, or license_seats.\n\n\nConcurrency definitions\nNamed slot limits such as billing-api, tenant:42, or reports.\n\n\nGuard mode\nDecorators and context managers that acquire a lease before entering user code.\n\n\nAdmission mode\nsubmit(), Scheduler, executors, and JobHandle for resource-aware dispatch.\n\n\nBackends\nRedis/Valkey for shared atomic accounting; memory for tests and local tools.\n\n\nIntegrations\nCelery retry-friendly guards and Ray guard/task helpers.\n\n\nOperations\nUsage snapshots, active lease listing, cleanup of expired leases, and a small CLI.",
     "crumbs": [
       "Home"
     ]
@@ -253,8 +253,8 @@
     "objectID": "docs/index.html#the-mental-model",
     "href": "docs/index.html#the-mental-model",
     "title": "Retsu",
-    "section": "The mental model",
-    "text": "The mental model\nDefine capacity  -&gt;  Evaluate request  -&gt;  Acquire lease  -&gt;  Run work\n       ^                    |                    |               |\n       |                    |                    v               v\n   resources and       static values or      usage increments  release in\n   concurrency         callables from        atomically        finally path\n                       function args\nA successful acquire creates exactly one lease. Usage is incremented once for that lease and decremented once when the lease is released or expires. Redis and Valkey accounting is implemented with Lua scripts so capacity checks and usage updates happen atomically.",
+    "section": "",
+    "text": "Define capacity  -&gt;  Evaluate request  -&gt;  Acquire lease  -&gt;  Run work\n       ^                    |                    |               |\n       |                    |                    v               v\n   resources and       static values or      usage increments  release in\n   concurrency         callables from        atomically        finally path\n                       function args\nA successful acquire creates exactly one lease. Usage is incremented once for that lease and decremented once when the lease is released or expires. Redis and Valkey accounting is implemented with Lua scripts so capacity checks and usage updates happen atomically.",
     "crumbs": [
       "Home"
     ]
@@ -263,8 +263,8 @@
     "objectID": "docs/index.html#choose-a-workflow",
     "href": "docs/index.html#choose-a-workflow",
     "title": "Retsu",
-    "section": "Choose a workflow",
-    "text": "Choose a workflow\n\n\nGuard mode\nUse when you already have an execution system and only need to protect a function or critical section.\n@retsu.guard(concurrency={\"vendor-api\": 1})\ndef sync_customer(customer_id: str) -&gt; None:\n    push_to_vendor(customer_id)\nLearn guard mode\n\n\nAdmission mode\nUse when jobs should be stored first, admitted only after capacity is acquired, and then dispatched by a scheduler.\nhandle = retsu.submit(render, args=(\"scene-42\",), resources={\"gpu\": 1})\nretsu.Scheduler().run_once()\nresult = handle.result(timeout=30)\nLearn admission mode",
+    "section": "",
+    "text": "Use when you already have an execution system and only need to protect a function or critical section.\n@retsu.guard(concurrency={\"vendor-api\": 1})\ndef sync_customer(customer_id: str) -&gt; None:\n    push_to_vendor(customer_id)\nLearn guard mode\n\n\n\nUse when jobs should be stored first, admitted only after capacity is acquired, and then dispatched by a scheduler.\nhandle = retsu.submit(render, args=(\"scene-42\",), resources={\"gpu\": 1})\nretsu.Scheduler().run_once()\nresult = handle.result(timeout=30)\nLearn admission mode",
     "crumbs": [
       "Home"
     ]
@@ -273,8 +273,8 @@
     "objectID": "docs/index.html#when-retsu-is-a-good-fit",
     "href": "docs/index.html#when-retsu-is-a-good-fit",
     "title": "Retsu",
-    "section": "When Retsu is a good fit",
-    "text": "When Retsu is a good fit\nRetsu is a good fit when capacity is an application-level concern and the resource cannot be expressed cleanly as a worker-pool size. Examples include external API quotas, tenant locks, GPU fractions, memory reservations, and licensed software seats.\nRetsu is not a replacement for a durable task queue, a general distributed lock service, or a full autoscaler. It complements those tools by making admission resource-aware.",
+    "section": "",
+    "text": "Retsu is a good fit when capacity is an application-level concern and the resource cannot be expressed cleanly as a worker-pool size. Examples include external API quotas, tenant locks, GPU fractions, memory reservations, and licensed software seats.\nRetsu is not a replacement for a durable task queue, a general distributed lock service, or a full autoscaler. It complements those tools by making admission resource-aware.",
     "crumbs": [
       "Home"
     ]
@@ -283,8 +283,8 @@
     "objectID": "docs/index.html#start-here",
     "href": "docs/index.html#start-here",
     "title": "Retsu",
-    "section": "Start here",
-    "text": "Start here\n\nFollow the quickstart for a copy-paste local example.\nRead concepts to understand resources, leases, and wait policies.\nUse guard mode for protected functions and critical sections.\nUse admission mode when work should be scheduled after capacity is acquired.\nReview operations before using Redis/Valkey in production.",
+    "section": "",
+    "text": "Follow the quickstart for a copy-paste local example.\nRead concepts to understand resources, leases, and wait policies.\nUse guard mode for protected functions and critical sections.\nUse admission mode when work should be scheduled after capacity is acquired.\nReview operations before using Redis/Valkey in production.",
     "crumbs": [
       "Home"
     ]
