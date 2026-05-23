@@ -17,16 +17,18 @@ website:
     left:
       - text: Home
         href: docs/index.md
-      - text: Installation
-        href: docs/installation.md
+      - text: Quickstart
+        href: docs/quickstart.md
+      - text: Concepts
+        href: docs/concepts.md
+      - text: Guard Mode
+        href: docs/guard-mode.md
+      - text: Admission Mode
+        href: docs/admission-mode.md
+      - text: Integrations
+        href: docs/integrations.md
       - text: API
         href: docs/api/references.md
-      - text: Example
-        href: docs/example.ipynb
-      - text: Changelog
-        href: docs/changelog.md
-      - text: Contributing
-        href: docs/contributing.md
     right:
       - icon: github
         href: https://github.com/osl-incubator/retsu
@@ -35,13 +37,25 @@ website:
     contents:
       - text: Home
         href: docs/index.md
+      - text: Quickstart
+        href: docs/quickstart.md
       - text: Installation
         href: docs/installation.md
+      - text: Concepts
+        href: docs/concepts.md
+      - text: Guard Mode
+        href: docs/guard-mode.md
+      - text: Admission Mode
+        href: docs/admission-mode.md
+      - text: Integrations
+        href: docs/integrations.md
+      - text: Operations
+        href: docs/operations.md
       - section: API
         contents:
           - text: Reference
             href: docs/api/references.md
-      - text: Example
+      - text: Notebook Tour
         href: docs/example.ipynb
       - text: Changelog
         href: docs/changelog.md
