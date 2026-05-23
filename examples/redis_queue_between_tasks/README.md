@@ -1,11 +1,26 @@
-# How to test
+# Redis queue between Celery tasks example
 
-You can run `run.sh` in your terminal, and in the web browser you can try the
-following endpoints:
+This directory is a legacy Celery/Flask example from an earlier Retsu API. It is
+kept for historical context, but the current public API is documented in the
+main documentation:
 
-- http://127.0.0.1:5000/serial/10/20
-- http://127.0.0.1:5000/parallel/10/20
-- http://127.0.0.1:5000/serial/result/[TASK_ID]
-- http://127.0.0.1:5000/parallel/result/[TASK_ID]
+- [Guard mode](../../docs/guard-mode.md)
+- [Admission mode](../../docs/admission-mode.md)
+- [Integrations](../../docs/integrations.md)
 
-Remember to replace `[TASK_ID]` by the desired process id.
+For current Celery usage, prefer `retsu.celery_guard()` inside a bound Celery
+task:
+
+```python
+@app.task(bind=True)
+def render(self, document_id: str) -> None:
+    with retsu.celery_guard(
+        self,
+        concurrency={"render": 1},
+        wait_strategy="retry",
+    ):
+        render_document(document_id)
+```
+
+The legacy `run.sh` flow may require porting before it works with the current
+Retsu package.

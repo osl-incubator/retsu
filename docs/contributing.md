@@ -1,219 +1,153 @@
 # Contributing
 
-In order to be able to contribute, it is important that you understand the
-project layout.
+Thank you for improving Retsu. The project is small, but it protects important
+resource-safety guarantees, so changes should be focused, tested, and easy to
+audit.
 
-This project uses the _src layout_, which means that the package code is located
-at `./src/retsu`.
+## Repository layout
 
-For my information, check the official documentation:
-https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/
+| Path | Purpose |
+| --- | --- |
+| `src/retsu/` | Public APIs, configuration, leases, resources, scheduling, and state models. |
+| `src/retsu/backends/` | Backend protocol plus memory and Redis/Valkey implementations. |
+| `src/retsu/executors/` | Admission-mode executor protocol and local/Ray executors. |
+| `src/retsu/integrations/` | Celery and Ray guard helpers. |
+| `src/retsu/plugins/` | Framework plugins such as Django app config support. |
+| `src/retsu/cli/` | `retsu` command line interface. |
+| `tests/` | Memory-only and Redis-backed tests. |
+| `docs/` | Quarto documentation. |
+| `examples/` | Usage examples and example notes. |
+| `containers/` | Valkey and optional worker container definitions. |
 
-In addition, you should know that to build our package we use
-[Poetry](https://python-poetry.org/), it's a Python package management tool that
-simplifies the process of building and publishing Python packages. It allows us
-to easily manage dependencies, virtual environments and package versions. Poetry
-also includes features such as dependency resolution, lock files and publishing
-to PyPI. Overall, Poetry streamlines the process of managing Python packages,
-making it easier for us to create and share our code with others.
+The package uses the `src` layout. Import package code as `retsu`, not through
+local path hacks.
 
-Contributions are welcome, and they are greatly appreciated! Every little bit
-helps, and credit will always be given.
-
-You can contribute in many ways:
-
-## Types of Contributions
-
-### Report Bugs
-
-Report bugs at https://github.com/xmnlab/retsu.git/issues.
-
-If you are reporting a bug, please include:
-
-- Your operating system name and version.
-- Any details about your local setup that might be helpful in troubleshooting.
-- Detailed steps to reproduce the bug.
-
-### Fix Bugs
-
-Look through the GitHub issues for bugs. Anything tagged with “bug” and “help
-wanted” is open to whoever wants to implement it.
-
-### Implement Features
-
-Look through the GitHub issues for features. Anything tagged with “enhancement”
-and “help wanted” is open to whoever wants to implement it.
-
-### Write Documentation
-
-Retsu could always use more documentation, whether as part of the official Retsu
-docs, in docstrings, or even on the web in blog posts, articles, and such.
-
-### Submit Feedback
-
-The best way to send feedback is to file an issue at
-https://github.com/xmnlab/retsu.git/issues.
-
-If you are proposing a feature:
-
-- Explain in detail how it would work.
-- Keep the scope as narrow as possible, to make it easier to implement.
-- Remember that this is a volunteer-driven project, and that contributions are
-  welcome :)
-
-## Get Started!
-
-Ready to contribute? Here’s how to set up `retsu` for local development.
-
-1.  Fork the `retsu` repo on GitHub.
-1.  Clone your fork locally and change to the directory of your project:
+## Development setup
 
 ```bash
-$ git clone git@github.com:your_name_here/retsu.git
-$ cd retsu/
+git clone https://github.com/osl-incubator/retsu.git
+cd retsu
+mamba env create --file conda/dev.yaml
+conda activate retsu
+poetry install
+pre-commit install
 ```
 
-Also, create a remote to the upstream repository, you will need that later:
+Conda also works if Mamba is not installed:
 
 ```bash
-$ git remote add upstream https://github.com/xmnlab/retsu.git
-$ git fetch --all
+conda env create --file conda/dev.yaml
+conda activate retsu
+poetry install
 ```
 
-1.  Prepare and use virtual environment: If you don't have yet conda installed
-    in your machine, you can check the installation steps here:
-    <https://github.com/conda-forge/miniforge?tab=readme-ov-file#download> After
-    that, ensure that conda is already available in your terminal session and
-    run:
+## High-value commands
+
+Fast service-free tests:
 
 ```bash
-$ conda env create env create --file conda/dev.yaml
-$ conda activate retsu
+pytest -q -m no_services
 ```
 
-Note: you can use `mamba env create` instead, if you have it already installed,
-in order to boost the installation step.
-
-1. Install the dependencies: Now, you can already install the dependencies for
-   the project:
+Full unit suite with Redis/Valkey managed by project automation:
 
 ```bash
-$ poetry install
+makim tests.unit
 ```
 
-1.  `retsu` uses a set of `pre-commit` hooks to improve code quality. The hooks
-    can be installed locally using:
+Redis backend only, after starting services:
 
 ```bash
-$ pre-commit install
+makim tests.setup
+pytest -q tests/test_redis_backend.py
+makim tests.teardown
 ```
 
-This would run the checks every time a `git commit` is executed locally.
-Usually, the verification will only run on the files modified by that commit,
-but the verification can also be triggered for all the files using:
+Linting, typing, and pre-commit checks:
 
 ```bash
-$ pre-commit run --all-files
+ruff format src tests
+ruff check src tests
+mypy .
+pre-commit run --all-files
+makim tests.linter
 ```
 
-If you would like to skip the failing checks and push the code for further
-discussion, use the `--no-verify` option with `git commit`.
-
-1.  This project uses `pytest` as a testing tool. `pytest` is responsible for
-    testing the code, whose configuration is available in pyproject.toml.
-    Additionally, this project also uses `pytest-cov` to calculate the coverage
-    of these unit tests. For more information, check the section about tests
-    later in this document.
-1.  Commit your changes and push your branch to GitHub::
-
-```
-$ git add .
-$ git commit -m "Your detailed description of your changes.""
-$ git push origin name-of-your-bugfix-or-feature
-```
-
-1.  Submit a pull request through the GitHub website.
-
-## Pull Request Guidelines
-
-Before you submit a pull request, check that it meets these guidelines:
-
-1.  The pull request should include tests.
-2.  If the pull request adds functionality, the docs should be updated. Put your
-    new functionality into a function with a docstring, and add the feature to
-    the list in README.rst.
-3.  The pull request should work for Python >= 3.10.
-
-## Running tests locally
-
-The tests can be executed using the `test` dependencies of `retsu` in the
-following way:
+Documentation build:
 
 ```bash
-$ python -m pytest
+makim docs.build
 ```
 
-### Running tests with coverage locally
+## Design priorities
 
-The coverage value can be obtained while running the tests using `pytest-cov` in
-the following way:
+1. Never over-allocate configured capacity.
+2. Release leases exactly once on success, failure, timeout, and cleanup paths.
+3. Keep memory and Redis/Valkey behavior aligned.
+4. Keep Redis capacity accounting atomic; do not replace Lua-scripted acquire or
+   release paths with Python read-modify-write sequences.
+5. Keep optional integrations optional at import time.
+6. Update docs, examples, and API references for user-facing behavior changes.
+7. Prefer small targeted edits over broad refactors.
 
-```bash
-$ python -m pytest --cov=retsu tests/
+## Testing expectations
+
+- Add or update tests near the behavior you change.
+- Mark service-free tests with `pytest.mark.no_services`.
+- Mark Redis/Valkey integration tests with `pytest.mark.redis`.
+- For backend behavior, cover both memory and Redis where the feature applies.
+- For scheduler/executor behavior, test status transitions, result handling,
+  failure handling, and lease release.
+- For CLI behavior, test return codes and user-facing output.
+
+## Documentation expectations
+
+Update documentation in the same change when behavior changes:
+
+- `README.md` for high-level positioning and quick examples;
+- `docs/index.md` for the website overview;
+- topic pages such as `guard-mode.md`, `admission-mode.md`, and
+  `operations.md` for workflow details;
+- `docs/api/references.md` for public API changes;
+- `examples/` when example usage changes.
+
+Do not commit generated Quarto output from `build/` unless a task explicitly
+asks for it.
+
+## Style
+
+- Python line length is 79 characters.
+- Mypy is strict; avoid unnecessary `Any` and broad `type: ignore` comments.
+- Ruff handles formatting, import order, pycodestyle, pyflakes, pydocstyle, and
+  pyupgrade-style checks.
+- Use existing Retsu exception types for expected user-facing errors.
+- Do not use heredocs inside YAML-backed configuration files.
+
+## Pull request checklist
+
+Before opening a PR, verify:
+
+- [ ] tests cover the behavior change;
+- [ ] resource accounting cannot over-allocate or go negative;
+- [ ] leases release on success, failure, and cleanup paths;
+- [ ] memory and Redis behavior remain aligned where applicable;
+- [ ] optional dependencies remain optional;
+- [ ] public API changes are reflected in docs and examples;
+- [ ] `ruff`, `mypy`, and relevant tests pass, or blockers are clearly stated.
+
+## Commit messages and releases
+
+Retsu uses semantic-release. Pull request titles should follow conventional
+commit style because squash-merge titles drive release notes:
+
+```text
+fix: release leases after dispatch failure
+feat: add scheduler queue filtering
+chore: update development dependencies
 ```
 
-A much more detailed guide on testing with `pytest` is available
-[here](https://docs.pytest.org/en/8.0.x/how-to/index.html).
+Use `!` for breaking changes:
 
-## Automation Tasks with Makim
-
-This project uses `makim` as an automation tool. Please, check the `.makim.yaml`
-file to check all the tasks available or run:
-
-```bash
-$ makim --help
+```text
+feat!: change admission result serialization format
 ```
-
-## Release
-
-This project uses semantic-release in order to cut a new release based on the
-commit-message.
-
-### Commit message format
-
-**semantic-release** uses the commit messages to determine the consumer impact
-of changes in the codebase. Following formalized conventions for commit
-messages, **semantic-release** automatically determines the next
-[semantic version](https://semver.org) number, generates a changelog and
-publishes the release.
-
-By default, **semantic-release** uses
-[Angular Commit Message Conventions](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format).
-The commit message format can be changed with the `preset` or `config` options\_
-of the
-[@semantic-release/commit-analyzer](https://github.com/semantic-release/commit-analyzer#options)
-and
-[@semantic-release/release-notes-generator](https://github.com/semantic-release/release-notes-generator#options)
-plugins.
-
-Tools such as [commitizen](https://github.com/commitizen/cz-cli) or
-[commitlint](https://github.com/conventional-changelog/commitlint) can be used
-to help contributors and enforce valid commit messages.
-
-The table below shows which commit message gets you which release type when
-`semantic-release` runs (using the default configuration):
-
-| Commit message                                                 | Release type     |
-| -------------------------------------------------------------- | ---------------- |
-| `fix(pencil): stop graphite breaking when pressure is applied` | Fix Release      |
-| `feat(pencil): add 'graphiteWidth' option`                     | Feature Release  |
-| `perf(pencil): remove graphiteWidth option`                    | Chore            |
-| `feat(pencil)!: The graphiteWidth option has been removed`     | Breaking Release |
-
-Note: For a breaking change release, uses `!` at the end of the message prefix.
-
-source:
-<https://github.com/semantic-release/semantic-release/blob/master/README.md#commit-message-format>
-
-As this project uses the `squash and merge` strategy, ensure to apply the commit
-message format to the PR's title.
